@@ -1,0 +1,176 @@
+\documentclass[12pt, tikz]{scrreprt}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+
+\usepackage[utf8x]{inputenc}
+
+\usepackage{gnuplot-lua-tikz}
+\pagestyle{empty}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{\gpbboxborder}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{amsmath}
+\usepackage{subfloat}
+\usetikzlibrary{shapes.misc}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{external}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+%\usepgfplotslibrary{fillbetween}
+
+\tikzset{cross/.style={cross out, draw, 
+         minimum size=2*(#1-\pgflinewidth), 
+         inner sep=0pt, outer sep=0pt},cross/.default={2.5pt}}
+
+\begin{document}
+\centering
+\tikzset{dot/.style={circle,fill=#1,inner sep=0,minimum size=4pt}}
+\tikzset{circ/.style={circle,draw=#1,inner sep=0,minimum size=4pt}}
+\begin{tikzpicture}
+% Width of a single column
+\newcommand{\xw}{9}
+\newcommand{\xh}{4.5} % half the width
+% horizontal offset of right column
+\newcommand{\xrcol}{10.3}
+% Cell structure
+\newcommand{\xoffsetaxis}[1]{
+  % line segments
+  \path[draw,color=black] ({#1+0},\yLevelZero) -- 
+                          ({#1+\xw},\yLevelZero);
+  \path[draw,color=black] ({#1+0},\yLevelZero-0.25) --
+                          ({#1+0},\yLevelZero+0.25);
+  \path[draw,color=black] ({#1+\xh},\yLevelZero-0.25) --
+                          ({#1+\xh},\yLevelZero+0.25);
+  \path[draw,color=black] ({#1+\xw},\yLevelZero-0.25) --
+                          ({#1+\xw},\yLevelZero+0.25);
+}%myaxis
+\newcommand{\myaxis}{\xoffsetaxis{0}}
+\newcommand{\myrightaxis}{\xoffsetaxis{\xrcol}}
+% Gauss-Legendre-Point in left diagram
+\newcommand{\point}[1]{\node[cross,draw=red] at
+     (9 * #1,\yLevelZero){};}
+% Simple point in right diagram
+\newcommand{\rpoint}[1]{\node[cross,draw=red] at
+     ({\xrcol + 9 *(#1)},\yLevelZero){};}
+% Box in right diagram: \rcell{width}{xpos}
+\newcommand{\rcell}[2]{\draw[blue]
+     ({\xrcol +9* #2}, \yLevelZero-0.25)
+     rectangle (\xrcol+9*#2+9*#1,\yLevelZero+0.25); }
+% Arrow from left to right
+\newcommand{\myarrow}{\node[draw=none,anchor=west] at
+     (\xrcol -1,\yLevelZero) {$\to$};}
+% label right
+\newcommand{\myrlabel}[1]{\node[draw=none,anchor=west] at
+     (\xrcol + \xw + 0.3,\yLevelZero) {#1};}
+% label left
+\newcommand{\myllabel}[1]{\node[draw=none,anchor=west] at
+     (-2,\yLevelZero) {#1};}
+
+% Gauss Legendre left hand:
+\newcommand{\yLevelZero}{7.0}
+\node[draw=none,anchor=center] at (4.5,\yLevelZero)
+  {Gauss-Legendre basis at order $N$ ($N+1$ nodes)};
+\node[draw=none,anchor=center] at (\xrcol+4.5,\yLevelZero)
+  {$N_S = 2N+1$ Finite Volume subcells};
+
+
+% N=2
+\renewcommand{\yLevelZero}{6.5}
+\myllabel{$N=2$:}
+\myaxis
+\point{0.1127016654}
+\point{0.5000000000}
+\point{0.8872983346}
+
+% right hand:
+\myrlabel{$N_S=5$}
+\myarrow
+\myrightaxis
+\rcell{0.2}{0.0}
+\rpoint{0.1}
+\rcell{0.2}{0.2}
+\rpoint{0.3}
+\rcell{0.2}{0.4}
+\rpoint{0.5}
+\rcell{0.2}{0.6}
+\rpoint{0.7}
+\rcell{0.2}{0.8}
+\rpoint{0.9}
+
+
+% N=3
+\renewcommand{\yLevelZero}{6.0}
+\myllabel{$N=3$:}
+\myaxis
+\point{0.0694318442}
+\point{0.3300094782}
+\point{0.6699905218}
+\point{0.9305681558}
+
+% right hand:
+\myrlabel{$N_S=7$}
+\myarrow
+\myrightaxis
+\newcommand{\width}{0.14285714285714285} % = 1/7
+\foreach\x in {0,...,6} \rcell{\width}{\x*\width};
+\foreach\x in {1,...,7} \rpoint{\x*\width - 0.5*\width};
+
+% N=4
+\renewcommand{\yLevelZero}{5.5}
+\myllabel{$N=4$:}
+\myaxis
+\point{0.0469100770}
+\point{0.2307653449}
+\point{0.5000000000}
+\point{0.7692346551}
+\point{0.9530899230}
+
+% right hand:
+\myrlabel{$N_S=9$}
+\myarrow
+\myrightaxis
+\renewcommand{\width}{0.1111111111111111} % = 1/9
+\foreach\x in {0,...,8} \rcell{\width}{\x*\width};
+\foreach\x in {1,...,9} \rpoint{\x*\width - 0.5*\width};
+
+% N=5
+\renewcommand{\yLevelZero}{5.0}
+\myllabel{$N=5$:}
+\myaxis
+\point{0.0337652429}
+\point{0.1693953068}
+\point{0.3806904070}
+\point{0.6193095930}
+\point{0.8306046932}
+\point{0.9662347571}
+
+% right hand:
+\myrlabel{$N_S=11$}
+\myarrow
+\myrightaxis
+\renewcommand{\width}{0.09090909090909091} % = 1/11
+\foreach\x in {0,...,10} \rcell{\width}{\x*\width};
+\foreach\x in {1,...,11} \rpoint{\x*\width - 0.5*\width};
+
+% X-Axis
+\renewcommand{\yLevelZero}{4.5}
+\node[draw=none,anchor=west] at (0, \yLevelZero) {$x=0$};
+\node[draw=none,anchor=center] at (4.5, \yLevelZero) {$x=0.5$};
+\node[draw=none,anchor=east] at (9, \yLevelZero) {$x=1$};
+
+% X-Axis right hand side
+\node[draw=none,anchor=west] at (\xrcol+0, \yLevelZero) {$x=0$};
+\node[draw=none,anchor=center] at (\xrcol+4.5, \yLevelZero) {$x=0.5$};
+\node[draw=none,anchor=east] at (\xrcol+9, \yLevelZero) {$x=1$};
+
+%  \path[draw,color=black] (#1+0,\yLevelZero-0.25) -- (#1+0,\yLevelZero+0.25);
+%  \path[draw,color=black] (#1+4.5,\yLevelZero-0.25) -- (#1+4.5,\yLevelZero+0.25);
+%  \path[draw,color=black] (#1+9,\yLevelZero-0.25) -- (#1+9,\yLevelZero+0.25);
+
+\end{tikzpicture}
+\end{document}

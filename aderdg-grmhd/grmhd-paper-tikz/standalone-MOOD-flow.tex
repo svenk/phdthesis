@@ -1,0 +1,206 @@
+\documentclass[12pt, tikz]{scrreprt}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{gnuplot-lua-tikz}
+\pagestyle{empty}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{\gpbboxborder}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{amsmath}
+\usepackage{subfloat}
+\usetikzlibrary{shapes.misc}
+
+\graphicspath{{../}{./}}
+
+\usepackage{cancel}	
+\usepackage{pgf,tikz}
+\usepackage{mathrsfs}
+\usetikzlibrary{decorations.fractals}
+\usetikzlibrary{decorations.pathmorphing,backgrounds}
+\usetikzlibrary{decorations.shapes}
+\usetikzlibrary{decorations.footprints}
+\usetikzlibrary{shapes,arrows,positioning,calc}
+\tikzset{paint/.style={ draw=#1!50!black, fill=#1!50 },
+    decorate with/.style=
+    {decorate,decoration={shape backgrounds,shape=#1,shape size=2mm}}}
+\usetikzlibrary{arrows}
+
+\usepackage{pgfplots}
+
+
+%%%%% AUTHORS - PLACE YOUR OWN COMMANDS HERE %%%%%
+
+% PUT HERE THE NAME OF THE MATRIX of the NCP
+\newcommand{\willy}{\boldsymbol{\mathcal{B}}}
+%
+\newcommand{\U}{\mathcal{U}}
+\newcommand{\natSet}{{\rm I\!N}}
+\newcommand{\di}{\text{d}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bdm}{\begin{displaymath}}
+\newcommand{\edm}{\end{displaymath}}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+\newcommand{\PNM}{P_NP_M}
+\newcommand{\halb}{\frac{1}{2}}
+\newcommand{\FQi}{\tens{\mathbf{F}}\left(\Qi\right)}
+\newcommand{\FQj}{\tens{\mathbf{F}}\left(\Qj\right)}
+\newcommand{\FQjj}{\tens{\mathbf{F}}\left(\Qjj\right)}
+\newcommand{\nj}{\vec n_j}
+\newcommand{\FORCE}{\textnormal{FORCE}}
+\newcommand{\GFORCE}{\textnormal{GFORCEN}}
+\newcommand{\LF}{\textnormal{LF}'}
+\newcommand{\LW}{\textnormal{LW}'}
+\newcommand{\WL}{\mathcal{W}_h^-}
+\newcommand{\WR}{\mathcal{W}_h^+}
+\newcommand{\nur}{\boldsymbol{\nu}^\textbf{r} }
+\newcommand{\nuf}{\boldsymbol{\nu}^{\boldsymbol{\phi}} }
+\newcommand{\nut}{\boldsymbol{\nu}^{\boldsymbol{\theta}} }
+\newcommand{\ar}{\phi_1\rho_1}
+\newcommand{\arr}{\phi_2\rho_2}
+\newcommand{\ur}{u_1^r}
+\newcommand{\uf}{u_1^{\phi}}
+\newcommand{\ut}{u_1^{\theta}}
+\newcommand{\urr}{u_2^r}
+\newcommand{\uff}{u_2^{\phi}}
+\newcommand{\utt}{u_2^{\theta}}
+\newcommand{\ub}{\textbf{u}_\textbf{1}}
+\newcommand{\ubb}{\textbf{u}_\textbf{2}}
+\newcommand{\RoeMat}{{\tilde A}_{\Path}^G} 
+
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\Q}{\mathbf{Q}}
+\renewcommand{\u}{\mathbf{u}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\q}{\mathbf{q}}
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\f}{\mathbf{f}}
+\newcommand{\g}{\mathbf{g}}
+\newcommand{\h}{\mathbf{h}}
+\renewcommand{\v}{\mathbf{v}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\emm}{m}
+\newcommand{\mbf}[1]{\mathrm{#1}}
+
+\newcommand{\lapse}{\alpha}
+\newcommand{\shift}{\beta}
+\newcommand{\Lor}{\Gamma}
+
+\newcommand{\apriori}{\textit{a priori} }
+\newcommand{\aposteriori}{\textit{a posteriori} }
+\newcommand{\oz}[1]{ \textcolor{red}   {\texttt{\textbf{OZ: #1}}} }
+
+\newfont{\numerikEleven}{ecrm1000}
+\newfont{\numerikTen}{cmss10}
+\newfont{\numerikNine}{cmss9}
+\newfont{\numerikEight}{cmss8}
+\newfont{\numerikSeven}{cmss7}
+\newcommand{\reds}[1]{{\color{red}#1}}
+
+%\newcommand{\bf}{\ifmmode\ \fi\textbf}
+\newcommand*{\bf}[1]{\ifmmode\mathbf{#1}\else\textbf{#1}\fi}
+
+\definecolor{pergamena}{rgb}{2.44,2.15,0.67}
+%\definecolor{blu}{rgb}{0.30,0.30,1.10}
+\definecolor{azz}{rgb}{0.85,0.90,1.00}
+\definecolor{mandarino}{RGB}{237,189,101}
+\definecolor{f1}{RGB}{255,204,153}
+\definecolor{pera}{RGB}{237,210,61}
+\definecolor{nonh}{RGB}{237,229,156}
+\definecolor{menta}{RGB}{171,242,193}
+\definecolor{darkspringgreen}{rgb}{0.09, 0.45, 0.27}
+\definecolor{UniBlue}{RGB}{83,121,170}
+\definecolor{darkgreen}{rgb}{0.0, 0.2, 0.13}
+
+\newcommand{\boldEq}{\mathord{\begin{tikzpicture}[baseline=0ex, line width=0.8, scale=0.13]
+\draw (0,1.2) -- (2,1.2);
+\draw (0,0.2) -- (2,0.2);
+\end{tikzpicture}}}
+
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{ffqqqq}{rgb}{1.,0.,0.}
+
+\begin{document}
+
+\tikzstyle{decision} = [diamond, draw, fill=red!40!yellow!40, text width=5.5em, text badly centered, node distance=20ex, inner sep=0pt]
+\tikzstyle{block2} = [rectangle, draw, fill=blue!70!red!10, node distance=15ex, text centered, rounded corners, text width=15ex, minimum height=5ex]
+\tikzstyle{green} = [rectangle, draw, fill=blue!10!green!60, node distance=15ex, text centered, rounded corners, text width=13ex, minimum height=5ex]
+\tikzstyle{white} = [rectangle, draw, fill=white, node distance=5ex, text centered,minimum height=5ex]
+\tikzstyle{blockInit} = [rectangle, draw, fill=white, node distance=35ex, text centered, rounded corners, text width=21ex, minimum height=5ex]
+\tikzstyle{blockADER} = [rectangle, draw, fill=white, node distance=53ex, text centered, rounded corners, text width=28ex, minimum height=5ex]
+\tikzstyle{blockEnd} = [rectangle, draw, fill=white!10!yellow!40, node distance=25ex, text centered, rounded corners, text width=35ex, minimum height=5ex]
+\tikzstyle{blockVh} = [rectangle, draw, fill=white, node distance=35ex, text centered, rounded corners, text width=25ex, minimum height=5ex]
+\tikzstyle{arrow} = [single arrow, draw=none,  draw, fill=white, node distance=9ex, text centered, minimum height=5ex] 
+\tikzstyle{arrow2} = [single arrow, draw=none,  draw, fill=white, node distance=15ex, text centered, minimum height=5ex] %rotate=90,
+\tikzstyle{line} = [draw, -latex]
+\tikzstyle{cloud} = [draw, rectangle,fill=green!20, node distance=25ex, minimum height=5ex, rounded corners]
+\scriptsize
+%\noindent
+\flushleft
+\resizebox{\textwidth}{!}{\begin{tikzpicture}[node distance = 8ex, auto]
+%
+  \node [blockInit] (start) {1. \tiny known initial data and b.c.   {\color{blue}$\u_h(\bf{x},t^n)$ }};
+	%}
+	\node [blockADER, below of=start, node distance = 15ex] (ADER-DG) {2. \tiny\textbf{\emph{candidate solution}}:\\{\color{blue}$\u_h^*(\bf{x},t^{n+1})$}};% 
+	\node [decision, below of=ADER-DG, node distance = 15ex,draw=red] (DetCriteria) {3.  \tiny \textbf{PAD} \& \textbf{DMP}?};
+  \path [line] (start) --  node [left] {ADER-{\color{blue}DG}} node [right] {\includegraphics[width=0.05\textwidth]{./AMR_finelevel.pdf}} (ADER-DG);
+  \path [line] (ADER-DG) -- (DetCriteria);
+	%}
+  \node [green,  left of=DetCriteria, text width=18ex, node distance = 40ex] (Ustar) {4.a1. $\u_h^*(\bf{x},t^{n+1})$};
+  \node [blockInit, left of=Ustar, node distance = 30ex,draw = red] (Unew)  {5. \color{red}$\u_h(\bf{x},t^{\color{red} n+1})$};
+  \node [blockInit, above of=Unew, node distance = 20ex] (AMR)  {6. \\ AMR process \\(see Fig. \ref{fig:AMRmaps})}; 
+  \path [line] (Unew) -- (AMR);  % node [above] {\color{darkspringgreen} OK!} (AMR); 
+	%\node [white, above of=Unew, text width=7ex, node distance = 9ex,draw = white] (grid) {\includegraphics[width=\textwidth]{.AMR_finelevel}};
+  \path [line] (DetCriteria) -- node [above] {\color{darkspringgreen} OK!} 
+	node [below] {\includegraphics[width=0.05\textwidth]{./AMR_finelevel.pdf} } %\, {\color{darkspringgreen} OK!}\;\;
+	 (Ustar);
+	\node [arrow2, left of=Ustar, text width=4ex,rotate=180] (arrow1) {\rotatebox{-180}{\color{darkspringgreen}$\boldEq$}};
+	\node [block2, below  of=DetCriteria, text width=26ex, node distance = 25ex] (Vh) {4.a2. {\color{red} $\xcancel{\u_h^*(\bf{x},t^{n+1})}$} ;   \\   {\color{blue}$\v_{h}(\bf{x},t^n) = \mathcal{P}\left(\u_h(\bf{x},t^n)\right)$ } }; 
+	\node [green, below of=Ustar, text width=18ex, node distance = 25ex] (Vhnew) {4.b2. $\v_h(\bf{x},t^{n+1}) $};% 
+  \path [line,decorate, decoration={zigzag,segment length = 0.5mm, amplitude = 0.2mm}] (DetCriteria) -- node[left] {\tiny{\color{red} 
+	TROUBLE-CELLS}}(Vh);
+	%node [right] 
+	%{\includegraphics[width=0.05\textwidth]{./AMR_finelevel_subgrid}} (Vh);
+	\node [white, above right of=Vh, text width=12ex, node distance = 25ex,draw = white] (L1) {\input{./Limiting}};
+  \path [line,decorate, decoration={zigzag,segment length = 0.5mm, amplitude = 0.2mm}] (Vh) -- node [above] {ADER-{\color{blue} TVD}} node [below]
+	 {\includegraphics[width=0.05\textwidth]{./AMR_finelevel_subgrid.pdf}} (Vhnew);
+	\node [white, above  of=Vhnew, text width=12ex, node distance = 10ex,draw = white] (pippo) {};
+	\node [arrow,  left  of=pippo, text width=7ex,rotate=120, node distance = 18ex] (arrow1) {\rotatebox{-120}{\color{darkspringgreen}$\mathbf{\mathcal{R}}$}};
+	%\node [white, left of=Vhnew, text width=4ex, node distance = 18ex,draw = white] (grid2) {\includegraphics[width=\textwidth]{.AMR_finelevel_subgrid}};
+	\node [white, left of=pippo, text width=12ex, node distance = 32ex,draw = white] (L2) {\input{./LimitingUp}};
+	\node [white, above  of=AMR, text width= 1ex, node distance = 10ex,draw = white] (pippo1) {};
+  \path [line,dashed] (AMR) |- node[above,near end] {\tiny{
+	cycle time step: $n \longrightarrow n+1$}} (start);
+  %\path [line] (pippo1) -- (start);
+	
+	
+	
+	
+	%%\node [white, right of=arrow1, text width=4ex, node distance = 18ex,draw = white] (grid2) {\includegraphics[width=\textwidth]{./Figures_E/Subcells}};
+	%%\node [arrow, above of=Vhnew, text width=7ex,rotate=120] (arrow1) {\rotatebox{-120}{\color{darkspringgreen}$\mathbf{\mathcal{R}}$}};
+	%%\node [white, below right=of Unew, text width=5ex, node distance = 13,draw = white] (grid) {\includegraphics[width=\textwidth]{./Figures_E/Subcells}};
+	%%}
+	%%\pause
+	%%\visible<4->{
+	%\node [white, right of=dt, text width=17ex, node distance = 23ex,draw = red] (Ns) {$N_s = 2N+1$};
+	%%\node [draw=none,right of=Ns,fill=none, node distance = 13ex] (dt2) { {\color{red} Optimal choice:} 
+	%\node [white, right of=Ns, text width=27ex, node distance = 27ex,draw = red] (dt2) { {\color{red} Optimal choice:}\tiny
+	%%maximize \emph{local} CFL:\scriptsize ;};
+	%\begin{itemize} 
+	%\item maximize \emph{local} CFL;  
+	%\item  $= \Delta t_{\text{DG}}$;  
+	%\end{itemize}
+	%};
+	%%}
+\end{tikzpicture}
+}% end resizebox
+
+\end{document}
+ 

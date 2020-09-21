@@ -1,0 +1,283 @@
+\section{Convergence, consistency and stability of 
+PDEs}\label{sec:apx-pde-classification}
+This section shall briefly collect a couple of standard definitions
+which complement the introductory section~\vref{sec:conservation-laws}
+about PDEs.
+
+\subsection*{Definitions}
+
+The initial boundary value problem on the spatial domain $\Omega$ is defined as
+\begin{equation}\label{sec:apx-defs-ibvp}
+\partial_t Q(t,x) = \mathcal D~Q(t,x)
+\end{equation}
+with solution vector $Q$ and (spatial) diferential operator $\mathcal D$,
+equipped with initial conditions $Q_0(t_0,x)$ and boundary conditions
+$Q_0(t,x), x\in\partial\Omega$.
+
+For discretization, we define a set of discrete points ${x_i}$ (not neccessarily
+a grid) which cover the discretized domain $\tilde{\Omega}$,
+as well as time steps ${t^n}$ (again not neccessarily uniformly
+distributed). The real solution $u^i_n$ is further approximated by a 
+discretization in the solution vector space $\tilde u^n_i$, and the
+differential operator $\tilde{\mathcal D}$ which is acting on 
+$\tilde{\Omega}$. Furthermore, we introduce a discrete time evolution
+operator $\mathcal T_s$ which fulfills
+\begin{equation}
+f(t_2) = \mathcal T_{t_2-t_1} f(t_1),
+\quad\text{and}\quad\mathcal T_t \circ \mathcal T_s = \mathcal T_{t+s}\,,
+\end{equation}
+where the later makes $\mathcal T_s$ a member of a semi-group
+\cite{Kruzkov1970,Guercilena2018:thesis}. This operator allows to write
+the IBVP \eqref{sec:apx-defs-ibvp} with discrete time evolution as
+\begin{equation}
+\tilde u(t+\Delta t) = \mathcal{\tilde T}^{\Delta}_{\Delta t} \tilde u(t) \,.
+\end{equation}
+We then define the
+\begin{itemize}
+	\item
+	Pointwise error $E_i^n = \tilde u_i^n - u_i^n$ and subsequent
+	global error $|E(t)|= \left( \sum_{i,n} |E^i_n|^p \right)^{1/p}$ as $L_p$ 
+	norm \eqref{apx.def.lpnorm} with typically $p=1,2$.
+	
+	\item
+	Convergence $\leftrightarrow$ $\lim_{\Delta\to 0} |E(t)|=0 ~~\forall t$
+	\footnote{
+		This short notation used in this section is actually predicate logic,
+		$\rightarrow$ is the implication (material conditional),
+		$\rightleftarrows$ is the logic biconditional.
+	}
+	
+	\item
+	Local truncation error $H_i^n = \mathcal{\tilde D}u - 
+	\mathcal D u$
+	
+	\item
+    Truncation error $H(t) = \left( \mathcal{\tilde T}^{\Delta}_{\Delta 
+	t} - \mathcal T_{\Delta t} \right) u(t)$
+
+    \item Total variation diminishing (TVD) $\leftrightarrow$
+    $|\mathcal{\tilde T}_{\Delta t}^\Delta u|_{TV} \leq |u|_{TV}$.
+	
+	\item
+	Consistency $\leftrightarrow$ $\lim_{\Delta\to 0} |H(t)|=0 ~\forall t \in \mathbb R$
+	
+	\item
+	Convergence order is $p$ $\leftrightarrow$ $|H(t)| = \mathcal{O}(\Delta^p)$.
+	
+	\item
+	Stability $\leftrightarrow$ $\sup_{u\neq 0} \frac{|H(t)|}{|u|} \leq C ~~
+	\forall t$ with a constant $C \in \mathbb R$.
+	
+    \item
+    Well-posedness iff $| u(t,x) | \leq k e^{\alpha t} |u_0(x)|$, with a norm
+      $|\cdot|$ and $k, \alpha$ constants. The non-continous dependency of the
+      solution on the initial data is especially obvious for a small
+      perturbation with $k \ll 1$ and $\alpha\gg 1$, which however will change
+      the solution to a very different one in finite time.
+\end{itemize}
+
+
+\subsection*{Theorems for stability}
+
+For linear equations, there is the \emph{Lax-Richtmeyer equivalence theorem}
+which reads in short \cite{Lax1956,Richtmyer94}
+\begin{equation}
+(\text{stable}~\wedge~\text{consistent})~~\rightarrow~~\text{convergence}
+\,,.
+\end{equation}
+A direct consequence is that (again only for linear systems ) any scheme of
+order $p$ has a global error $E(t)=\mathcal{O}(\Delta^p)$.
+
+\noindent
+For nonlinear PDEs, there is the \emph{Lax-Wendroff theorem} which states
+\begin{equation}
+(\text{convergent solution found})~~\rightarrow~~\text{solution is weak.}
+\end{equation}
+The total variation of a function $f(x)$ shall be defined as
+\begin{equation}
+|f|_{TV} = \sup_{h\to 0} 
+\frac 1 h  \int_\Omega | f(x) - f(x-h) | \d x
+= \int_\Omega |f'(x)|  \d x
+\,,
+\end{equation}
+where the second equivalence sign holds only if $f$ is differentiable
+(\ie the derivative exists). Most TV-stable schemes are TVD. Monotonicity
+$\rightarrow$ TVD. Monotone schemes are at most first order accurate,
+monotonicity preserving schemes, but can archive high accuracy.
+
+\section[ADER vs. Runge-Kutta for time integration]
+  {ADER-DG vs RK-DG: Strong MPI scaling and performance comparison}
+\label{sec:rkdg-performance}
+
+%
+In this section \footnote{
+  Parts of the texts and results in this section are published in
+  \cite{Fambri2018}. The benchmarks of this section belong to the hydrodynamics
+  chapter \ref{chapter:hydro}. In contrast, the numerical methods covered here
+  belong to chapter \ref{chapter:numerics}.
+} we provide a detailed and quantitative performance analysis of 
+the new ADER-DG schemes for the GRMHD equations proposed in this work. 
+We compare CPU times and MPI scaling results for ADER-DG in comparison with 
+classical Runge-Kutta DG (RKDG) schemes. We furthermore provide CPU time 
+comparisons between ADER-DG and ADER-WENO finite-volume (FV) methods. \\
+%
+As first test we run the Michel accretion problem again on the domain 
+$\Omega=[3,5.5] \times [1,\pi-1]$ in two space dimensions using a sequence 
+of successively refined meshes of $N_x \times N_x$ DG elements and 
+$\ N_x (N+1) \times N_x (N+1)$ finite-volume 
+zones until a final time of $t=10$. 
+We use a third-order ADER-DG scheme ($N=2$) and compare with 
+a third-order ADER-WENO finite-volume scheme, see \cite{AMR3DCL,Dumbser2008}. 
+In order to make the comparison 
+fair, the mesh of the FV scheme is $N+1$ times finer than the one of the DG scheme, 
+since the DG method has $N+1$ degrees of freedom per cell and per space dimension. 
+The total number of degrees of freedom is therefore the same for both methods. 
+We present the $L_2$ and $L_\infty$ errors for the density $\rho$    
+obtained with both methods. We also report the wall clock time (WCT) measured in 
+seconds and the time needed by the scheme to update one single degree 
+of freedom on one single CPU core (DTU), measured also in seconds. The inverse  
+of this number represents the number of degrees of freedom that the scheme is 
+able to update in one second on one CPU core and can be compared with other 
+finite-volume and finite-difference methods. 
+As computer hardware for this test we use one single 
+CPU core of a workstation with an Intel i7-4770 CPU with 3.4 GHz clock speed 
+and 16 GB of RAM. The results are shown in Table \ref{tab:CTimes}, from which
+it becomes clear that the ADER-DG scheme is faster and more accurate than the 
+ADER finite-volume scheme using the same number of degrees of freedom. Similar 
+results have already been reported in \cite{Dumbser2008} and \cite{ADERNSE} for 
+the Euler equations of hydrodynamics, the MHD equations and the compressible 
+Navier-Stokes equations, using the unified framework of $P_NP_M$ schemes. 
+%
+\begin{table}[t]
+	\centering
+	\begin{tabular}{ c c  cccc  }
+		\hline
+		& $N_x$ &  $L_2$ error & ${L_\infty}$ error & WCT [s] & TDU [s]  \\ 
+		\hline
+		\multirow{4}{*}{\rotatebox{90}{{DG $\mathcal{O}3$}}}
+		&  6     &    2.53E-05  & 3.26E-05 	    &  15.9     &  1.0470E-04  \\ % 15.9433022     &    0.442869506   \\
+		& 12     &    3.32E-06 	&  4.46E-06	 	& 74.4     &  6.3726E-05  	\\ % 74.412477     &    0.516753313   	\\
+		& 18     &    1.01E-06 	&  1.37E-06	 	& 193.5     & 4.9770E-05 	\\ % 193.4568401     &    0.597089013 	\\
+		& 30     &    2.26E-07 	&  3.07E-07	 	& 733.4     & 4.1173E-05 	\\ % 733.3763011     &    0.814862557 	\\
+		\cline{2-5}
+		\hline
+		\multirow{4}{*}{\rotatebox{90}{{FV $\mathcal{O}3$}}}
+		& 18    &    2.77E-05 	&  5.99E-05 	 &   37.7     &    5.1765E-04  \\  % 37.7366419     &    0.116471117    \\
+		& 36    &   6.40E-06 	&  1.72E-05 	 	&  231.9     &   4.0117E-04 	\\ % 231.8798864     &    0.178919665  	\\
+		& 54    &   2.73E-06 	&  8.81E-06 	 	&  694.0     &   3.5679E-04 	\\ % 693.9548484     &    0.237981772  	\\
+		& 90    &   9.44E-07 	&  3.78E-06 	 	&  2754.8     &  3.0694E-04  	\\  %2754.759259     &    0.340093736  	\\
+		\cline{2-5}
+		\hline	
+	\end{tabular}
+	\caption[
+	  Convergence norms for 2D Michel accretion
+	]{  Comparison of $L_2$ and $L_\infty$
+          errors for the Michel accretion problem in 2D. Wall clock times
+          (WCT) and CPU time per degree of freedom update (TDU) in
+          seconds for a third-order ADER-DG scheme ($N=2$) compared with
+          a third-order ADER-WENO finite-volume (FV) scheme.} \label{tab:CTimes}
+\end{table}
+
+As second test case we take the large amplitude Alfv\'en wave problem in flat
+Minkowski spacetime described in \cite{DelZanna2007} and also used later in 
+\cite{Dumbser2008} and \cite{Zanotti2015}. 
+We use the 3D computational domain $\Omega=[0,2 \pi]^3$, which is discretized 
+with ADER-DG schemes of increasing order of accuracy in space and time and 
+using a sequence of successively refined meshes of size 
+$N_x \times N_x \times N_x$. 
+To provide a direct a comparison, we solve the same test problem also with high 
+order Runge-Kutta DG schemes \citep{CockburnShu98,cockburn_2001_rkd}. Since 
+ADER-DG schemes are uniformly high order accurate in space and time, for the 
+RKDG method we use appropriate Runge-Kutta schemes in time whose temporal order 
+of accuracy exactly matches the spatial one. In particular, we use the classical 
+third and fourth-order RK schemes of \cite{Kutta1901}, the fifth order 
+Runge-Kutta scheme of \cite{Fehlberg} and the first one of the sixth order 
+Runge-Kutta schemes proposed in \cite{Butcher1964}. Note that due to the 
+well-known Butcher barriers that apply to high order RK schemes for nonlinear
+ODE systems, the fifth order RK scheme has six stages, and the sixth order RK 
+scheme has seven stages. 
+We run the test problem with both schemes without any limiter up to a final 
+time of $t=1$ and report the errors of the variable $B_y$ measured in $L_2$ 
+norm.
+%
+%
+\begin{marginfigure}[-3cm]
+	\includegraphics[width=\textwidth]{grmhd-paper-official/GRMHD3D_MPIScaling.pdf}
+	\caption[
+	  ADERDG vs RKDG strong scaling test (GRMHD), \publishedIn{Fambri2017}
+	]{ Strong scaling test for the 3D GRMHD equations and
+          performance comparison between fourth-order ADER-DG and RKDG
+          schemes ($N=3$).  The test case is the large amplitude Alfv\'en
+          wave problem solved in 3D up to $t=1$ on a uniform Cartesian
+          mesh composed of $40 \times 40 \times 40$ elements.  The
+          results were obtained with a pure MPI implementation on the
+          SuperMUC phase I system at the LRZ in Garching, Germany, using
+          64 to 16,000 CPU cores. On 16k cores, each MPI rank has only 4
+          elements to update.}
+	\label{fig:scaling}
+\end{marginfigure}
+%
+The computational results for ADER-DG and Runge-Kutta DG schemes are
+reported in Table \ref{tab.conv.comp}, together with the measured wall
+clock times (WCT) in seconds and the time needed by each scheme to update
+one single degree of freedom (TDU) in microseconds. Again, the inverse of
+TDU in seconds represents the number of degrees of freedom that the
+scheme is able to update in one second on one single CPU core and can be
+directly compared with existing finite-volume and finite-difference
+codes.  We observe that the CPU times and error norms are comparable for
+both schemes.
+% 
+For all mesh sizes $N_x$ and polynomial approximation degrees $N$ we have used  
+512 CPU cores of the Phase I system of the SuperMUC of the LRZ in Garching, 
+Germany. This means that for the coarsest mesh with $N_x=8$, each MPI rank has 
+only one single element to update. The results of Table \ref{tab.conv.comp} 
+clearly show that for a small number of elements per MPI rank our 
+\textit{communication avoiding} ADER-DG schemes are computationally 
+less expensive than RKDG schemes of the same order, since RKDG requires MPI 
+communication in each Runge-Kutta stage. We finally run this test problem on 
+a fixed grid of 64,000 elements ($N_x=40$) using fourth-order ADER-DG
+and RKDG schemes on an increasing number of CPUs, from 64 to 16,000. 
+The parallel implementation is based on pure MPI and thus each CPU core 
+corresponds to one MPI rank.  
+The speedup graph and the parallel efficiency as measured on the Phase I 
+system of the SuperMUC supercomputer of the LRZ in Garching, Germany, are  
+presented in Fig. \ref{fig:scaling}. 
+It shows the better MPI scaling of the communication avoiding ADER-DG schemes 
+compared to conventional RKDG methods. 
+%
+\begin{table}[t]
+	\centering
+	\resizebox{\textwidth}{!}{
+	\begin{tabular}{ccccc|ccccc}
+		\hline
+		 $N_x$ & $L_2$ error &  $L_2$ order & WCT [s] & TDU  [$\mu$s] & $N_x$ & $L_2$ error &  $L_2$ order & WCT [s] & TDU [$\mu$s] \\ 
+		\hline
+		\multicolumn{5}{c|}{ADER-DG ($N=3$)} & 	\multicolumn{5}{c}{RKDG ($N=3$)} \\ 
+		\hline
+        8   & 7.6396E-04	&      	& 0.093 	& 33.8	& 8 	& 8.0909E-04	&     	& 0.107 	& 39.2 \\ 
+        16	& 1.7575E-05	&  5.44	& 1.371 	& 31.5	& 16	& 2.2921E-05	& 5.14	& 1.394 	& 32.0 \\ 
+        24	& 6.7968E-06	&  2.34	& 6.854 	& 31.0	& 24	& 7.3453E-06	& 2.81	& 6.894 	& 31.2 \\ 
+        32	& 1.0537E-06	&  6.48	& 21.642	& 31.1	& 32	& 1.3793E-06	& 5.81	& 21.116	& 30.3 \\  
+		\hline
+		\multicolumn{5}{c|}{ADER-DG ($N=4$)} & 	\multicolumn{5}{c}{RKDG ($N=4$)} \\ 
+		\hline	
+        8   & 6.6955E-05	&      	& 0.363 	& 46.8	& 8 	& 6.8104E-05	&     	& 0.456 	& 51.4 \\ 
+        16	& 2.2712E-06	&  4.88	& 5.696 	& 45.9	& 16	& 2.3475E-06	& 4.86	& 6.666 	& 51.0 \\ 
+        24	& 3.3023E-07	&  4.76	& 28.036	& 44.9	& 24	& 3.3731E-07	& 4.78	& 29.186	& 45.3 \\ 
+        32	& 7.4728E-08	&  5.17	& 89.271	& 45.2	& 32	& 7.7084E-08	& 5.13	& 87.115	& 43.4 \\  
+		\hline
+		\multicolumn{5}{c|}{ADER-DG ($N=5$)} & 	\multicolumn{5}{c}{RKDG ($N=5$)} \\ 
+		\hline	
+        8   & 5.2967E-07	&      	& 1.090  	& 53.1	& 8 	& 5.7398E-07	&     	& 1.219  	& 55.9 \\ 
+        16	& 7.4886E-09	&  6.14	& 16.710 	& 51.2	& 16	& 8.1461E-09	& 6.14	& 17.310 	& 52.5 \\ 
+        24	& 7.1879E-10	&  5.78	& 84.425 	& 51.2	& 24	& 7.7634E-10	& 5.80	& 83.777 	& 49.4 \\ 
+        32	& 1.2738E-10	&  6.01	& 263.021	& 50.3	& 32	& 1.3924E-10	& 5.97	& 260.859	& 49.5 \\  
+		\hline	
+    \end{tabular}
+    }% resizebox
+	\caption[
+	  ADERDG vs RKDG: Convergence table and runtime
+	]{  Accuracy and cost comparison between ADER-DG and RKDG schemes of different orders for the GRMHD equations in three space dimensions. 
+	The test problem is the large amplitude Alfv\'en wave solved in the domain $\Omega=[0,2\pi]^3$ up to $t=1$ on a sequence of  successively refined Cartesian meshes with $N_x^3$ elements. The errors refer to the variable $B_y$. The table also contains  
+	total wall clock times (WCT) measured in seconds and the time needed by the scheme to update one single degree of freedom on  one single CPU core  (TDU) measured in microseconds. All simulations have been performed in parallel on 512 MPI ranks of the  SuperMUC phase I system at the LRZ in Garching, Germany. Note that for the coarsest grid with $N_x=8$, each MPI rank has only one single element to update.} \label{tab.conv.comp}
+\end{table} 

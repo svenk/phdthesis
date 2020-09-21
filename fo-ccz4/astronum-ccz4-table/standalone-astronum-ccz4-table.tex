@@ -1,0 +1,41 @@
+%
+% This is an attemp to graphically display the CCZ4 equations
+% in a fancy way. It is rendered as standalone latex because
+% there are so many tricks that this can be seen as a "Tikz-like"
+% figure.
+%
+%
+
+% \documentclass[12pt, tikz]{scrreprt}
+\documentclass{standalone}
+
+%\usepackage[tightpage]{preview}
+
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[utf8x]{inputenc}
+
+% Left align all equations:
+\usepackage[fleqn]{amsmath}
+\setlength{\mathindent}{0pt}
+
+\usepackage[table]{xcolor}
+\usepackage{array,multirow,graphicx,mathtools, %
+  nicefrac,booktabs,tikz,adjustbox,hyperref,cite,wrapfig,etoolbox}
+
+\AtBeginDocument{\let\latexlabel\label}% was for tufte
+
+\begin{document}
+\begingroup%
+\input{common-definitions.tex}%
+\input{astronum-ccz4-table.tex}%
+\endgroup%
+% Thanks to the begingroup/endgroup construct,
+% we can also add the other table next to it, just uncomment
+% the code below:
+%\begingroup%
+%\input{common-definitions.tex}%
+%\input{riemann-helpers-table.tex}%
+%\endgroup%
+\end{document}
+ 

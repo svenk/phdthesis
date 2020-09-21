@@ -1,0 +1,8 @@
+ 
+The aeibibtex repository with its very long aeireferences.bib file (79983 lines,
+2.9MB in size, MD5SUM e4fb25d9b70091b8aa278e97027f1bb0,
+commit 20c682543d77c393fce694c273503fe6b3bf6a67) was used extensively in this
+file, but is not open sourced from its authors. Therefore, we do *NOT* include
+it in this repository.
+
+You find the compiled papers in the phdthesis.bbl file.

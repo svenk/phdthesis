@@ -1,0 +1,119 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                              %
+% This is the main entry file for the PhD thesis of SvenK, written in 2018.    %
+% Compiles with a recent TeX Live distribution (2017). Type "make" to compile. %
+%                                                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% for the time being: % (only for quick submission to Luciano, 
+\def\releasemode{1}
+
+% Structure:
+%   Every project lives with its tex files as well as figures in its own
+%   subdirectory. Some projects can be compiled as standalone tex documents.
+%   Otherwise, certain common definitions can be found in frame/macros.tex.
+%   In general, resembling web framesets, all administrative texts can be
+%   found in frame/
+
+% Setting latex input path allows to distribute \input files as well as
+% graphics across subdirectories. By default, \graphicspath uses
+% the \input@path, therefore it is sufficient to set \input@path only, cf. 
+% http://ftp.gwdg.de/pub/ctan/macros/latex/required/graphics/graphics.pdf
+\makeatletter
+\def\input@path{%
+	{frame/}
+	{numerics/}
+	{fo-ccz4/}
+	{aderdg-grmhd/}
+	{bns-lifetimes/}
+	{qbh/}
+}
+\makeatother
+
+% Documentclass definitions and styling goes here:
+\input{frame/macros.tex}
+
+\begin{document}
+
+%\title{High order methods in numerical relativity}
+\title{
+	High-order methods in fully general-relativistic
+	hydrodynamics \&
+	magnetohydrodynamics
+}
+\newcommand\thesubtitle{Oder so ähnlich}
+\author{Sven Köppel}
+\date{\today\ at \currenttime}
+
+\input{frame/front.tex}
+
+% Move this to end latex processing at a certain step (speed up built)
+%\end{document}
+
+\input{frame/zusammenfassung.tex}
+
+\chapter{Introduction}\label{chapter:intro}
+\input{frame/intro.tex}
+
+\chapter{Evolution equations on the computer}\label{chapter:numerics}
+\input{numerics/numerics-intro.tex}
+\input{numerics/aderdg.tex}
+\input{numerics/numerics-misc.tex}
+
+\subtitledChapter
+   {A first-order formulation of the Einstein equations and its solution with DG schemes}
+   {General Relativity}\label{chapter:gr}
+\input{fo-ccz4/efe.tex}
+\input{fo-ccz4/aderdg-foccz4.tex}
+
+\subtitledChapter{ADER-DG schemes for the general-relativistic magnetohydrodynamic equations}
+   {Hydrodynamics}\label{chapter:hydro}
+\input{aderdg-grmhd/hydrodynamics.tex}
+\input{aderdg-grmhd/aderdg-grmhd.tex}
+
+\subtitledChapter{General-relativistic measurement of the treshold mass to prompt collapse}	
+   {Binary Neutron Star lifetimes}\label{chapter:bnslt}
+\input{bns-lifetimes/bns-lifetimes.tex}
+
+\subtitledChapter{Generalized Uncertainty Principle and Black Holes in Higher Dimensional Self Complete Gravity}
+   {Models for Quantum Black Holes}\label{chapter:qgr}
+\input{qbh/gupbh_extrad.tex}
+
+\chapter{Conclusions}\label{chapter:conclusions}
+\input{frame/conclusions.tex}
+
+\appendix
+%\setcounter{chapter}{1} % Bugfix for tufte-book counterwithin numbering
+\let\thesection\theOldSection % Have "A.1" instead of "1"
+\makeatletter
+\renewcommand\thesection{\thechapter\@arabic\c@section} % Have A1 instead of A.1
+\makeatother
+\chapter{Appendix}\label{chapter:appendix}
+\input{frame/appendix-conventions.tex}
+\input{numerics/appendix-numerics.tex}
+\input{fo-ccz4/ffoccz4.tex}
+\input{fo-ccz4/appendix-bc.tex}
+\input{bns-lifetimes/appendix-gwdefs.tex}
+\input{qbh/appendix-adjusted-gup.tex}
+
+\input{frame/lists.tex} % list of figures and tables
+
+% Bibliography / References
+
+\begin{fullwidth} % for tufte
+%\section{Bibliography}\label{chapter:bib} % looks weirdo
+\newpage% section anchor on correct page
+\addcontentsline{toc}{section}{Bibliography} % misses number
+%\phantomsectiontotoc{Bibliography}% also not perfect
+% in Tufte it seems to miss
+% cite everything: \nocite{*}
+\bibliography{aeireferences,svens,dumbser-short,modgup_paper_refs}{}
+\end{fullwidth}
+
+\newpage
+
+\input{frame/backcover.tex} % ack, declarations, CV
+
+\end{document}
+
+

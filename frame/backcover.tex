@@ -1,0 +1,289 @@
+\begin{fullwidth} % for tufte, stay on 1 page
+	\chapter*{Acknowledgement}
+	\addcontentsline{toc}{section}{Acknowledgement}
+	
+	My gratitude goes to my supervisors for the close supervision, patience in
+	explaining concepts, the many oppertunities for traveling and exchange
+	and meetings at any time and place. Especially I thank my primary supervisor,
+	Luciano Rezzolla, for the one of a kind way of remote collaboration since my
+	move-out of Frankfurt in 2017. My secondary supervisor, Piero Nicolini,
+	is expressed my special thanks for the countless cofees in Otto-Stern-Zentrum.
+	
+	I also want to thank the large group of Relativistic Astrophysics
+	at the Institute for Theoretical Physics (ITP) in Frankfurt,
+    especially my fellow students of the hydrodynamics subgroup,
+	Federico Guercilena, Jens Papenfort, Elias Most and Luke Bovard for
+    many fruitful discussions and exchange of the knowledge.
+	I also benefited from insights provided by Filipo Galeazzi,
+	Bruno Mundim, Matthias Hanauske and Mariafelicia De Laurentis and most
+	of the other people in this large international, fluctuating and colorful
+	group.	
+	Special thanks go to my collegues Alejandro Cruz Osorio and 
+	Roman Gold with which I shared my office at ITP consecutively.
+
+	% However, I also express my gratitude to all other group members: Hector
+	% Olivares, Jonas Köhler, Marcio de Avellar, Antonios Tsokaros, Natascha
+	% Wechselberger, Ziri Younsi, David Kling and Laura Tolos, just to 
+	% mention a few. Given the long time I stayed with this large international, 
+	% fluctuating colorful group, I surely forgot some people!
+	
+	Special thanks goes to the ExaHyPE consortium and in the frontline 
+	Michael Dumbser for his	tireless efforts of spreading the knowledge
+	about sophisticated numerical methods and for the various invitations to
+	Trento University. I express my special thanks to my fellows Dominic Charrier,
+	Jean-Matthieu Gallard, Angelika Schwarz, Ben Hazelwood and
+	Leonard Rannabauer for their great
+	collaboration and the many discussions. Special thanks also
+	to Tobias Weinzierl for his relentless efforts of convincing about the
+	power of loosing control and various invitations to Durham University.
+	Gratitude is further owed to Olindo Zanotti, Michael Bader and
+	Vasco Varduhn for start-up support in their research fields.
+	
+    I also thank the exotic high energy physics (quantum gravity) group at 
+    Giersch Science Center/Frankfurt Institute for Advanced Studies
+    (GSC/FIAS) in Frankfurt, especially my fellow students
+    Marco Knipfer, Antonia Frassino and Michael Wondrak for many inspiring
+    discussions.
+	
+	Last but not least I thank FIAS and ITP for their kind hospitality, 
+	furthermore the graduate schools
+	HGS-HiRE (HIC for FAIR/GSI) and FIGSS (FIAS) for infrastructure, travel 
+	support and softskill
+	schooling. For running simulations within this thesis, I enjoyed access to 
+	various clusters of the
+	of the Gauss Supercomputing Center, especially the LRZ computing center in 
+	Munich/Garching
+	(SuperMUC and CoolMUC) and the HLHRS in 
+	Stuttgart (Hazelhen),
+	the CSC in Frankfurt (Loewe and Fuchs), the Durham-based supercomputer 
+	(Hamilton) as well as local
+	computing facilities in ITP and FIAS. Special thanks goes to the 
+	administrative teams of CSC, ITP and FIAS which provided personal support 
+	in any condition.
+	
+	I~recieved fundamental support from 
+	the European Union's
+	Horizon 2020 Research and Innovation Programme (Grant 671698, call 
+	FETHPC-1-2014, project ExaHyPE)
+	and the COST Action MP1304 ``NewCompStar''.
+	
+    In order to appreciate the work of open source software authors, I want to
+    cite scientific codes which ask for credits:
+	GNU Parallel \cite{Tange2011a}, scipy \cite{SciPy} and matplotlib 
+	\cite{matplotlib}. Also technically this work is standing on the shoulder
+	of giants, as I made use of the rich contemporary GNU/Linux software
+	infrastructure and all the scientific ecosystems --- primarily scientific
+	python --- available for free.
+	
+
+\newpage
+\chapter*{Curriculum Vitae}
+\addcontentsline{toc}{section}{Curriculum Vitae}\label{sec:cv}
+%
+%\begin{figure}
+%	\hspace*{-2cm}
+%	\includegraphics[width=1.5\textwidth]{cv/sven-fias.jpg}
+%	\caption{Photography of Sven (hide this text but show in lof)}
+%\end{figure}
+%
+%
+\begin{multicols}{2}
+%
+\noindent
+\includegraphics[width=.9\linewidth]{cv/sven-fias.jpg}
+\section*{Personal information}
+
+
+%\begin{multicols}{2}[%
+\begin{description}
+	\item[Name] Sven Köppel
+	\item[E-Mail] koeppel@fias.uni-frankfurt.de
+	\item[Date of Birth] January 31, 1989
+	\item[Place of Birth] Königstein (Taunus), Germany
+	\item[Web page] 
+	\href{http://fias.uni-frankfurt.de/~koeppel}{fias.uni-frankfurt.de/{$\sim$}koeppel}
+	\item[Place of residence] Münster (Westfalen), Germany
+	\item[Descendants] Lola *2017
+\end{description}
+
+\section*{Education}
+\begin{description}
+	\item[2015] PhD studies, Institut für theoretische Physik,
+	   Goethe Universität Frankfurt am Main, Supervisor: Prof. L. Rezzolla.
+	\item[2014] Master's thesis, Frankfurt Institute for Advanced Studies,
+	   Title: \emph{Ultraviolet improved Black Holes},
+	   Supervisor: Prof. P. Nicolini.
+	\item[2011] Bachelor's thesis, Institut für theoretische Physik,
+	   Title: \emph{The QCD Equation of State in the Early Universe},
+	   Goethe Universität Frankfurt am Main, Supervisor: Prof. O. Phillipsen.
+    \item[2008] Abitur, Eichendorffschule mit gymnasialer Oberstufe
+       Immanuel-Kant, Kelkheim (Taunus).
+\end{description}
+
+\section*{Peer-reviewed Publications}
+\begin{itemize}
+	\item
+	S. Köppel, L. Bovard, L. Rezzolla,
+	``Universal relations for binary neutron star lifetimes'',
+	published in Astrophysical Journal Letters 2019 \cite{Koeppel2019}
+	
+    \item 
+    F. Fambri, M. Dumbser, S. Köppel, L. Rezzolla, O. Zanotti,
+    ``ADER discontnous Galerkin schemes for general-relatvistc ideal 
+    magnetohydrodynamics'',
+    published in Mon.Not.Roy.Astron.Soc. 2018 \cite{Fambri2018}
+    
+    \item
+    M. Dumbser, F. Guercilena, S. Köppel, L. Rezzolla, O. Zanotti,
+    ``Conformal and covariant Z4 formulaton of the Einstein equatonss strongly 
+    hyperbolic frst-order reducton and solutons with discontnous Galerkin 
+    schemes'',
+    published in Phys.Rev.D. 2018 \cite{Dumbser2017}
+   
+    \item
+    A. Frassino, S. Köppel, P. Nicolini,
+    ``Geometric model of black hole quantum N-portrait, extradimensions and 
+    thermodynamics'',
+    published in Entropy 2016~\cite{FKN16}
+\end{itemize}
+
+\section*{Upcoming Publications}
+\begin{itemize}
+	\item
+	S. Köppel, M. Knipfer, P. Nicolini,
+	``Generalized Uncertainty Principle and Black
+	Holes in Higher Dimensional Self Complete
+	Gravity'',
+	to be published \cite{Knipfer2019}
+\end{itemize}
+
+\section*{Peer-reviewed Conference Proceedings}
+\begin{itemize}
+	\item
+	S. Köppel,
+	``Towards an exascale code for GRMHD on dynamical spacetimes'',
+	published in J.Phys.Conf.Ser. 2018 \cite{Koeppel2017}
+	\item
+	S. Köppel, M. Knipfer, M. Isi, J. Mureika, P. Nicolini,
+	``Generalized uncertainty principle and extra dimensions'',
+	published in Springer Proc.Phys. 2018 \cite{Koppel:2017rsf}
+\end{itemize}
+
+\vfill{}
+\hfill
+\textcolor{black!80!white}{$\to$ CV, page 2/2}
+
+\newpage
+\small % Page 2
+\section*{Presentations, Invitations and Posters}
+\begin{itemize}
+	\item Predicting gravitational waves on computers, at When Gravitational 
+	Waves hit Durham - an ExaHyPE workshop, Durham School of Engineering and 
+	Computing Sciences, on 2017-11-30 (invited talk).
+	
+	\item Towards an Exascale code for MHD on dynamical spacetimes, at Astronum 
+	2017, Centre de congres des Saint-Malo, France, on 2017-06-27.
+	
+	\item Mini Overview, ExaHyPE: Exascale Spacetree ADER-DG, at Mini-Workshop 
+	on Preparing for PRACE Exascale Systems, Juelich Supercomputing Centre, 
+	Forschungszentrum Juelich, on 2017-06-01 (invited talk).
+	
+	\item Einsteins Equations in ExaHyPE, at ExaHyPE Research Council, LRZ, 
+      Technische Universität M\"unchen, Garching, on 2017-04-03  
+      (and 4 more talks there).
+	
+	\item Probing star collisions with Exascale computers, FIGSS seminar,
+	  FIAS, Uni Frankfurt, on 2016-12-12.
+	
+	\item Donuts in Space, at Palaver SS 2016, ITP Uni Frankfurt, on 2016-05-30
+	  (and one more talk there at 2014).
+	
+	\item On gravity self-completeness on Anti-de Sitter background, at 
+	DPG-Frühjahrestagung 2016, Uni Hamburg, on 2016-03-01.
+	
+	\item ExaHyPE: Various Equations and Quick Adaption to the Users' Needs
+	Becoming Open Source, SIAM-CSE, Atlanta (USA), on 2016-02-28
+	(invited poster).
+	
+	\item The Generalized Uncertainty Principle and Extra Dimensions, at 
+	Geometry and Physics seminar, DFT at IFIN-HH, Bucharest, on 2015-09-25 
+	(invited talk).
+	
+	\item The Generalized Uncertainty Principle in extra dimensions, at Karl 
+	Schwarzschild Meeting on Gravitational Physics 2015, Frankfurt, on 
+	2015-07-21.
+
+	\item The quest for physics at shortest scales, at FIAS scientific retreat, 
+	Riezlern, on 2015-01-18.
+	
+	\item Quantum gravity improved black holes, at Astro Coffee, FIAS 0.101, on 
+	2015-01-27.
+	
+	\item On gravity self-completeness in higher dimensions, at 
+	DPG-Frühjahrestagung 2015, TU-Berlin, on 2015-03-20.
+	
+	\item Quantum gravity improved black holes, at DPG Physics School General 
+	Relativity 99, DPG Zentrum Bad Honnef, Uni Bonn, on 2014-09-14 (Poster).
+\end{itemize}
+
+\subsection*{Publications and Invitations in eLearning-related matter}
+\begin{itemize}
+	\item
+	S. Köppel,
+	``Soziale Wissenschaft'',
+	published in USE: Universität Studieren / Studieren Erforschen, 2014
+	(proceeding).
+	
+	\item
+	S. Köppel,
+	``POKAL: Kollaboratives eLearning neu erfunden'',
+	published in Medien in der Wissenschaft \cite{Koeppel2013}.
+	
+	\item UNIversal 2014 Studienkongress, ``Wissenschaft als soziales Netzwerk'',
+	  on 2014-07-15 (invited talk).
+	
+	\item Hessisches eLearning-Fachforum 2014, Hochschule Rhein-Main,
+	``eLearning von Studierenden für Studierende,
+	Studentische Contests und eLearning-Settings an der Goethe-Universität 
+	Frankfurt'' (invited talk).
+	
+	\item GMW 2013
+	(Jahrestagung der Gesellschaft für Medien in der
+	Wissenschaft) an der
+	Goethe-Universität Frankfurt,
+	``POKAL – Kollabioratves eLearning neu erfunden''
+	(invited talk).
+
+    \item And 20 more talks about e-Learning at Uni Frankfurt between 2011-2015.
+	
+\end{itemize}
+
+\section*{Relevant academic work experience}
+\begin{description}
+	\item[2015-2017] ERC Horizon 2020 Project: ``ExaHyPE: An ExaScale 
+	Hyperbolic PDE Engine'', with PIs Prof. M. Bader, Prof. M. Dumbser, Prof. L. 
+	Rezzolla, Prof. T. Weinzierl.
+	\item[2010-2016] PhysikOnline: eLearning for physicists, 
+	  Center for Scientific Computing, Goethe Universität Frankfurt,
+	  Prof. H. Lüdde.
+	\item[2015] Uni$\Phi$, OpenScience social publication platform,
+	   Studiumdigitale, Institute for Computer Science, Goethe
+	   Universität Frankfurt, Prof. D. Krömker.
+	\item[2011-2012] Psychology eLearning, Interdisciplinary
+	   College Of University Didactics (IKH), Goethe Universität Frankfurt,
+       Prof. H. Horz.
+    \item[2008-2010] BioKemika: Chief development of a biochemical
+       search engine, Institute for biophysical chemistry and Life sciences,
+       Goethe Universität Frankfurt, Prof. Clemens Glaubitz.
+\end{description}
+
+\section*{Relevant academic grants}
+\begin{itemize}
+  \item 2015, 2016  ``RiedbergTV'' (20k\euro{}, SeLF eLearning funds)
+  \item 2011---2016  ``PhysikOnline'' (300k\euro{}, QSL funds)
+  \item 2011, 2013 ``POKAL: PhysikOnline Kollaborative Arbeits- und 
+  Lenrplattform'' (25k\euro{} in total, SeLF)
+\end{itemize}
+
+\end{multicols}
+\end{fullwidth}% tufte

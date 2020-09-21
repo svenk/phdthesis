@@ -1,0 +1,690 @@
+% Macros for PhDthesis in tufte style,
+% borrowing ideas from various other styles, most notably the classicthesis
+% and cleanthesis styles.
+
+% The macros also define the documentclass
+
+% doesnt work anyway
+\iffalse
+% This has no effect at all:
+% has to go before documentclass
+% from cleanthesis.sty
+\RequirePackage[					% modify figure and table captions
+font={small}, 					% 	- small font size
+labelfont={bf,sf,color=ctcolorfloatlabel},% 	- label in bold, sans-serif and 
+%magenta
+labelsep=endash,				% 	- separator: none, colon, 
+%period, space, quad, newline, endash
+singlelinecheck=false			% 	- no centered single-lined captions
+]{caption}[2008/08/24]
+% for compatiblity with tufte-book:
+\let\abovecaptionskip\undefined
+\let\belowcaptionskip\undefined
+\fi
+
+
+
+% We want backref=page in order to have back references from the
+% bibliography. However, tufte-book wants to load hyperref without this
+% option. Enabling \documentclass[nohyper]{tufte-book} on the other hand
+% renders the figure captions in standard size and I found no way to
+% revert it back in smaller size. Therefore we register the backref
+% option *before* the documentclass loads and let tufte-book setup hyperref.
+\PassOptionsToPackage{backref=page}{hyperref}
+%
+\PassOptionsToPackage{table}{xcolor}
+%\documentclass[titlepage,nobib,nohyper,marginals=raggedleft]{tufte-book}
+\documentclass[nobib,a4paper,oneside,nofonts,justified,notitlepage]{tufte-book}
+% further options: justified, notitlepage
+%                  twoside  vs oneside       (only for pagenumbers)
+%                  symmetric                 (symmetric pages)
+% option: nofonts <-> Palatino/Helvetica, turn on again at one time.
+
+% TODO: Different layout for print (L+R) and screen (not switching L+R)
+
+% Bugfix for accidentally doublesided cleared pages when in oneside mode.
+% Helps avoid empty pages before new chapters and around the TOC/beginning
+\ifthenelse{\boolean{@tufte@twoside}}%
+{}{\renewcommand{\cleardoublepage}{\clearpage}}%
+
+
+\usepackage[utf8]{inputenc}
+%\usepackage[backref=page]{hyperref} % is done by tufte-book
+\usepackage[german,english]{babel} % ngerman doesnt work; last language is main.
+\usepackage{amsmath,amssymb,mathtools,braket}
+\allowdisplaybreaks  % amsmath: allow page breaks in align enviromnents.
+
+\usepackage{color,verbatim}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{environ} % \NewEnviron
+\usepackage{nicefrac}
+\usepackage{adjustbox} % scales content to box width
+\usepackage{datetime}
+\usepackage{titling} % \thetitle, \theauthor, ...
+\usepackage{tabularx} % even better tables
+\usepackage[toc]{appendix} % appendices
+\usepackage{varioref} % \vref which includes page number
+\usepackage{eurosym} % CV grants
+\usepackage{bbding} % checkmarks
+\usepackage{pifont} % dingbats
+\usepackage{mathbbol} % use lowercase letters in mathbb
+
+% cross mark and check mark https://tex.stackexchange.com/a/42620/49958
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+% just to be sure we have these
+\usepackage{array,multirow,mathtools,adjustbox,etoolbox}
+
+% Status: tried \subref for equations, does not work.
+%    Package probably be removed again!
+% -> at least it mangles the figure fontsize!
+\usepackage{subcaption} % also providing \subref
+ % fix subcaption https://tex.stackexchange.com/a/31927/49958
+\captionsetup{compatibility=false,font=footnotesize}
+
+% Colors:
+% Classicthesis input
+% from https://ctan.org/tex-archive/macros/latex/contrib/classicthesis/
+\definecolor{CTsemi}{gray}{0.55} % chapter numbers will be semi transparent .5 .55 .6 .0
+\definecolor{CTcitation}{rgb}{0,0.5,0} % WebGreen
+\definecolor{CTurl}{named}{Maroon} % Maroon
+\definecolor{CTtitle}{named}{Maroon} % Maroon {cmyk}{0, 0.87, 0.68, 0.32}
+\definecolor{CTlink}{named}{RoyalBlue} % RoyalBlue {cmyk}{1, 0.50, 0, 0}
+\definecolor{halfgray}{gray}{0.55} % chapter numbers will be semi transparent .5 .55 .6 .0
+\definecolor{webgreen}{rgb}{0,0.5,0}
+\definecolor{webbrown}{rgb}{0.6,0,0}
+% clean thesis colors
+\definecolor{ctmain}{cmyk}{1, .50, .10, .01}
+\definecolor{ctaux}{cmyk}{.18, .98, .18, 0}
+% Standard colors for links
+\definecolor{darkblue}{rgb}{0,0,.6}
+\definecolor{darkred}{rgb}{.1,0,0}
+\definecolor{darkgreen}{rgb}{0,.5,0}
+
+% Fonts!
+%\IfFileExists{bergamo.sty}{\usepackage[osf]{bergamo}}{}% Bembo
+%\IfFileExists{chantill.sty}{\usepackage{chantill}}{}% Gill Sans
+\setcaptionfont{\footnotesize}
+
+% This is just ignored, assumably overwritten by Tufte-Book
+% TODO: Would like to have caption labels to look like in cleanthesis
+%%% \usepackage{caption}
+%%% -> has to go before document class! See start of flie.
+% this is *not* ignored but only works for real \figures and not 
+%marginside-figures.
+%\captionsetup[figure]{name={WhyDoYouIgnoreMe.},labelfont={color=red}}
+% This is ignored
+%\captionsetup{font={color=blue},labelfont={bf,sf,color=red}}
+
+% tufte-specific, this line works but modifies the whole caption,
+% not only the "Figure X.X:" string:
+% \setcaptionfont{\sffamily \color{ctmain} }
+
+% This does not really work (it used to work shortly..)
+%% then redefine the caption
+%\let\savedCaption=\caption
+%\renewcommand*{\caption}[2][foo]{%
+%	\normalsize \normalfont \color{green}
+%	\savedCaption[#1]{#2}}
+
+% klappt auch nicht wirklich:
+%\def\caption{\dosingleempty\doMyCaption}
+%def\doMyCaption[#1]#2{%
+%   hiho
+%   \iffirstargument \savedCaption[#1]{#2} \else \savedCaption{#2} \fi
+%}
+
+
+
+%% works also, but is unneccessary complicated:
+%%\makeatletter
+%%\renewcommand*{\@tufte@caption@font}{\sffamily \color{ctmain}}
+%%\renewcommand*{\setcaptionfont}[1]{\renewcommand*{\@tufte@caption@font}{#1}}
+%%\makeatother
+
+% Fonts:
+\usepackage{tgheros} % TEX Gyre Heros (sans-serif, qhv)
+\usepackage{libertine} % Libertine as serif font
+\usepackage{inconsolata} % monospace font
+\normalfont % reset for tt
+
+% Number sections independent of chapters,
+% https://tex.stackexchange.com/questions/207968/
+\usepackage{remreset}
+\makeatletter
+\@removefromreset{section}{chapter}
+\makeatother
+% Which numerals to use for headings
+% (without this line, it is "II.4.2" instead of "4.2")
+\let\theOldSection\thesection % save for later
+\renewcommand{\thesection}{\arabic{section}}
+
+% Count chapters from zero, not one
+\setcounter{chapter}{-1} % works, but currently I 
+ %dont like that anymore
+
+% A bugfix to display a "zero" when using roman literals for chapter numbering
+% https://tex.stackexchange.com/a/211416
+\newcommand{\ZeroRoman}[1]{% 0 + \Roman
+	\ifcase\value{#1}\relax 0\else% Chapter 0
+	\Roman{#1}\fi}% All other chapters
+\renewcommand{\thechapter}{\ZeroRoman{chapter}}
+%\renewcommand{\thechapter}{\Roman{chapter}} 
+
+
+
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+
+%%% Needed by the GRMHD paper
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{cancel}	
+%%% Needed by the GRMHD paper
+
+\usepackage[sort]{natbib} % neccessary when not using revtex4
+
+%\ifshowfigures
+ % show figures, standard
+%\else
+% \usepackage[allfiguresdraft,filename,content={draft mode}]{draftfigure}
+%\fi
+
+% Circled character in normal text
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+        
+
+\usepackage{anyfontsize} % scale fonts, yes
+
+% "Release mode" in terms of todo notes, type "make release" into your
+% command line.
+\ifdefined\releasemode
+\usepackage[disable]{todonotes}
+% Should also disable the listing of todos
+\else
+
+% colored boxes for things todo
+% Alternative dazu (gut fuer Seitenanmerkungen):
+% http://tex.stackexchange.com/a/73418/49958
+\usepackage[draft,colorinlistoftodos,prependcaption,textsize=small]{todonotes}  
+ % notes showed
+\presetkeys{todonotes}{noline}{}
+
+\fi% endif defined \releasemode
+
+
+% Hyperref setup
+\hypersetup{
+    pdftitle={Thesis draft},
+    pdfauthor={Sven Köppel},
+    pdfsubject={phd thesis},
+    pdfkeywords={a} {b} {c},
+    colorlinks=true,        % no borders
+    linkcolor=ctmain,          % color of internal links
+    citecolor=ctaux,    % color of links to bibliography
+    filecolor=ctaux,      % color of file links
+    urlcolor=ctmain,          % color of external links
+    bookmarks=true          % show the toc
+}
+
+% Color of footnote links (light circled background color)
+%\newcommand*\circledBackground[1]{\tikz[baseline=(char.base)]{
+%            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+%            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+%		\node[shape=circle,fill,inner sep=0pt] (char) {#1};}}
+% TIKZ circle does not work, but the colorbox works
+% This works, but makes it really big
+\renewcommand{\thefootnote}{\protect\colorbox{ctmain!5!white}{\protect\textcolor{ctmain}{\arabic{footnote}}}}
+
+% prep of different raising of footnote
+\newcommand*\raiseup[1]{%
+        \begingroup
+        \setbox0\hbox{\footnotesize\strut #1}%
+        \leavevmode
+        \raise\dimexpr \ht\strutbox - \ht0\box0
+        \endgroup
+}
+
+% Avoid footnote marks to be superscript
+% https://tex.stackexchange.com/a/333024
+\makeatletter
+% Default:
+% \def\@makefnmark{\hbox{\@textsuperscript{\normalfont\@thefnmark}}}
+% \renewcommand{\@makefnmark}{\makebox{\normalfont\@thefnmark}}
+\renewcommand{\@makefnmark}{\raiseup{\makebox{\normalfont\@thefnmark}}}
+\makeatother
+
+
+
+% double equations next to each other
+% http://tex.stackexchange.com/questions/120670/equations-side-by-side-both-numbers-on-the-right
+\NewEnviron{double}[2]
+  {\begin{equation*}
+     \refstepcounter{equation}\latexlabel{#1}
+     \refstepcounter{equation}\latexlabel{#2}
+     \BODY % write something like a=b\qquad c=d
+     \tag{\ref*{#1}, \ref*{#2}}
+   \end{equation*}}
+\AtBeginDocument{\let\latexlabel\label}
+% ^^ this very line also saves our life in context of tufte-floats.
+% Tufte floats are known for eating labels, for instance in (floating) tables.
+% Store our global label just to be sure
+% (cf https://github.com/Tufte-LaTeX/tufte-latex/blob/master/tufte-common.def#L1246)
+% These two did *not* work, but the upper one does. Just use \latexlabel inside
+% anything tufte-float-like.
+%\newcommand{\globalLabel}[1]{\label{#1}}
+%\let\globalLabel=\label
+
+% Backrereferences in Bibliography,
+% http://tex.stackexchange.com/questions/15971/bibliography-with-page-numbers
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{%
+    \ifcase #1 (Not cited.)%
+    \or        (Cited on page~#2.)%
+    \else      (Cited on pages~#2.)%
+    \fi}
+
+% for tufte:
+\renewcommand{\subsubsection}[1]{ {\bf #1} }
+
+% Bibliography
+\bibliographystyle{plain}
+% jetzt: Living Reviews, Vorteil: DOI und ArxiV-Verlinkung, Backlinks.
+% http://blog.relativity.livingreviews.org/author-information/citation-guidelines/#bibtex
+% \bibliographystyle{livrevrel}
+% -> does not eat my bibliographies, probably have to hand-craft the refs!
+
+% Numberswithin was "chapter", but since chapters now have roman literals,
+% we use section names.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+%\setcounter{chapter}{1} % because it seems to start with 0
+
+% **************************************************
+% Chapter and Section display
+% **************************************************
+
+% TUFTE MODIFICATION: Show numbers,
+% https://tex.stackexchange.com/a/96125/49958
+% add numbers to chapters, sections, subsections, using the titlesec
+% package: http://texdoc.net/texmf-dist/doc/latex/titlesec/titlesec.pdf
+\setcounter{secnumdepth}{2}
+
+% inspired by classicthesis at http://www.miede.de/ and CTAN
+\newcommand\formatchapter[1]{%
+	\vbox to \ht\strutbox{%
+		\setbox0=\hbox{\chapterNumber\thechapter\hspace{10pt}\vline\ }%
+		\advance\hsize-\wd0 \advance\hsize-10pt\raggedright%
+		\spacedallcaps{#1}\vss}}
+
+\PassOptionsToPackage{newparttoc}{titlesec}% newparttoc to write \part to .toc with \numberline
+
+% there is a bug in titlesec to display the numbers, for certain
+% latex versions (like at the FIAS and ITP machines).
+% what happens is that there are just no numbers shown, nothing else.
+% fix from https://tex.stackexchange.com/a/300259
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\ttlh@hang}{\parindent\z@}{\parindent\z@\leavevmode}{}{}
+\patchcmd{\ttlh@hang}{\noindent}{}{}{}
+\makeatother
+
+% Subtitles for chapters: https://tex.stackexchange.com/a/102682
+\makeatletter
+\newcommand*\nameundef[1]{\expandafter\let\csname #1\endcsname\@undefined}
+\newcommand\chaptersubtitle[1]{\def\@chaptersubtitle{#1}}
+\newcommand\undefChaptersubtitle{\nameundef{@chaptersubtitle}}
+
+
+% chapter format
+\titleformat{\chapter}[block]%
+	{\huge\fontfamily{qhv}\selectfont\raggedright}% raggedright: no hyphenation in title
+	{\protect\marginpar{ \begin{tikzpicture}
+		\draw[fill,color=ctmain!10!white] (0,0) rectangle (\linewidth,\linewidth);
+		\draw[color=ctmain] (1.5cm,4cm) node { \LARGE\smallcaps{Chapter} };
+		\draw[color=ctmain,anchor=east] (4.5cm,1.5cm) node {\color{ctmain!60!white}\normalfont\Huge\fontsize{85}{86}\selectfont\thechapter};
+	\end{tikzpicture}}}
+	{0pt}%
+	{}
+	[\@ifundefined{@chaptersubtitle}{}{\color{CTsemi}\large\@chaptersubtitle}]% after title body
+
+\makeatother % end of subtitles-containing definition
+
+% Subtitles for chapters. They are not supposed to be shown in the TOC
+%   but only on the particular chapter page.
+%\def\chaptersubtitle#1{
+%	{{\Large\fontfamily{qhv}\selectfont #1}}
+%}%
+%   \addcontentsline{toc}{chaptersubtitle}{\protect\numberline{}#1}%
+
+%\titleformat{\chapter}[block]%
+%  {\huge\rmfamily\itshape\color{red}}% format applied to label+text
+%  {
+%{\chapterNumber\thechapter}\ \,\hspace{10pt}\vline   
+%}% label
+%%  	\llap{\colorbox{red}{\parbox{1.5cm}{\hfill\itshape\huge\color{white}\thechapter}}}
+%  {2pt}% horizontal separation between label and title body
+%  {}% before the title body
+%  []% after the title body
+
+\newcommand{\mySectionFont}{\fontfamily{qhv}\selectfont}
+
+% section format
+\titleformat{\section}%
+  {\fontfamily{qhv}\selectfont\color{ctmain}}% format applied to label+text
+  {\llap{\color{black}\hfill{\thesection}\hspace*{10pt}}}% label
+  {0pt}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
+
+% subsection format
+\titleformat{\subsection}%
+  {\fontfamily{qhv}\selectfont\color{ctmain}}% format applied to label+text
+  {\llap{\color{black}\hfill\thesubsection\hspace*{10pt}}}% label
+  {0pt}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body 
+  
+ 
+  
+% **************************************************
+% Page headers
+% **************************************************
+
+% store the current chapter name, caveats: https://texfaq.org/FAQ-cmdstar
+\newcommand{\currentchapter}{}
+\let\oldchapter\chapter
+\usepackage{suffix}
+% hah, apparently this works!
+\renewcommand{\chapter}[1]{\oldchapter{#1}\renewcommand{\currentchapter}{#1}}
+\WithSuffix\newcommand\chapter*[1]{\oldchapter*{#1}\renewcommand{\currentchapter}{#1}}
+
+% syntactic sugar
+\newcommand{\subtitledChapter}[2]{\chaptersubtitle{#1}\chapter{#2}\undefChaptersubtitle}
+
+%\makeatletter
+%\renewcommand{\chapter}[1]{
+%    \@ifstar
+%    {\oldchapter*{#1}\renewcommand{\currentchapter}{#1}}
+%	{\oldchapter{#1}\renewcommand{\currentchapter}{#1}}
+%}
+%\makeatother
+
+% This snippet directly comes from tufte-common.def. We replace
+% \plainauthor and \plaintitle to the actual chapter title to have a better
+% context
+ 
+\makeatletter
+  \ifthenelse{\boolean{@tufte@twoside}}
+  { 
+     \fancyhead[LE]{\thepage\quad\smallcaps{\newlinetospace{\currentchapter}}}%
+     %\fancyhead[RO]{\smallcaps{\newlinetospace{\plaintitle}}\thepage\quad}
+     \fancyhead[RO]{\smallcaps{\newlinetospace{\currentchapter}}\quad\thepage}%
+     % for development:
+     %\fancyhead[RO]{\smallcaps{\newlinetospace{PDF compiled on \today at \currenttime}}\quad\thepage}
+  }
+  % else: single sided:
+  {
+    \fancyhead[RE,RO]{\smallcaps{\newlinetospace{\currentchapter
+     % (PDF compiled on \today at \currenttime)
+      }}\quad\thepage}
+  }
+\makeatother
+
+%% Redefine the plain page, so we have page numbers on chapter pages (but also plain pages!)
+%% SRC: https://tex.stackexchange.com/a/117334/49958 et al
+%\fancypagestyle{section-page}{\fancyhead[RE,RO]{\thepage}}
+%\usepackage{etoolbox}
+%\patchcmd{\chapter}{\thispagestyle{plain}}{\thispagestyle{section-page}}{}{}
+% -> does not work!
+
+%% Instead, change the plain style which is used by tufte-common.def. There is still
+%% the empty style for empty pages.
+\makeatletter
+\fancypagestyle{plain}{
+  \ifthenelse{\boolean{@tufte@twoside}}
+  { 
+  	\fancyhead[LE]{\thepage}%
+  	%\fancyhead[RO]{\smallcaps{\newlinetospace{\plaintitle}}\thepage\quad}
+  	\fancyhead[RO]{\thepage}%
+  	% for development:
+  	%\fancyhead[RO]{\smallcaps{\newlinetospace{PDF compiled on \today at \currenttime}}\quad\thepage}
+  }
+  % else: single sided:
+  {
+  	\fancyhead[RE,RO]{\thepage}
+  }
+}% end of fancypagestyle
+\makeatother
+
+% try this instead:
+\fancypagestyle{page}{\fancyhead[RE,RO]{\thepage}}
+
+% **************************************************
+% Table of Contents (TOC)
+% **************************************************
+
+% Make the TOC fancier: package {etoc}
+%
+% Idea: Display subsections without page numbers, getting an overall
+%       more compact TOC (seen in the Thesis of Reisswig).
+%       Then also apply the sans-serif font and colors from the sections
+% 
+%ftp://ftp.rrzn.uni-hannover.de/pub/mirror/tex-archive/macros/latex/contrib/etoc/etoc-DE.pdf
+
+\iftrue %\iffalse: %disable for the time being
+\usepackage[linktoc=all]{etoc}
+\usepackage{etoolbox} % for https://tex.stackexchange.com/a/55926
+\makeatletter
+\newlength{\tocleftmargin}    \setlength{\tocleftmargin}{5cm}
+\newlength{\tocrightmargin}   \setlength{\tocrightmargin}{1cm}
+
+
+% test empty strings https://tex.stackexchange.com/a/377231/49958
+\def\ifempty#1{\def\temp{#1} \ifx\temp\empty }
+\def\ifShowChapter#1{\ifempty{#1}\else Chapter\fi} % unnumbered capters
+
+% Trick to use another color for subsection links
+% -> doesnt work
+\newcommand{\setAuxLinkColor}{}%\hypersetup{linkcolor=black}}       
+
+\etocsetstyle{chapter}
+   {\begingroup\addvspace{1ex}\parfillskip0pt
+	\leftskip\tocleftmargin
+	\rightskip\the\tocrightmargin plus 1fil
+	\parindent0pt}
+    {\bfseries\LARGE\upshape\addvspace{2ex}\leavevmode}
+    {\llap{\color{ctmain}\mySectionFont\setAuxLinkColor 
+    % This works and allows to disable page numbers for content chapters (with
+    % sections). Removed however due to Introduction+Conclusion chapter
+    % where numbering is neccessary
+    % TODO Disable
+    \etocifnumbered{Chapter}{}\hspace{.5em}{\setAuxLinkColor\etocnumber}\hspace{.75cm}}{\mySectionFont\setAuxLinkColor\etocname}
+    %\etocifnumbered{}{\hfill\makebox[-\tocrightmargin][l]{\makebox[0pt]{\normalfont\normalsize\mySectionFont\color{ctmain}\large\etocpage}}}
+    {\hfill\makebox[-\tocrightmargin][l]{\makebox[0pt]{\bfseries\LARGE\color{ctmain}\mySectionFont\etocpage}}}
+	\par}
+    {\endgroup}
+    
+    % Idea of the section display: Mimic how they look like with \titleformat
+\etocsetstyle{section}
+    {\begingroup\leftskip\tocleftmargin
+    	\rightskip\the\tocrightmargin plus 1fil
+    	\parindent0pt}
+    {\mdseries\large\addvspace{.5ex}\leavevmode}
+    {\llap{\mySectionFont\color{black}\etocnumber\hspace{.75cm}}\mySectionFont\color{ctmain}\etocname%
+%   {\llap{\etocnumber\hspace{.75cm}}\textit{\etocname}%
+	 \hfill\makebox[-\tocrightmargin][l]{\makebox[0pt]{\etocpage}}\par}
+   {\endgroup}
+
+% Trick to use another color for subsection links
+\renewcommand{\setAuxLinkColor}{\hypersetup{linkcolor=ctmain!70!white}}       
+%\newcommand{\resetLinkColor}{\hypersetup{linkcolor=ctmain}} % default...
+
+	\etocsetstyle{subsection}
+	{\par\nopagebreak\begingroup
+		\leftskip\tocleftmargin \rightskip\@tocrmarg \parfillskip\@flushglue
+		\parindent 0pt \normalfont\normalsize\rmfamily\small%\itshape
+		% \columnsep1em
+		% \begin{minipage}{\dimexpr\linewidth-\leftskip-\rightskip\relax}%
+		% \begin{multicols}{2}%
+		\color{ctmain!70!white}
+		\etocskipfirstprefix}
+	{,\allowbreak\,}
+	{{\mySectionFont\setAuxLinkColor\etocname}}%\  % ~(\etocpage)
+	%\textup{(\etocnumber)}
+	{.\par\endgroup}%
+	% {.\par\end{multicols}\end{minipage}\par\endgroup}%
+
+\makeatother
+% end of crazy etoc TOC redefinition
+\fi % endof foobar test
+
+\setcounter{tocdepth}{2} % overwrite tufte
+% tocdepth = 1 was useful in beginning
+
+% This stems from
+% https://github.com/derric/cleanthesis/blob/master/cleanthesis.sty#L642
+\usepackage{tocloft}
+% - fixes wrong fonts in the toc, thanks to magnucki
+\renewcommand{\cftchapfont}{\usefont{T1}{bch}{b}{n}\selectfont}
+\renewcommand{\cfttoctitlefont}{\normalfont}
+\renewcommand{\cftloftitlefont}{\normalfont}
+\renewcommand{\cftlottitlefont}{\normalfont}
+
+% This works for removing the malformed TOC title
+\makeatletter \renewcommand{\@cftmaketoctitle}{} \makeatother
+
+% https://tex.stackexchange.com/a/187871/49958
+\newcommand{\phantomsectiontotoc}[1]{%
+	\addtocontents{toc}{\protect\contentsline{section}{\protect\numberline{\thesection}#1}{}{}}%
+}
+
+% Textual stuff
+
+% for math
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\dd}[2]{\frac{\d #1}{\d #2}}
+\newcommand{\pp}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\Lie}{\mathcal{L}}
+\newcommand{\gammat}{\tilde\gamma}
+\newcommand{\Gtilde}{\tilde\Gamma}
+\newcommand{\Ghat}{\hat\Gamma}
+\newcommand{\Atilde}{\tilde A}
+\newcommand{\TraceFree}[1]{\left[#1\right]^{\mathrm{TF}}}
+
+% Terms coming from...
+\newcommand{\NewTerms}[1]{\textcolor{red}{#1}}
+
+% for regular text
+\newcommand{\understand}{\circled{?}}
+
+
+%%% Start of commands defined in the CCZ4 paper
+
+\newcommand{\cf}{{cf.}~}
+\newcommand{\ie}{{i.e.,}~}
+\newcommand{\eg}{{e.g.,}~}
+\newcommand{\ms}{{\rm ms}}
+\newcommand{\km}{{\rm km}}
+\newcommand{\hz}{{\rm Hz}}
+\newcommand{\khz}{{\rm kHz}}
+\newcommand{\mpc}{{\rm Mpc}}
+\newcommand{\pls}{~~~}
+\newcommand{\hG}{{\hat\Gamma^k}}
+\newcommand{\gij}{{\tilde\gamma_{ij}}}
+\renewcommand{\u}{\boldsymbol{u}}
+\newcommand{\halb}{\frac{1}{2}}
+
+\renewcommand{\d}{\mathrm{d}}
+
+\newcommand{\x}{\boldsymbol{x}}
+\newcommand{\Q}{\boldsymbol{Q}}
+\renewcommand{\u}{\boldsymbol{u}}
+\newcommand{\w}{\boldsymbol{w}}
+\newcommand{\q}{\boldsymbol{q}}
+\newcommand{\F}{\boldsymbol{F}}
+\newcommand{\f}{\boldsymbol{f}}
+\newcommand{\g}{\boldsymbol{g}}
+\newcommand{\h}{\boldsymbol{h}}
+%\renewcommand{\v}{\boldsymbol{v}}
+\newcommand{\B}{\boldsymbol{B}}
+\newcommand{\emm}{m}
+
+% Naming a computer code name
+\newcommand{\code}[1]{\texttt{#1}}
+%%% End of commands defined in the CCZ4 paper
+
+\providecommand{\tr}{\operatorname{tr}} % trace
+
+\providecommand{\cf}{cf.,~}
+\providecommand{\ie}{i.e.,~}
+\providecommand{\eg}{e.g.,~}
+\providecommand{\dd}{\mathrm{d}}
+\providecommand{\mev}{\,{\rm MeV}}
+\providecommand{\s}{\rm s}
+\providecommand{\ms}{\rm ms}
+\providecommand{\km}{\,{\mathrm{km}}}
+\providecommand{\gcm}{\,{\mathrm{g}/\mathrm{cm}^{3}}}
+\providecommand{\sol}{\odot}
+\providecommand{\Msun}{M_{\odot}}
+\providecommand{\Msol}{M_{\odot}}
+\providecommand{\tov}{\mathrm{TOV}}
+\providecommand{\Mtov}{M_\tov}
+\providecommand{\tautov}{\tau_{\tov}}
+\providecommand{\Rtov}{R_\tov}
+\providecommand{\Mth}{M_\textrm{th}}
+\providecommand{\sys}{{\mathrm{sys}}}
+\providecommand{\Ctov}{\mathcal{C}_{\rm{TOV}}}
+
+% for Tensortemplates:
+\providecommand{\TT}[2]{\mathtt{#1}_{\langle #2 \rangle}}
+
+
+% TODO:
+% Bibtex distinguish between aeireferences, web publications, math references,
+% cs references, qgr references? Or probably with a label in the display?
+% cf.
+% 
+%http://packages.oth-regensburg.de/ctan/macros/latex/contrib/bibtopic/bibtopic.pdf
+
+% numbering equations in an tabular array, used in aderdg-foccz4.tex:
+% src: https://tex.stackexchange.com/a/66838/49958
+\newcommand{\tagarray}{%
+	\mbox{}\refstepcounter{equation}%
+	$(\theequation)$%
+}
+
+
+% Shorthands for the list of figures/tables, kind of label markers
+\newcommand{\by}[1]{Author: #1}
+\newcommand{\publishedIn}[1]{Published in \cite{#1}}
+\newcommand{\modifiedAfter}[1]{Modified after \cite{#1}}
+\newcommand{\colorizedAfter}[1]{Colorized from \cite{#1}}
+\newcommand{\ownPub}[1]{Part of own publication \cite{#1}}
+\newcommand{\exclusive}{Exclusive material.}
+
+% **************************************************
+% Metrics
+% **************************************************
+%% Thought about adding a list of metric (number of total equations,
+%% etc.), but it seems to be a bit self-praise...
+%
+%\usepackage{totcount,lastpage}
+%\newtotcounter{eqnnum}
+%
+%% Count sections
+%\regtotcounter{section}
+%%\total{section}
+%
+%% Count citations
+%\newtotcounter{citnum}
+%\def\oldbibitem{} \let\oldbibitem=\bibitem
+%\def\bibitem{\stepcounter{citnum}\oldbibitem}
+%%\totalheightof{citenum}
+
+% 

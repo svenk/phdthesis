@@ -1,0 +1,153 @@
+\chapter{References}
+\setcounter{section}{0} % each appendix has his own sections
+%
+%\chapter{List of figures and tables}
+%\addcontentsline{toc}{chapter}{List of figures and tables}
+
+This list helps to find and identify figures; they are labeled by their size 
+and type (illustration or plots) and marked if they were not self-made.
+
+\begin{fullwidth} % for tufte
+%\listoffigures
+% hide title/own title
+\section{List of figures}\label{sec:lists}
+{\makeatletter
+	% ENDLICH, das klappt:
+	\renewcommand*{\addvspace}[1]{}
+	\@starttoc{lof}
+	\makeatother }
+
+\newpage % design improvement
+% \listoftables
+%\tinysection{List of tables}
+\section{List of tables}
+
+{\makeatletter
+	\renewcommand*{\addvspace}[1]{}
+	\@starttoc{lot}
+	\makeatother}
+
+\section{List of computer codes and libraries}\label{apx.codes}
+This section lists codes which where used within this work, and adresses of internet websites where
+it is possible to download them.
+
+\subsection{Initial data codes}
+The following codes are a selection of codes which I modified in order to
+be read in by the \code{ExaHyPE} code.
+
+\begin{description}
+	\item[Lorene] An extensive code and library for creating
+      general-relativistic initial data for various compact objects, such as
+      single rotating (magnetized) stars and binary neutron stars. Whenever
+      binary neutron star systems were evolved in this work, the initial data
+      stems from Lorene. \\ The code is available at
+      \href{https://lorene.obspm.fr/}{lorene.obspm.fr} or
+      \href{https://bitbucket.org/relastro/lorene}{bitbucket.org/relastro/lorene}
+      as well as
+      \href{https://bitbucket.org/relastro/lorene-pointwiseexport}{bitbucket.org/relastro/lorene-pointwiseexport}.
+     
+	\item[RNSID] A fast code for creating rotating neutron star initial data.
+	  This code is also part of the Einstein Toolkit,
+	  available at
+	  \href{https://bitbucket.org/einsteintoolkit/einsteininitialdata}{bitbucket.org/einsteintoolkit/einsteininitialdata}
+      but also at 
+	  \href{https://bitbucket.org/relastro/rnsid_standalone}{bitbucket.org/relastro/rnsid\_standalone}
+	
+	\item[ToriID] A code for creating torus initial data (hydrodynamic 
+	  quantities) on a given spacetime from a compact object. This code
+	  is available at
+	  \href{https://bitbucket.org/relastro/toriid-standalone}{bitbucket.org/relastro/toriid-standalone}.
+	
+	\item[TOV Solvers] Various codes for solving the TOV equations were used
+	  in this work, for instance the \code{TOVSolver} from EinsteinToolkit
+	  which is available as a standalone version at
+	  \href{https://bitbucket.org/relastro/tovsolver_hybrid/}{bitbucket.org/relastro/tovsolver\_hybrid}.
+	  Other codes used are the closed soure codes \code{PizzaTOV} and
+	  \code{MargheritaTOV}.
+	
+	\item[TwoPunctures] The TwoPunctures code allows to create a spacetime
+	  with an arbitrary number of puncture black holes. A version is available
+	  at 
+	  \href{https://bitbucket.org/relastro/twopunctures-standalone}{bitbucket.org/relastro/twopunctures-standalone}.
+	
+\end{description}
+
+\subsection{Time evolution codes}\label{apx.codes.time-evolution}
+\begin{description}
+	\item[EinsteinToolkit] The Einstein toolkit is a mature and extensive code
+	  collection which is available as open source at
+	  \href{https://einsteintoolkit.org/}{einsteintoolkit.org}. It is a modular
+	  code based on \code{Cactus}. The \code{Carpet} code 
+	    \cite{Schnetter-etal-03b, Schnetter:2006pg,Goodale02a} 
+	  provides by default the computational grid/meshing. The \code{GRHydro}
+	  and \code{IllinoisGRMHD} are two open source relativistic hydrodynamic
+	  codes which are part of the Einstein toolkit. Howveer, there are also
+	  a large number of proprietary extensions/modules, such as any recent
+	  instance of the \code{Whisky} code.
+	\item[WhiskyTHC] The Whisky templated hydrodynamics code
+	  \cite{Radice2013,Radice2011}. It is the merger of various codes for
+	  evolving hydrodynamics, such as the \code{Pizza} code. It gets it
+	  name from templated C++ and is a high order FD/FV code for general
+	  relativist hydrodynamics. It is supposed to be used within the
+	  Einstein toolkit. It is closed source.
+	\item[ExaHyPE] ExaHyPE is a next generation ADER-DG code with dynamic AMR.
+      Its computational grid/meshing is provided by the \code{Peano}
+      framework \cite{Peano1,Peano2}.
+      It is available at \href{http://exahype.eu/}{exahype.eu} and/or
+	  \href{http://www.peano-framework.org/}{peano-framework.org}.
+	
+	\item[SVEC] The State vector enhancement code is a general relativistic
+	  magnetohydrodynamics code which can provide the PDE parts within the
+	  ExaHyPE framework. The code is available at
+	  \href{https://bitbucket.org/svek/svec/}{bitbucket.org/svek/svec/}
+	  but also part of ExaHyPE.
+	  
+	\item[Antelope] Antelope is a code for solving Einsteins equations in a
+	  MoL framework, as provided by the Einstein toolkit. It has different
+	  formulations of Einsteins equations implemented
+	  (Z4, Z4c, CCZ4, FO-CCZ4) and is based on the \code{TensorTemplates}
+	  framework. At the time being, Antelope is closed source.
+\end{description}
+	
+\section{List of co-authored papers}
+In the following, all co-authored papers written within the relativistic
+astrophysics group in Frankfurt are listed, with my individual contributions.
+See also page \pageref{sec:cv} for my curriculum vitae which lists all
+peer reviewed papers, \ie also single authored publications and publications
+written not within the relativistic astrophysics group.
+
+\begin{enumerate}
+	\item[\cite{Dumbser2017}] FO-CCZ4 (Chapter \ref{chapter:gr}):
+	   Parallel/comparative system matrix analysis with Mathematica and Maple,
+	   both for a preliminary FO-Z4 candidate as the FO-CCZ4 system,
+	   implementation and code generation for C++/\-Fortran/\-TensorTemplates,
+	   running benchmarks and tests on different supercomputers,
+       producing figures and texts for the paper,
+	   revised and improved article during review.
+	\item[\cite{Fambri2017}] ADER-GRMHD (Chapter \ref{chapter:hydro}):
+	   Implementation and tests with Fortran/C++ version of PDE system,
+	   producing texts for the paper,
+	   revised and improved article during review.
+	\item[\cite{Koeppel2019}] BNS Lifetimes (Chapter \ref{chapter:bnslt}):
+		Operating over 200 (completed) binary neutron star merger simulations
+		on different supercomputers,
+		Interpreting the data,
+		Writing an analysis code and contributing to a 
+		comparative second one maintained by the coworker,
+		Producing figures and text for the paper,
+		Running a convergence study, testing different parameter spaces
+		(like headon mergers),
+		revised and improved article during review.
+	%\item[\cite{Koeppel2017}] Astronum-Proceeding (single authored)
+	%\item[\cite{Koppel:2017rsf}] GUP-Proceeding: 
+	%   Produced figures and text, did calculations and derivations.
+	%\item[\cite{Knipfer2019}] GUP-Paper:
+	%   Produced figures and text, did calculations and derivations.
+	%\item[\cite{FKN16}] Holography-Paper:
+	%   Produced figures and text, did calculations and derivations.
+\end{enumerate}
+
+% This list is only for Luciano; thus no need to write about QBH papers.
+
+\end{fullwidth}
+% End list of figures and tables chapter

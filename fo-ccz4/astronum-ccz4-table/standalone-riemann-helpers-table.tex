@@ -1,0 +1,28 @@
+% Based on the standalone ccz4 table
+
+% \documentclass[12pt, tikz]{scrreprt}
+\documentclass{standalone}
+
+%\usepackage[tightpage]{preview}
+
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[utf8x]{inputenc}
+
+% Left align all equations:
+\usepackage[fleqn]{amsmath}
+
+%\usepackage{sub} % custom subequations % part of amsmath?
+
+\usepackage[table]{xcolor}
+\usepackage{array,multirow,graphicx,mathtools, %
+  nicefrac,booktabs,tikz,adjustbox,hyperref,cite,wrapfig,etoolbox}
+\AtBeginDocument{\let\latexlabel\label} % was for tufte
+
+\begin{document}
+\begingroup%
+\input{common-definitions.tex}%
+\input{riemann-helpers-table.tex}%
+\endgroup%
+\end{document}
+ 

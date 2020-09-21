@@ -1,0 +1,164 @@
+% Source: There is even a repository for that.
+%
+% The equations were derived together by Luciano, Elias, Luke, Sven
+% in Trento one day. However, I removed a good part of the calculations,
+% keeping only some stuff.
+
+\newcommand{\Gah}[2]{\mathring{\Gamma}^{{#1}}{}_{{#2}}}
+\newcommand{\pgh}[2]{\partial_{{#1}}\mathring{\gamma}_{{#2}}}
+\newcommand{\pd}[1]{\partial_{{#1}}}
+\newcommand{\Dh}[1]{\mathring{\nabla}_{{#1}}}
+\newcommand{\CDh}[1]{\mathring{\mathcal{D}}_{{#1}}}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\gat}{\tilde{\gamma}}
+\newcommand{\gah}{\mathring{\gamma}}
+
+\section{FO-FCCZ4: a first-order fully covariant Z4 
+formulation}\label{sec:fo-fccz4}
+\marginnote{
+	The notation uses different decorators to express the belonging
+	of a particular symbol to a particular reference frame. As a guide,
+	for a given symbol $\varphi$, % = \varphi_{ijk\dots}^{abc\dots}$,
+	it is
+	\begin{enumerate}
+		\item[$\tilde{\varphi}$] With tilde: Ordinary 3-symbol in Cartesian 
+		space
+		\item[$\mathring{\varphi}$] Ring underlines that these quantities are 
+		relative to the background metric $\mathring{\gamma}_{ij}$ (\ie 
+		measured in curved space)
+		\item[$\varphi$] four dimensional symbol
+	\end{enumerate}%
+	Furthermore, when applicable, this notation is used:
+	\begin{enumerate}
+		\item[$\mathcal X_{ij}$] Tensors, derived from covariant derivatives
+		\item[$X_{ij}$] Not transforming as tensors, as derived from partial 
+		derivatives
+	\end{enumerate}
+}%
+This section provides a \emph{fully} covariant formulation of the (first 
+order formulation of the) CCZ4 equations (Section~\vref{sec:fo-ccz4})
+as a proof of concept, \ie it demonstrates the calculations neccessary to
+derive such a set of equations. The concept follows \cite{Ruchlin2017}.
+A discussion about the practicability will be given in the end.
+
+The general idea of this approach is to introduce a (non-evolved) background
+three-metric $\mathring{\gamma}_{ij}$ which, together with the new evolved 
+metric $\epsilon_{ij}$, composes the
+metric $\tilde{\gamma}_{ij}$ in the Cartesian coordinate system,
+%
+\begin{equation}
+\tilde{\gamma}_{ij} :=
+\mathring{\gamma}_{ij} + \ve_{ij} \,.
+\end{equation}
+
+In the following, a number of calculation rules are derived which define how
+the coordinate transformation is defined. These rules can then be applied to
+transform the right hand side/differential operator in the FO-CCZ4 equations
+to the new coordinate system. Schematically,
+\begin{equation}
+\partial_t Q = \mathcal R(Q, \partial_i Q)
+\quad\rightarrow\quad
+\partial_t \mathring Q = \mathcal R(\mathring Q, \mathring{\nabla}_i \mathring 
+Q)
+\end{equation}
+To do so, the auxilliary quantities $X\in \{B^i_j, A_i, P_k, D_{ijk} \}$, as defined in
+\eqref{eq:Auxiliary}, need to be replaced by variants $\mathcal X$ which use the covariant
+derivative, furthermore the metric itself as well as the contracted Christoffel symbol $\hat{\Gamma}^i$.
+The time evolution $\partial_t \mathcal X = \partial_t X + \dots$ must be
+determined, furthermore the replacement law $\partial_i X = \partial_i \mathcal X + \dots$.
+
+The vector of evolved quantities will then be
+\begin{equation}
+Q_\text{FO-FCCZ4} = (\epsilon_{ij}, K_{ij}, \Theta, \Lambda_i, \alpha, \beta^i, b_i, A_i, \mathcal B^i_j, 
+\mathcal D_{ijk}, K, \phi, \mathcal P_k)
+\end{equation}
+whereas the material parameters
+\begin{equation}
+Q_\text{background} = (\mathring{\gamma}_{ij}, \mathring{\Gamma}^i_{jk})
+\end{equation}
+need to be stored. Note that the transformations only add algebraic source terms, and thus
+the differential structure (hyperbolicity) of the FO-FCCZ4 system does not change.
+
+\subsection*{Vector transformation}
+For a vector, the spatial covariant derivative respective to the
+$\mathring{\gammat}$ metric is defined as
+\begin{equation}
+\Dh{i}X^{k} =  \pd{i}X^{k} + \Gah{k}{il}X^{l}, \qquad
+\Dh{i}X_{k} =  \pd{i}X_{k} - \Gah{l}{ik}X_{l},
+\end{equation}
+Since $\mathring\Gamma$ is related to the cartesian metric, $\Gah{i}{jk}=0$,
+and therefore $\Dh{i}B_{k} = \pd{i}X_{k}$, \ie there is no need to change any
+occurance of a spatial derivative on $A_i$ and $P_k$.
+
+\subsection*{(1,1)-tensor transformation}
+%Subsequently, also derivatives of tensors $\pd{i}B^{j}_{k}$ and 
+%$\pd{i}B_{jkl}$ shall be written as $\Dh{i}B^{j}_{k}$ and $\Dh{i}B_{jkl}$.
+%It is useful to define the following additional quantities
+We recognize $B^{i}_{k} = \pd{k}\beta^{i}$ being the evolved tensor in the FO-CCZ4
+scheme, while $\mathring{\mathcal{B}}^{i}_{k} := \Dh{k}\beta^{i}$ will be evolved
+in FO-FCCZ4. It's time evolution equation \eqref{eq.foccz4.auxB} gets another contribution
+\begin{equation}
+\pd{t}\mathring{\mathcal{B}}^{i}_{k} = \pd{t}B^{i}_{k} + \Gah{i}{lk}\pd{t}\beta^{l},
+\,,
+\end{equation}
+where $\partial_t \beta^l$ is just the algebraic source term in \eqref{eq.foccz4.beta}.
+Occurances of spatial derivatives on $B^i_j$ have to be replaced according to
+\begin{align}
+\pd{l}B^{i}_{k} = \pd{l}\mathring{\mathcal{B}}^{i}_{k} - 
+\pd{l}(\Gah{i}{km})\beta^{m} -
+\Gah{i}{km}\mathring{\mathcal{B}}^{m}_{l}- \Gah{i}{km}\Gah{m}{nl}\beta^{n}
+\end{align}
+
+\subsection*{(0,3)-tensor transformation}
+In order to determine the replacement neccessary for the time evolution
+$\partial_{t} D_{ijk}$ and spatial derivatives of $\partial_{l}D_{ijk}$, we define
+$
+2\mathring{\mathcal{D}}_{ijk}:= \mathring{D}_{i}\tilde{\gamma}_{jk} =
+\mathring{D}_{i} \ve_{jk}
+$, so that
+$
+\mathring{D}_{i}\ve_{jk} = \pd{i}\ve_{jk}
+-\Gah{l}{ij}\ve_{lk} - \Gah{l}{ik}\ve_{lj} =
+\mathring{\mathcal{D}}_{ijk}
+$. 
+The time evolution \eqref{eq.foccz4.auxD} is then replaced by
+\begin{align}
+2\,\pd{t}\mathring{\mathcal{D}}_{ijk} = 2\,\pd{t}D_{ijk} - 
+\Gah{l}{ij}\pd{t}\ve_{lk} -
+\Gah{l}{ik}\pd{t}\ve_{lj}
+\end{align}
+Spatial derivatives are however replaced by
+\begin{equation}
+\begin{aligned}
+\label{eq:dl_Dijk}
+    2\,\pd{l}D_{ijk} &= 2\,\pd{l}\mathring{\mathcal{D}}_{ijk} + \pd{l}\pd{i}\gah_{jk}+
+    (\pd{l}\Gah{m}{ij})\ve_{mk}\\
+    &\phantom{=}
+     + (\pd{l}\Gah{m}{ik})\ve_{mj} +
+    \Gah{m}{ij}\pd{l}\ve_{mk}  + \Gah{m}{ik}\pd{l}\ve_{mj} \,,
+\end{aligned}
+\end{equation}
+with $
+  \pd{i}{\ve}_{jk} = \Dh{i}\ve_{jk}+\Gah{l}{ij}\ve_{lk}+\Gah{l}{ik}\ve_{lj}
+$.
+\subsection*{Contracted Christoffel symbol}
+Instead of $\hat\Gamma^i$, the evolution variable in FO-FCCZ4 will be refered to as $\Lambda^i$,
+which is defined via the difference of the Christoffel symbols
+$\Delta^i{}_{kl} := \tilde{\Gamma}^{i}{}_{kl} - \mathring{\Gamma}^{i}{}_{kl}$,
+which transforms like a vector. Its relationship to $\hat{\Gamma}^i$ can be derived as
+\begin{equation}
+\begin{aligned}
+\Lambda^i &:= \Delta^i + 2 \tilde Z^i
+= \tilde{\gamma}^{kl}\Delta^i{}_{kl} + 2 \tilde Z^i \\
+&= \tilde{\gamma}^{kl}(\tilde{\Gamma}^{i}{}_{kl} - \mathring{\Gamma}^{i}{}_{kl}) + 2 \tilde Z^i \\
+&= \tilde{\Gamma}^{i} - \tilde{\gamma}^{kl}\mathring{\Gamma}^{i}{}_{kl} + 2 \tilde Z^i
+= \hat{\Gamma}^{i} - \tilde{\gamma}^{kl}\mathring{\Gamma}^{i}{}_{kl}
+\,.
+\end{aligned}
+\end{equation}
+Therefore, the spatial and tempral derivatives are given by
+\begin{align}
+\partial_t \hat{\Gamma}^i &= \partial_t \Lambda^i + (\partial_t \tilde{\gamma}^{kl}) \mathring{\Gamma}^i_{kl} \\
+\partial_i \hat{\Gamma}^j &= \partial_i \Lambda^j + 2D_{ijk} \mathring{\Gamma}^i_{kl}
+  + \tilde\gamma{kl} \partial_i \hat{\Gamma}^j_{kl}
+\end{align}

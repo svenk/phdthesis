@@ -1,0 +1,179 @@
+
+\section[
+  Aspects of input and output on AMR and DG
+]{Aspects of input and output on adaptive meshes and discontinous
+  Galerkin methods}
+For completeness, this section presents a few aspects of input and output in
+a numerical time evolution code, especially in the context of dynamical AMR
+and DG. These features were implemented for the \code{ExaHyPE} code.
+
+\subsection{In-situ initial data}
+Reading initial data on an AMR grid is more challenging then on a predefined
+grid, as local features in the initial data shall already be resolved, not only
+features which appear after certain time during the evolution. In order to
+setup an AMR grid hierarchy which adaptively adopts to non-analytical initial
+data, an AMR grid code needs to evaluate the refinement criterion on the ID.
+
+One way to do this is to evaluate the initial state $Q_0(\vec x)$ on subsequent
+grid levels until the required accuracy is gained. At the same time, in the
+context of parallelism, an AMR code has to load balance the spawned spacetree
+over the available processors.
+
+% SOURCE: 
+%http://sven.köppel.org/uni/ws1617/2017-04-03-ExaHyPE-ReviewMeeting-FIAS-SK/
+% Another source: ExaHyPE guidebook
+\begin{marginfigure}
+	\includegraphics[width=\textwidth]{dg-fv-id-derivatives/01_initial.pdf}
+	\includegraphics[width=\textwidth]{dg-fv-id-derivatives/02_projection.pdf}
+	\includegraphics[width=\textwidth]{dg-fv-id-derivatives/03_derivative.pdf}
+	\includegraphics[width=\textwidth]{dg-fv-id-derivatives/04_fd_local_derivs.pdf}
+	\caption[
+	FV vs DG derivatives for ID, drawn with Inkscape, \exclusive
+	]{Cartoon of FD vs. DG derivatives for initial data in one dimension.
+		Each panel shows the same exemplaric patch, where a fifth order DG polynomial
+		is embedded on a Euler-Legendre nodal basis (\ie the filled circles indicate the
+		spatial positions where the field values are stored).
+		First panel: The exemplaric field solution which is subsequently projected
+		onto the DG polynomial (green, second panel) and subsequently differentiated
+		(blue, third panel). In contrast, the last panel shows the cartoon of a
+		finite differencing stencil for off-grid computation of the initial data
+		around a requested point. Here, the initial data have to be provided at
+		each bullet, \ie have to be provided five time as much as in the DG derivative
+		case.
+	}
+	\label{fig:dg-fv-id-derivatives}
+\end{marginfigure}
+
+The paradigm shift from a classical block-regular code (such as \code{Carpet}) towards
+an AMR code (such as \code{ExaHyPE}) shall be demonstrated on an example: As per
+definition, a-priori there is no grid, the evaluation of an initial data
+(ID)
+subroutine has to happen locally for a given spatial point $\vec x$. Typically,
+within this thesis, initial data itself are the numerical solution of an
+elliptic PDE and therefore present on a certain grid. Reading in the data from
+the ID code to the time evolution code typically results in interpolating
+between two grids.
+
+As soon as non-local computations are neccessary, this attemp fails. An example
+are initial data available as solution of a second order elliptic PDE but
+to be evolved with a first order formulation of that PDE (as with the 
+formulation of Einstein field equations presented in 
+section~\ref{sec:fo-ccz4}). In this case,
+auxilliary fields $a_i = \partial_i \phi$ for some field $\phi$ have to be
+computed, and the derivative operator is nonlocal by definition.
+
+The two solutions are either to precompute the auxiliary field also on the
+initial data code grid, or to compute them on-demand (in-situ). The later
+option is preferable to have point-wise access to the initial data in the
+time evolution at any time. For computing derivatives, in \code{ExaHyPE} we chose
+two approaches (Figure~\ref{fig:dg-fv-id-derivatives}): Patchwise, using
+the DG derivatives (which can be thought of a semi-local attempt) or off-grid with finite
+differences.
+
+\subsection{In-situ postprocessing}
+Within the time evolution codes presented so far, it is common practice to
+write out the system state also during the time evolution (and not only at
+its arbitrary end). This outputting is done repeatedly by a time or iteration
+criterion (formulated for instance as ``write every $N$th iteration'' or 
+``write every $\Delta t$''), but any other kind of \emph{query based plotting}
+can be imagined. \footnote{We use the terms \emph{plotting}, \emph{writing},
+	\emph{dumping} of data synonymously.
+} The concept of a writeout is to store 
+the current \emph{snapshot}
+$\u(t,\x)$ for a given time $t$ permanently, while it is neccessarily erased
+at one point in an evolution scheme which thrives to have a constant memory
+need during time evolution.
+
+When it comes to the writeout phase, any kind of \emph{postprocessing} can be
+done. This term shall be defined by a local mapping
+$f: \mathrm \Omega^n \to \mathrm \Omega^m$ which maps the solution vector
+$\u(\x)$ at a fixed given time $t$
+to a vector of written quantities $\boldsymbol w(\x)$ on the spatial 
+$d$-dimensional simulation domain $\Omega$\footnote{
+  This mapping can be non-locally extended to allow for derivatives, such
+  as $\boldsymbol w(\x) = f(\u(\x), \partial_i \u(\x), \dots)$.
+}. One can imagine that
+$\boldsymbol w = \boldsymbol f(\u)$ is computed either during the time
+evolution (``online''), in order to write out \emph{only} the mapped state
+vector, or afterwards, so $\u$ is written and $\boldsymbol f(\u)$ is computed
+in an offline postprocessing step. 
+Online post processing might save a lot of computing ressources
+if $m \ll n$ and $\boldsymbol f$ is computationally cheap.
+
+Reductions or volume/surface integrals can be modeled with a mapping
+$g: \mathrm R^{d\times n} \to \mathrm R^{e \times m}$, where $e<d$ is the
+dimensional reduction and again $m<n$ stands for a lossy mapping of the
+solution vector to less degrees of freedom. For the highly symmetric spacetimes
+of compact objects, as presented in the next chapters, simple 1D and 2D cuts
+of the Cartesian coordinate systems on the axis are typical dimensional
+reductions, while $L_1$, $L_2$ and $L_\infty$  (volume) integrals are evaluated
+on the whole space and provide ``0D'' scalar output. Surface integrals over
+an arbitrary surface (defined by its normal vector field $S^i$) are technically
+more complex to implement but nevertheless fall into the class of mappings $g$.
+\todo[color=green]{
+  In-Situ postprocessing: Could give examples, such as
+  ADM Mass, Angular momentum, Apparent Horizon
+  detectors. Something different are tracers/trackers (nonlocal)
+}
+
+\subsection{Visualization of ADER-DG simulations}
+When simulation data should be stored permanently, a well-defined file format
+provides interoperability between different (possibly postprocessing) codes.
+The \code{ExaHyPE} grid structure can be casted as \emph{block regular}:
+The DG polynomials in each patch can be sampled on a unigrid, without loss
+of accuracy (\ie by keeping the number of nodal points the same). This is
+the basic idea of the implementation of the \code{CarpetHDF5} file format
+within \code{ExaHyPE},
+which was originally developed for \code{Carpet} \cite{Reisswig:2010}.
+
+While the \code{CarpetHDF5} \footnote{
+  \code{HDF} is short for ``Hierarchical Data Format'' and is a container file format
+  for scientific data, especially multidimensional arrays. In principle,
+  the propsed discussion is independent of the container file format.
+  See \cite{exahype-guidebook} for details about the file formats.
+  
+  In contrast to the formats discussed in the main text,
+  \code{VTK} (``Visualization Toolkit'') is a widely supported
+  standarized format for describing higher dimensional geometries.
+  \code{ExaHyPE} can write \code{VTK} files, but these files are only
+  optimized for interoperability.
+} file format is tailored to the memory layout of
+\code{Carpet}, where block regular \emph{components} are sized in order to
+match one parallel rank (\ie a MPI process), in \code{ExaHyPE} the patches
+are kept intentionally small to hold a single DG polynomial. Therefore,
+the number of patches per dimension is typically one to two orders of
+magnitude larger in \code{Carpet} grids compared to \code{ExaHyPE} grids,
+and the amount of \emph{meta data} in the \code{CarpetHDF5} file format
+dominates over the \emph{payload data}. In this context, the term ``meta
+data'' refers to the description of the grid structure and component
+geometry, while ``payload data'' are the actual field values. This
+property makes the \code{CarpetHDF5} format especially inattractive
+in \code{ExaHyPE} as a volumetric file format
+(\ie in three spatial dimensions). \footnote{
+  The structure-of-array/array-of-structure representation of fields
+  is the underlying difference between \code{Carpet} (basically
+  storing $(Q_0(\vec x), Q_1(\vec x), \dots)$ and \code{ExaHyPE}
+  (storing $\vec Q(\vec x_0), \vec Q(\vec x_1), \dots)$).
+  This is also the main difference between the Carpet file format and
+  the tailored Peano block regular file format~\cite{exahype-guidebook}.
+}
+
+
+\section{Summary}
+In Chapter~\ref{chapter:numerics}, all the ingredients for a new code developed
+within this thesis were proposed. At the very heart, it is a coupled
+evolution scheme which uses a local ADER-DG scheme which is by construction
+communication avoiding and thus suitable for the next generation of
+machines, in contrast to traditional schemes, as well as an undemanding
+traditional Finite Volume scheme, which is however time variation diminishing
+and suitable to evolve a solution at low order. The infrastructure
+for running three-dimensional astrophysical simulations was presented, and it
+will be brought to life in the subsequent chapters \vref{chapter:gr}
+(with general relativity) and chapter \vref{chapter:hydro}
+(with hydrodynamics).
+
+
+
+
+
+

@@ -1,0 +1,187 @@
+% Titlepage and TOC
+%
+% Supposed to be included from phdthesis.tex
+
+\thispagestyle{empty}
+\begin{fullwidth} % for tufte
+	\begin{center}
+		%%    \includegraphics[draft, width=9.5cm]{someTitleFigure}
+		%\begin{pgfpicture}
+		%	\pgftext{\pgfimage[width=9.5cm,height=4cm]{someTitleFigurePlaceholder}}
+		%\end{pgfpicture}
+		%%\\
+		% dezente Schattierung
+		\phantom{empty}
+		\vspace{2cm}
+		\Huge \textcolor{black!90}{\textbf{\thetitle}} \\
+		%\vspace{.5cm}
+		%\LARGE \textcolor{black!80}{\textbf{\thesubtitle}} \\
+		\Large
+		\vspace{1.9cm}
+		%\textcolor{black!70}{
+			Dissertation zur Erlangung des \\
+			Doktorgrades der Naturwissenschaften \\
+			\vspace{1.9cm}
+			vorgelegt beim Fachbereich Physik der \\
+			Johann Wolfgang Goethe-Universität in Frankfurt am Main \\
+		%}%endofcolor
+		\vspace{1.9cm}
+		von\\
+		\textsc{\theauthor} \\
+		aus \\
+		\textsc{Königstein im Taunus} \\
+		\vspace{.9cm} 
+		Frankfurt am Main, März 2019 \\
+		(D30)
+		\vspace{1.2cm}
+		% for the list of figures :D
+		% \addcontentsline{lof}{figure}{Describing the front page picture}%
+		
+		\ifdefined\releasemode\else
+		\colorbox{red!40}{This PDF was compiled at {\bf \thedate}}\\[5ex]
+		\fi
+		\vfill{}
+		%\large
+		%\begin{tabular}{@{}>{\itshape}rl@{}}
+		%	First Supervisor: & \textsc{Prof. Dr. Luciano Rezzolla} \\[1ex]
+		%	Second Supervisor: & \textsc{Prof. Dr. Piero Nicolini}
+		%\end{tabular}
+		%\\
+		%\vspace{2cm}
+		\includegraphics[width=4.9cm]{logos/goethe-logo.pdf}
+		%\\
+		%\vspace{1cm}
+		%\large
+	\end{center}
+	
+\newpage % end of title page
+\end{fullwidth}
+	\Large
+	
+	\noindent
+	Geschrieben am \\[.3cm]
+	
+	\noindent
+	\textsc{Institut für theoretische Physik (ITP)} \\
+	Max-von-Laue-Straße 1 \\
+	60431 Frankfurt am Main \\[.3cm]
+	
+	\noindent
+	und am \\[.3cm]
+	
+	\noindent
+	\textsc{Frankfurt Institute for Advanced Studies (FIAS)} \\
+	Ruth-Moufang-Straße 1 \\
+	60431 Frankfurt am Main
+	
+	\vfill
+	
+	\noindent{}%
+	vom Fachbereich Physik der \\[2pt]
+	Goethe-Universit\"at als Dissertation angenommen.
+	
+	\vspace*{2cm}
+	
+	\noindent{}%
+	\begin{tabular}{@{}l@{\hskip 1ex}l}
+		Dekan: & Prof. Dr. Michael Lang\\
+		\phantom{Gutachter:}&~
+	\end{tabular}
+	
+%	\vspace*{1cm}
+	
+	\noindent{}%
+	\begin{tabular}{@{}l@{\hskip 1ex}l}
+		Gutachter: & Prof. Dr. Luciano Rezzolla\\
+		& Prof. Dr. Piero Nicolini \\
+		& Prof. Dr. David Radice (Princeton University/IAS)
+	\end{tabular}
+	
+	\vspace*{2cm}
+	\noindent{}%
+	Datum der Disputation:
+	\vspace*{2cm}
+	\normalsize  % end of "Large" 
+	
+\newpage
+
+\begin{fullwidth}
+
+\begin{center}
+\parbox{\textwidth}{
+%
+\begin{center}\textbf{Abstract}\end{center}
+
+This thesis is a summary of existing and upcoming publications
+\cite{Dumbser2017,Fambri2018,Koeppel2017,
+	exahype-guidebook,Koeppel2019,FKN16,Koppel:2017rsf,Knipfer2019},
+with a focus on high order methods in numerical relativity and general
+relativistic flows.
+The text is structed in five chapters. In the first three ones, the
+ADER-DG technique and its application to the Einstein-Euler
+equations is introduced. Novel formulations for both the Einstein
+equations in the 3+1 split as well as the general relativistic
+magnetohydrodynamics (GRMHD) had to be derived.
+The first order conformal and covariant Z4 formulation of Einstein equations
+(FO-CCZ4) is proposed and proven to be strongly hyperbolic.
+Together with the fluid equations of general
+relativistic magnetohydodynamics (GRMHD), a number of benchmark scenarios is
+presented to show both the correctness of the PDEs as well as the
+applicability of the numerical scheme.
+
+As an application in astrophysics, a general-relativistic study of the
+treshold mass for a prompt-collapse of a binary neutron star merger with
+realistic nuclear equation of states has been carried out. A nonlinear
+universal relation between the treshold mass and the maximum compactness
+is found. Furthermore, by taking recent measurements of GW170817 into account,
+lower limits on the stellar radii for any mass can be given.
+
+Furthermore, an (unpaired) work in quantum mechanical black hole engineering
+is presented. Higher dimensional extensions of generalized Heisenberg's
+uncertainty principle (GUP) are studied. A number of new phenomenology is
+found, such as the existence of a conical singularity which mimics the
+effect of a gravitational monopole on short scale and that of a
+Schwarzschild black hole at a large scale, as well as oscillating Hawking
+temperatures which we call ``lighthouse effect''. All results are consistent
+with the self complete paradigm and a cold evaporation endpoint remnant.
+}% end of parbox
+\end{center}
+
+	
+\phantom{foo}\vfill
+
+\textcolor{black!80!white}{
+This document is written with \LaTeX{} and a style inspired by the books
+of the data visualization pioneer \textsc{Edward Tufte}. In physics, his
+style was first adopted in the textbooks of \textsc{Richard Feynman}.
+It is characterized by the large margin column and the flat structure,
+among others. I chose this format to include a lot of illustrating figures
+and  supplementary comments. Deeply nested hierarchies are omitted.
+%\todo[inline]{sowie: Zitationsstil LRR, falls gewählt.}
+} % end of textcolor
+
+\vspace{.5cm}
+\noindent
+\textcolor{black!80!white}{
+The text and figures (see page \pageref{sec:lists} for a list) in this 
+work are
+licensed under a Creative Commons Attribution-ShareAlike license 
+(\href{https://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA}).
+} % end of textcolor
+%\newpage
+\end{fullwidth}
+% probably not here
+%\input{allgemeinverstaendliche-zusammenfassung.tex}
+
+\ifdefined\releasemode\else
+\begin{fullwidth} \listoftodos \end{fullwidth}
+\fi
+
+\begin{fullwidth}
+% \chapter*{Contents} % eToc brings its own Contents header
+\tableofcontents
+\end{fullwidth}
+
+%\newpage% just to be sure
+\normalsize% just to be sure
+\normalfont% just to be sure

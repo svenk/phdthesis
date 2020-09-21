@@ -1,0 +1,469 @@
+\vspace{.5cm}
+\begin{fullwidth}
+%
+Shortly after the beginning of my PhD position in theoretical
+astrophysics end of 2015, the first
+direct observation of gravitational waves was made, where the merger of
+$36\Msol$ and $29\Msol$ black holes to a single $62\Msol$ black hole was
+measured. This remarkable event identified as GW150914 \cite{Abbott2016aa}
+prove the existence of
+gravitational waves, of stellar mass binary black hole systems and heralded a
+new era of gravitational wave multimessenger astronomy. The breakthrough gained
+international attention due to the 2017 Nobel prize awarding to Weiss,
+Barish and Thorne ``for decisive contributions to the LIGO
+detector and the observation of gravitational waves''.
+
+In 2017 the first direct observation of two merging neutron
+stars was made, with constituent neutron star masses up to $1.6\Msol$ and
+a merger mass of $2.74\Msol$. This event, identified as GW170817 
+\cite{Abbott2017}, was followed by a short gamma-ray burst and a number of
+other observations in the electromagnetic spectrum.
+
+Due to their bad signal to noise ratio, gravitational wave interferometry
+depends on precomputed gravitational wave-forms. These wave-forms are computed
+by large scale perturbative but especially numerical approaches to general
+relativity. Numerical relativity had emerged as a powerful tool
+for the study of astrophysical systems, following the breakthrough
+calculations of the merger of binary ``moving puncture''
+black holes in mid-2000
+\cite{Pretorius:2005gq,Campanelli06,
+	Baker05a,Baker-etal:2007a,Bruegmann:2006at,Hannam:2008sg}.
+
+\subsection{Numerical schemes for the Exascale era}
+% Scheme intro from the GRMHD paper, adopted for generality.
+
+The interest for high accuracy simulations of general-relativistic
+spacetimes has only been strengthened by the observational
+breakthrought. There is a need for stable and accurate methods
+which can exploit the computational ressources available.
+Chapter~\vref{chapter:numerics} is a mathematical one which purely
+concentrates on numerical aspects in hyperbolic partial differential
+equations and introduces a sophisticated numerical scheme with
+arbitrary convergence order in time and space. At the same time,
+it is communication avoiding and therefore suitable for the upcoming
+generation of exascale computers --- machines which can compute
+$10^{18}$ basic arithmetic operations per second. The scheme was
+used in the coauthored publications \cite{Dumbser2017,Fambri2018} as
+well as in \cite{exahype-review,exahype-guidebook}. Particular
+challenges in computer science/high performance computing (HPC) are
+discussed and the \code{ExaHyPE} code is introduced, a dynamical
+adaptive mesh refinement (AMR) code
+which uses finite state machines for determining the control flow
+and take off the control from the user. \code{ExaHyPE} can solve a
+specific class of hyperbolic partial differential equations (PDEs)
+and will be open sourced end of 2019.
+
+Discontinuous Galerkin methods belong to the family of finite-element
+methods which consider the numerical approximation of a weak formulation
+of the governing system of partial differential equations over a set of
+non-overlapping elements. The discrete solution space is restricted to
+the space of piecewise polynomials of maximum degree $N \geq 0$ and the
+degrees of freedom (\ie the expansion coefficients) of the chosen
+polynomial basis are directly evolved in time.
+In particular, in the DG formulation the
+numerical solution is allowed to be {discontinuous} at element interfaces.
+%
+In the last twenty years, DG methods became increasingly popular mainly
+because of four attractive properties:
+\begin{enumerate}[(i)]
+  \item nonlinear $L_2$ stability (See 
+    Appendix \ref{apx:symbols} for standard definitions such as ``$L_2$'')
+    has been proven for general nonlinear scalar conservation laws
+    \cite{Jiang1994};
+  \item arbitrary high order of accuracy can be easily
+    achieved for smooth solutions by simply increasing the polynomial degree
+    $N$ of the chosen basis functions;
+  \item high parallel scalability makes DG methods better suited for
+    large-scale simulations even on general
+    unstructured meshes when compared with high-order finite-difference or
+    finite-volume methods;
+  \item high-order DG methods are not very dissipative and dispersive, even
+    when compared with high-order finite-volume and finite-difference schemes
+    and are thus essential for accurate long-term simulations. 
+\end{enumerate}
+    
+%The main drawback that afflicts
+%{explicit} DG schemes is the rather severe CFL stability condition that
+%constrains the timestep of the simulations to scale with approximately
+%$h/(2N+1)$ for hyperbolic partial differential equations, where 
+%$N$ is the degree  of the nodal polynomial basis used within the element 
+%and $h$ is the characteristic size of one DG element (not the distance 
+%between the individual nodal degrees of freedom). 
+%A way to alleviate the severe CFL timestep restriction is the use
+%of efficient semi-implicit DG schemes, as those proposed, for instance by
+%\cite{Tavelli2016,Fambri2016}.
+
+\subsection{A novel hyperbolic formulation of Einsteins Equations}
+\label{sec:gr-intro-intro}
+Chapter \vref{chapter:gr} concentrates on general relativity and casts
+these equations in the mathematical framework proposed in the the
+previous chapter.
+In fact,
+the development of hyperbolic formulations of the
+Einstein equations that allow for long-term simulations of generic
+spacetimes, including the ones encompassing the physical singularities
+arising in the presence of black holes, has been of great
+importance in numerical relativity. The first step in this direction has
+been the derivation of the Arnowitt-Deser-Misner (ADM) formulation.
+While this formulation splits time and
+space and presents general relativity as an initial
+boundary-value problem, suitable for numerical implementation, it is
+known to be not hyperbolic, and therefore unstable in numerical
+applications.
+
+Subsequently, a lot of effort has been devoted to find hyperbolic
+formulations of the Einstein equations. These efforts have lead to the
+derivation of the Baumgarte-Shapiro-Shibata-Nakamura-Oohara-Kojima
+(BSSNOK) formulation \cite{Shibata95,Baumgarte99,Nakamura87,Brown09},
+which achieves hyperbolicity via a conformal transformation of the
+3-metric and the promotion of some contractions of the Christoffel
+symbols to independently evolved variables and, most importantly, by
+inserting the momentum and Hamiltonian constraint expressions in the
+evolution system. A general-covariant alternative is the Z4 formulation
+of \cite{Bona:2003fj,Bona:2003qn,Alic:2009}, which has been presented
+both in first- and second-order form in the spatial derivatives. More
+successful have been formulations based on the Z4 one that include a
+conformal transformation of the metric. These are the Z4c formulation,
+that removes some source terms in the Einstein equations in order to
+bring the evolution equations into a form which is closer to the BSSNOK
+system \cite{Bernuzzi:2009ex}, and the CCZ4 formulation \cite{Alic:2011a,
+	Alic2013}, which also includes a mechanism to damp constraint
+violations as they arise during the evolution (see also
+\cite{Sanchis2014, Bezares2017} for some recent and slight variants).
+
+Parallel to the quest for better formulations of the equations, the
+development and implementation of better numerical methods has been a
+main priority of ongoing research. While most general-relativistic codes
+use finite-differences (\eg \cite{Brown2007b,Zhang2006, mignone_2010_hoc,
+  Radice2012a,Radice2013b}) or spectral methods (\eg
+\cite{Szilagyi:2009qz}) for the spacetime evolution, increasing interests
+is being focused towards DG methods, which are very attractive due to
+their excellent scalability and wave-propagation properties.
+The latter allow
+the propagation of smooth linear and nonlinear waves over long distances
+with little dissipation and dispersion errors, and turn out to be 
+well suited for the solution of the Einstein equations, where (apart
+from physical singularities in black holes) the fields are smooth and
+high accuracy can be achieved.
+
+So far, however, only a rather limited number of attempts have been made
+to solve Einstein equations with DG methods. Field et al. \cite{field10}
+tested a second-order BSSNOK formulation, while Brown et
+al. \cite{Brown2012} developed a first-order formulation of BSSNOK,
+however both works were limited to spherical symmetry and vacuum
+spacetimes. The first DG implementation in non-vacuum spacetimes was
+published by Radice \& Rezzolla \cite{Radice2011}, but was still
+restricted to spherical symmetry. The first three-dimensional (3D)
+implementation, albeit in a fixed spacetime and focused on hydrodynamics
+was developed by Bugner et al. \cite{Bugner2015,Bugner2018}.
+%More recently,
+Miller and Schnetter \cite{Miller2016} proposed an operator-based DG 
+method suitable also for second-order systems and applied it to the 
+BSSNOK
+system, while Kidder et al. \cite{Kidder2016} developed a task based
+relativistic magnetohydrodynamics code.
+
+Within theis thesis, a novel first-order (FO) form of the CCZ4 system is
+presented, refered to as FO-CCZ4. The system's eigenstructure is studied
+and strong hyperbolicity is shown for a particular choice of gauges.
+Subsequently, different numerical implementations of this PDE system
+are discussed. The scheme is solved with the three dimensional code
+proposed in the previous chapter, using an ADER-DG algorithm with
+adaptive mesh refinement (AMR) and local time-stepping (LTS),
+supplemented with a high order ADER-WENO \cite{eno,Liu1994, Jiang1996}
+finite-volume subcell limiter
+\cite{Dumbser2009a,Dumbser2010,Dumbser2011} to deal with
+singularities in black-hole spacetimes.
+
+A series of standard tests for general-relativistic codes
+\cite{Alcubierre:2003pc,Babiuc:2007vr} are adopted to demonstrate 
+the stability and accuracy of both the PDE itself and its ADER-DG 
+discretization.
+Verifications for the expected convergence order are given and long-time
+robustness and stability is proven. Finally, the scheme is applied at a
+long-term evolution of single black-hole spacetimes, showing that the 
+new code is able to stably evolve a puncture black-hole spacetime for a
+time scale of $\sim 1000$ $M$ ($M$ being the mass of the black hole).
+Preliminary results for the head-on collisions of two black holes are
+presented.
+
+While the equations are given in a general way including matter terms,
+they are vanishing in the presented tests and Einstein field equations
+are only presented ``in vacuum''. Scientific results of this chapter
+have been published in \cite{Dumbser2017}, as 
+well as in \cite{Koeppel2017,exahype-review}.
+
+\subsection{General relativistic Magnetohydrodynamics within the
+  new framework}\label{sec:hd-intro}
+
+Chapter \vref{chapter:hydro} discusses relativistic hydrodynamics. It is 
+the complementary topic compared to the previous chapter, concentrating
+solely on the right hand side of Einsteins equations.
+
+In fact, electromagnetism plays an important role in many astrophysical 
+processes
+such as compact objects and binaries consisting of black holes and
+neutron stars. The general-relativistic theory of magnetohydrodynamics
+(GRMHD) is a successful theory to describe these systems, combining the
+fluid description of matter with a simplified theory for electromagnetic
+fields in the absence of free charge carriers. Similar to
+general-relativistic hydrodynamics (GRHD), first successful
+(lower-dimensional) simulations of the GRMHD system date back to the
+pioneering work of \cite{Wilson1975} more than 40 years ago
+(See \cite{Font08,Marti2015} for recent reviews in the progress of GRMHD
+simulations).
+
+In the past years, several groups
+started to recast the system of GRMHD equations into a conservative form
+in order
+to make use of conservative Godunov-type finite-volume schemes based on
+approximate Riemann solvers and high-resolution shock-capturing schemes
+(HRSC). Many GRHD and GRMHD codes have been developed over the last
+decade (for instance \cite{Baiotti04, Duez05MHD0, Anninos05c, Anton06,
+	Giacomazzo:2007ti, Anderson2008, Kiuchi2009, Bucciantini2011,
+	Radice2012a, Dionysopoulou:2012pp, Radice2013b, Osorio2015, 
+	White2016, 
+	Porth2017})
+and applied to various topics in astrophysics. Some codes also evolve the
+spacetime by feeding back the fluid and magnetic energy-momentum tensor
+in the Einstein field equations, which govern the time evolution of the
+metric tensor; some codes even incorporate radiation transfer like the
+one proposed by \cite{Takahashi2017}, or include the full Maxwell theory
+in a resistive relativistic MHD formulation
+\cite{Palenzuela:2008sf, Dumbser2009,
+	Dionysopoulou:2012pp, Bucciantini2012a, Bugli2014, Aloy2016}.
+
+DG methods have attracted the interest of the computational-astro\-physics
+community only over the last few years. In particular, the first
+DG-based method for general-relativistic hydrodynamics has been developed
+by \cite{Radice2011}, but it was limited to spherically symmetric
+spacetimes. The first three dimensional implementation of a DG method for
+relativistic flows on curved but fixed background spacetimes has been
+recently presented by \cite{Bugner2015}, but without considering the
+magnetic field interaction. Recently, \cite{Kidder2016}
+provided a DG implementation within a task-based parallelism model for
+GRMHD, while \cite{Anninos2017} presented also a DG code with
+hp-refinement.
+
+In this work, the previously introduced new numerical scheme is proposed
+for the solution of the GRMHD equations. Its
+shock capturing properties and high-order accuracy on spacetime
+adaptive meshes (AMR), supplemented by a high-order a posteriori
+subcell 2nd order TVD finite-volume limiter (adopted for shocks
+and discontinuities) make it well suited for the evolution of the MHD
+flow on curved background spacetimes. In fact, this method
+was already successfully applied on special-relativistic MHD
+equations (SRMHD) in \cite{Zanotti2015d}.
+
+An important and novel aspect of this approach is the interpretation of
+the source terms in the GRMHD equations that account for the
+gravitational field in curved spacetimes as seperate nonconservative
+products. In other words, while the GRMHD equations are normally written
+in a flux-conservative form with a generic source term which holds
+derivatives stemming from the spacetime curvature, in the presented
+framework, it is written without an algebraic source but with a
+differential nonconservative term which is part of the system
+eigenstructure. This is a simple rewrite of the equations which neither
+changes its hyperbolic nature  \cite{Anile_book,Komissarov1999} nor the
+fact that it is already first order, suitable for a large number of
+finite volume methods.
+
+After the presentation of the modified PDE system, the solution of
+number of smooth and non-smooth (\ie shocks and large gradients
+including) benchmark situations are provided which demonstrate the
+correctness of the PDE and the quality of its numerical solution.
+
+The results of this chapter have been published in \cite{Fambri2018}
+and also in \cite{Koeppel2018,exahype-review,exahype-guidebook}.
+
+\subsection{A general-relativistic criterion to seperate prompt from delayed
+	collapse in a binary neutron star merger}\label{sec:bnslt-intro}
+Chapter \vref{chapter:bnslt}  is the first chapter discussing a purely
+astrophysically driven research topic where all the techniques
+developed in the previous chapters serve as a tool for modeling
+four dimensional spacetimes of astrophysical phenomena. The chapter
+presents research done in respect to the issue of lifetimes of binary
+neutron star collision remnants. Thanks to the first neutron star
+binary merger observations \cite{Abbott2017} which offers new insight
+into the nature of neutron stars, constraints in the properties of
+nuclear matter can be probed \cite{Annala2017, Paschalidis2017,
+ Bauswein2017b,Radice2017b,Most2018, Burgio2018, Montana2018}.
+
+When two neutron stars merge, they will produce an object that either
+collapses promptly to a black hole, or does not \cite{Baiotti08}. In the
+latter case, the remnant may be a metastable object, \eg a hypermassive
+neutron star (HMNS), eventually collapsing to a black hole on a secular
+timescale, or survive for much longer times, either as a rotating or a
+nonrotating star (see \eg \cite{Baiotti2016} for a review). In the case
+of the first detection of merging neutron stars, GW170817
+\cite{Abbott2017}, the precise fate of the merger remnant is
+presently unknown, although the formation of a black hole naturally
+matches the simultaneous observation of a short gamma-ray burst
+\cite{Eichler89, Rezzolla:2011}, and has been the working hypothesis to
+set new limits on the maximum mass of neutron stars \cite{Margalit2017,
+	Shibata2017c, Rezzolla2017, Ruiz2017}.
+
+Determining the time of collapse of the merger remnant is particularly
+challenging as there are a number of physical processes that either
+determine or undermine the stability of merger remnant. These include:
+the ejection of matter \cite{Rosswog1999, Kyutoku2012, Radice2016,
+	Lehner2016, Dietrich2016, Bovard2017}, the angular-momentum transfer
+via magnetic fields \cite{Kiuchi2015a, Siegel2013, Kawamura2016}, the
+evolution of the degree of differential rotation \cite{Kastaun2016,
+	Hanauske2016}, and possible viscous effects mediated either by
+neutrinos or magnetic fields \cite{Duez2004b, Shibata:2017b, Radice2017,
+	Alford2017}.
+
+As already said, observationally, the two scenarios can be clearly kept apart
+by both the gravitational wave and electromagic spectra which are much
+richer in the case of the delayed collapse. A first attempt to seperate
+prompt to delayed collapse can be made by the mass of the system $M$.
+It is simple to seperate the two scenarios by a critical 
+(threshold) mass $\Mth$ which distinguishes prompt collapses ($M>\Mth$) from
+delayed ones ($M<\Mth$), althought it still poses numerical and conceptual
+challenges. Bauswein et. al. \cite{Bauswein2013} have been the 
+first to explore this problem by employing a smooth-particle approximation for
+the hydrodynamics and a conformally flat approximation to general
+relativity. In this way, they were able to find a linear universal
+relationship between $M_{\rm th}$ and the compactness of the maximum-mass
+model, $\mathcal{C}_\tov:=M_\tov/R_\tov$, where
+$M_\tov$ and $R_\tov$ are respectively the mass and
+radius of the maximum-mass nonrotating star. Here, we improve on this
+result by using a fully general-relativistic approach, a wider range of
+compactnesses, and a rigorous definition of the threshold mass. As a
+result, we find a {nonlinear} relation between $M_{\rm th}$ and
+$\mathcal{C}_\tov$, which offers a better match to the
+numerical-relativity results. Furthermore, exploiting the information
+from GW170817, we use the new relation to set more stringent lower bounds
+on the radii neutron stars \cite{Bauswein2013,Bozzola2017,Bauswein2017b}.
+%
+The results presented in this chapter have been published in
+\cite{Koeppel2019}.
+
+\subsection{Quantum modified Schwarzschild solutions}\label{sec:qbh-intro}
+Chapter \vref{chapter:qgr} discussed black hole spacetimes at the smallest scales. 
+The Schwarzschild solution is only characterized by its mass $M$ which can have
+any value. When it comes to quantum size black holes, a natural
+mass scale is given by the Planck scale,
+$
+M_\text{Pl} = \sqrt{{\hbar c}/{G}} \sim 2.1 \times 10^{-8}\, \text{kg} \sim 5.6 \times 10^{27}
+\,\text{eV}/c^2
+$,
+which is tiny compared to astrophysical scales but nevertheless huge when compared
+to the masses of the standard model particles. The theory of quantum mechanical black holes
+is called quantum gravity (QG), and its theoretical description is a longstanding
+problem, experimentally it also remains inaccessible. Quantum field theory on curved
+space (QFTCS) is an approximating theory to describe quantum matter on classical curved
+background space, and Hawkings famous result that quantum black holes are actually
+black bodies that emit thermal readiation at a temperature proportional to their
+surface gravity~\cite{Haw75} belongs to this class of first order quantum gravity effects.
+As soon as the Hawking temperature comes in the regime of the Planckian black hole mass
+itself, this thermodynamical description breaks down.
+
+Black holes also question the understanding of quantum mechanics itself.
+Conventionally the Compton wavelength is thought to assume arbitrarily small values,
+provided one smashes particles at higher enough energies.
+This way of reasoning, however, breaks down at the Planck scale.
+A Planckian black hole is expected to form due to the collapse of 
+particles at such extreme energies~\cite{Adl10}. This is equivalent to saying 
+that gravity is ultraviolet self-complete, \textit{i.e.}, there are no 
+propagating quantum degrees of freedom in the trans-Planckian regime and length 
+scales below the Planck length are inaccessible 
+\cite{DvG10,DFG11,DGG11,SpA11,DFG12,DvG12,NiS12,MuN12,AuS13,Car14,DGI15,CMN15,FKN16}.
+Such features are effectively captured by a modification of commutation relations known
+as generalized uncertainty principle (GUP)~\cite{Ven86,ACV89,ACV93,Mag93,KMM95},
+resulting in a modification of Heisenberg's uncertainty principle
+$\Delta x \Delta p \leq \nicefrac \hbar2 \left( 1 + \beta (\Delta p)^2 \right)$,
+where $\sqrt \beta \sim \ell_\text{Pl}$ and $\ell_\text{Pl}$ the Planck length.
+For $\Delta p \ll \ell_\text{Pl}$, length scales become proportional to $\Delta p$,
+as expected from the presence of a black hole in the trans-Planckian regime.
+For reviews see \cite{SNB12,Hos13,TaM15}. 
+
+The GUP has been invoked to improve the scenario of black hole evaporation, 
+that is customarily affected by a divergent profile of the Hawking temperature 
+$T$ in the terminal phase. With $\Delta p\sim T$ 
+and $\Delta x\sim GM$, the temperature profile is no longer divergent and  a 
+Planckian black hole remnant forms as an evaporation endpoint 
+\cite{AdS99,APS01}. Such a remnant has also been considered as a candidate for 
+cold dark matter component \cite{ChA03}. There are, however, potential problems 
+at the basis of such results. Planckian remnants have Planckian temperatures. 
+The surface gravity description of the temperature no longer holds.
+
+To amend the above limitations, a new approach has been proposed in order to 
+implement GUP effects in gravitational systems \cite{IMN13}. As a start, one 
+can notice that the GUP introduces nonlocality by preventing infinitesimal 
+resolution.  Therefore one might be led to consider a nonlocal version of 
+Einstein equations \cite{Kra87,Tom97,Bar03,Mod12a}, where nonlocal
+spacetime (\ie a nonlocal Einstein tensor, smeared by a 
+operator-valued gravitational coupling constant)
+is coupled to classical spacetime (\ie the Schwarzschild source term).
+Such a theory 
+can be either used to described large scale degravitating effects 
+\cite{ADD02,DHK07,Bar05,Bar12} or short scale modified gravity theories 
+\cite{GHS10,MMN11,Nic12,CMN14,FKN16}. 
+One can select a specific smeared gravitational coupling constant 
+$G_\mathrm{N}^{-1}\left(L^2\Box\right)$ to reproduce the GUP 
+momentum space deformation
+for the static potential due to virtual particle exchange.
+The resulting non-rotating black hole metric allows for 
+horizon extremisation with consequent formation of a zero temperature black 
+hole remnant at the end of the evaporation \cite{IMN13}. Such a black hole 
+solution not only supersedes the aforementioned limitations of the scenario 
+proposed in \cite{AdS99,APS01}, but offers additional interesting properties: 
+it removes the scale ambiguity of the Schwarzschild metric and fulfills the 
+gravity ultraviolet self completeness by preventing black hole radii smaller 
+than the Planck length; it allows for a semiclassical description of the whole 
+evaporation process and for the presence of a final heating phase (SCRAM 
+phase \cite{Nic09}) before the remnant formation.
+
+Within this thesis, the case of GUP effects in higher dimensional black hole
+metrics is studied. It should be noted that there is no
+unique prescription for the GUP in the presence of extra
+dimensions \cite{Koppel:2017rsf}. As a result, an analysis of the existing
+proposals
+\cite{ScC03,Maz13,Car13,Car14,LaC15,LaC16,Carr:2017grh,Maz12,DMS15,Maz15,LaC18}
+for the GUP in higher dimensions will be given.
+
+The results presented in this chapter have been published in
+\cite{Koppel:2017rsf}, while other are going to be published in an upcoming
+publication \cite{Knipfer2019}.
+
+%\subsection*{Motivations and general structure}
+%In this monograph, each chapter subsumes one research topic which typically
+%lead in one or more publications. Each of these topics roughly corresponds
+%to a well-established community which brought up plenty of primers, text-books
+%and comprehensive reviews.
+%%The lengthy bibliopgrahy (page \pagref{chapter:bib})
+%%can hardly cover the most relevant work. Also, introductions such
+%%as the foregoing pages can only provide a short overview...
+%
+%I decided to prepend each chapter with a motivational (\ie fresmen-level)
+%opener as a sweep in high energy physics to create links and connections
+%instead of providing an outright review.
+%
+%
+%As a motiviation for the sophisticated numerical methods to solve hyperbolic
+%PDEs in Chapter~\ref{chapter:numerics}, Section~\ref{sec:hamiltonian-motivation}
+%reviews Hamiltonian dynamic and the concept of time evolution.
+%
+%The motivation for the numerical relativity Chapter~\ref{chapter:gr} is given
+%in Section~\ref{sec:gr-intro}. It introduces the two body problem in general
+%relativity and motivates to approximate in the strong field regime not on the
+%field equations, but instead on the spacetime itself.
+%
+%The relativistic hydrodynamics Chapter~\ref{chapter:hydro} is prepended with
+%Section~\ref{sec:hd-nuclear-matter} which briefly introduces the need or an
+%effective theory when describing the spacetime of neutron stars.
+%
+%The binary neutron star lifetimes Chapter~\ref{chapter:bnslt} is equipped with
+%Section~\ref{sec:bnslt-motivation} which makes an excursion to nuclear physics
+%and its equations of states.
+%
+%The quantum black hole Chapter~\ref{chapter:qgr} is not equipped with such
+%an excursion since the topic itself is probably the excursion from the
+%other chapters. Therefore, Section~\ref{sec:motivation-qbh} just provides
+%a motiviation why to study quantum black holes.
+%
+%Finally, Chapter~\ref{chapter:conclusions} provides a conclusive final
+%discussion about the work done within this thesis and where to go next.
+\end{fullwidth}

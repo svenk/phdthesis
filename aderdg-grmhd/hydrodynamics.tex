@@ -1,0 +1,889 @@
+% Definitions from exahype-advanced-hydro.tex
+% in math mode: Description before symbol
+\newcommand{\desc}[1]{\text{#1}\quad} % -> shall inline
+% abbrevations in math mode
+\newcommand{\hydro}{\text{HD}}
+\newcommand{\mhd}{\text{MHD}}
+\newcommand{\adm}{\text{ADM}}
+\newcommand{\hd}{\text{HD}}
+\newcommand{\srhd}{\text{SRHD}}
+\newcommand{\grhd}{\text{GRHD}}
+\newcommand{\grmhd}{\text{GRMHD}}
+\newcommand{\bmag}{\text{B}}
+\newcommand{\magneto}{\text{MD}} % magnetodynamics
+
+% left aligned vectors (pmatrix is center aligned)
+\newenvironment{pvector}{\begin{pmatrix*}[l]}{\end{pmatrix*}}
+
+This chapter summarizes efforts of solving the equations of general relativistic
+magnetohydrodynamics (GRMHD) with the finite-volume limited ADER-DG scheme
+introduced in Chapter~\vref{chapter:numerics}. 
+An introduction into the problem and a review of previous work given in
+Section~\vref{sec:hd-intro}. This chapter is prepended a motivation abou
+the physical modeling of neutron stars spacetimes.
+The subsequent Chapter~\vref{chapter:bnslt}
+will demonstrate an actual application (beyond academic benchmark scenarios).
+This chapter relies partially on the publications \cite{Fambri2018,Koeppel2017}.
+
+\section[
+  Motivation: An effective theory for dense and hot matter
+]{Motivation: An effective theory for dense and hot nuclear 
+matter}\label{sec:hd-nuclear-matter}
+The most compact astrophysical object after a black hole is a neutron star.
+Having roughly the mass of the sun, the star radius is only at the kilometer
+scale, thus only an order of magnitude larger then its Schwarzschild radius.
+\footnote{To provide some numbers, the solar mass $\Msol \approx 2 \times 
+10^{30}$~kg complies with its Schwarzschild radius $R_\sol \approx 3$~km.
+n contrast, typical neutron stars with $M \approx 2 \Msol$
+have a radius at the order of $R\approx 10$~km.}. 
+Astrophysically, these objects are interesting as the endpoint of a supernovae.
+Pulsars, being neutron stars (or white dwarfs) emitting characteristic
+highly intensive beams of electromagnetic radiation, are amongst the most
+fascinating and best studied compact objects in astronomy.
+
+For an high energy physicist, neutron stars are interesting because they allow 
+to probe all fundamental forces: Of course gravity, electromagnetism, but also
+the weak and strong force. In
+neutron stars, energy and density regimes can be reached which are out of
+range for particle accelerators. An understanding of neutron star interiours
+thus allows to falsify or set limits in nuclear and fundamental theories.
+As an example, within the merger of a binary neutron star system, it is likely
+that the quark phase transition can be probed.
+\todo[color=green]{HD, Intro: Would nice to have references for QGP excursion.}
+
+In order to describe the physics of a neutron star, the best fundamental
+theories available are the standard model of particle physics, written in the
+language of special-relativistic quantum field theory, and general relativity,
+the (non-quantum) theory of gravity \footnote{In fact, a neutron star does not 
+even come close to take backreactions of quantum matter onto the spacetime into
+account, and therefore quantum corrections are not required in Einstein field
+equations (in contrast as in section~\ref{sec:motivation-qbh}).}.
+
+The typical approach to solve the \emph{spacetime} of a single isolated
+neutron star requires taking in an averaged, thermalized
+energy-momentum tensor at a given spatial position. This motivates to find a
+suitable effective theory (or phenomenological model) for the matter dynamics
+which is thermodynamically motivated, leaving the (fundamental) particle
+physics picture behind \footnote{Section~\vref{sec:tov} will go into detail of
+an ideal fluid model of a neutron star, the TOV solution.}. The physical branch
+of fluid mechanics provides a suitable theory, which is (relativistic)
+hydrodynamics. 
+% It subsumes all physics on micro scales within an \emph{equation
+%of state}.
+
+\section{Introduction of Hydrodynamics}
+Hydrodynamics adopts two features: Coarse graining, \ie the averaged 
+thermodynamic description
+of a system, and fast thermalization, \ie the fact that the fluid is locally
+assumed to be in a well-defined thermodynamic equilibrium state
+\footnote{
+ For it's power of describing effective phenomenae, hydrodynamics is sometimes
+ called an ``effective theory of everything''.
+}.
+\emph{Ideal} hydrodynamics is based on the \emph{perfect fluid hypothesis}: 
+Dynamical timescales are much larger then viscous or heat transfer timescales. 
+Furthermore, the fluid is assumed to be isentropic, \ie there are no prefered 
+direction effects. This allows to assume stresses to be isotropic. Furthermore,
+there is no heat transport and viscosity and no dissipation. Beyond the ideal
+theory, there are (more) realistic theories of hydrodynamics which add
+particular features, such Navier-Stokes equations, the classical theory of
+viscous fluids \footnote{In this thesis, only ideal fluids are covered, while
+ references to extensions are given at some points.}.
+
+The \emph{dynamical timescale} of a gravitational systems is given by
+\cite{Rezzolla_book:2013}
+\begin{equation}
+\tau_\text{dyn} \sim 1/\sqrt{G\bar\rho} \,,
+\end{equation}
+with an average rest mass density $\bar \rho$ and here the explicit Newton's
+constant~$G$. The dynamical time scale of nuclear
+matter (nuclear density $\rho_\text{nuc} \approx 2.3\times 10^{17}$kg/m$^3$)
+is $\tau_\text{dyn} \sim 2 \times 10^{-4}\text{s}$.
+%$\sim 200\mu\text{s} \sim 40 \Msol$.
+In comparison, the viscous and heat timescales
+are typically of the order of 10$^{+8}$s and therefore can be ignored.
+\todo[color=green]{HD Intro: Find reference for viscous/heat timescales}
+
+The relativistic perfect ideal fluid is described by the stress energy tensor
+\begin{equation}
+T_{\mu\nu} = \rho h u_\mu u_\nu + p g_{\mu\nu}\,,
+\end{equation}
+with rest mass density $\rho$, 4-velocity $u_\mu=\d{x^\mu}/\d{\tau}$ 
+(which is timelike, $u^\mu u_\mu=-1$) and specific internal energy
+$\epsilon$ as part of the specific enthalpy $h=1+\epsilon+p/\rho$. The
+pressure $p$ subsumes all physics on micro scales within an
+\emph{equation of state} $p=p(\rho,\epsilon)$.
+The relativistic total energy density is $e=\rho(1+\epsilon)$ and
+$g_{\mu\nu}$ is the usual 4-metric.
+
+Widespread simple equations of state are the one-parametric ideal-fluid
+(or ``Gamma-law'') equation of state $p=\rho\epsilon(\Gamma-1)$
+with the adiabatic / polytropic index $\Gamma$, and the polytropic
+EOS $p=\kappa \rho^\Gamma$.
+
+Hydrodynamics can be derived from a number of different fundamental principles,
+for instance the principle of minimal action \cite{Andersson2007}
+or from kinetic theoryby applying a moment scheme to the Boltzmann equations
+\cite{Rezzolla_book:2013}. While a derivation is out of the scope of this
+text, the equations of motion as well as the resulting PDEs are discussed
+in the subsequent sections. The fluid dynamics are dictated by two conservation
+equations for the 4-energy momentum tensor $T^{\mu\nu}$ and for the rest mass
+(density flux) $\rho u^\mu$, \ie
+\begin{equation}
+T^{\mu\nu}=0, \quad \nabla_\mu (\rho  u^\mu) = 0\,.
+\end{equation}
+
+Instead of deriving the actual PDEs, the different parts of the 
+flux-conser\-vative formulation of general realtivistic magnetohydrodynamics
+(GRMHD)  shall be discussed in the next sections \footnote{
+  Naturally, such a discussion can either be ordered \emph{top-down}, \ie
+  starting from the advanced theory and advancing into the low-energy limit,
+  or \emph{bottom-up}, \ie starting with the classical, easy theory and
+  advancing by proposing additions neccessary to fulfill relativity, curved
+  background and to incorporate Maxwell's theory. Both approaches are well 
+  known in theoretical physics. In this text, I decided for
+  the \emph{bottom-up} strategy.
+}. The state vector of GRMHD,
+%\footnote{
+%	Remind that the ordering of state vectors has no physical meaning
+%	(Section~\ref{sec:conservation-laws}).
+%}
+\begin{equation}
+Q_\grmhd = (Q_\hd, Q_\adm, Q_\magneto) \,,
+\end{equation}
+is a composite of state vectors which origin from three different theories:
+The state vector of hydrodynamics $Q_\hd$ (discussed in this section), 
+the curved background metric, collected in the parameter $Q_\adm$ 
+(discussed in Section~\ref{sec:grhd}) and the state vector of
+magnetodynamics $Q_\magneto$ (Section~\ref{sec:grmhd}). The seperation of
+theories by fundamental building blocks is also sketched in Figure
+\ref{fig:composite-SVEC} and implemented in the \code{SVEC} GRMHD code.
+
+\subsection{Classical Hydrodynamics}\label{sec:hydro-definitions}
+% Some texts come from my Exahype-Engine/ApplicationExamples/GRMHD/doc
+\begin{marginfigure}
+	\begin{tikzpicture}[node distance=1cm]
+	\node (Vhd) {$V_{hydro}$};
+	\node[right=0.2cm of Vhd] (maxwell) {$Q_{B}$};
+	\node[right=0.7cm of maxwell] (adm) {$Q_{ADM}$};
+	
+	\node[below of=Vhd] (Qhd) {$Q_{hydro}$}
+	edge[<-] (Vhd.south);
+	
+	\node[below of=Qhd] (mhd) {$Q_{MHD}$}
+	edge[<-] (Qhd.south)
+	edge[<-] (maxwell.south);
+	
+	\node[below left of=mhd] (dens) {Densitied $Q_{MHD}$}
+	edge[<-] (mhd.south);
+	
+	\node[below right of=dens] (grmhd) {GRMHD State vector}
+	edge[<-] (adm.south)
+	edge[<-] (dens.south);
+	\end{tikzpicture}
+	\caption[
+	GRMHD State vector composition, Cartoon (tikZ), \exclusive
+	]{State vector composition in GRMHD, or in particular, in
+		the \code{SVEC} code.}%
+	\label{fig:composite-SVEC}
+\end{marginfigure}
+
+%
+Hydrodynamics can be introduced by defining the \emph{primitive} and 
+\emph{conserved} state vector, where the later is evolved in time and the
+former is required for the system closure, given by the pressure/equation of
+state. The vectors are given as
+\begin{alignat}{4}
+\label{eq.hd.prim}
+&\begin{array}{l}\text{Primitive}\\\text{vector}\end{array}
+&
+\quad u &=
+\begin{pvector}
+\text{rest mass density} \\
+\text{velocity} \\
+\text{internal energy}
+\end{pvector}
+= \begin{pmatrix} \rho \\ v_i \\ \epsilon \end{pmatrix}\,,
+\\
+\label{eq.hd.cons}
+&
+\begin{array}{l}\text{Conserved}\\\text{vector}\end{array}
+&
+Q_\hydro
+&=
+\begin{pvector}
+\text{Conserved density} \\
+\text{Momentum} \\
+\text{Energy density}
+\end{pvector}
+=
+\begin{pmatrix} D \\ S_j \\ E \end{pmatrix}\,,
+\\
+&
+\begin{array}{l}\text{related by}%\\\text{Prim2Cons}
+	\end{array}
+%\desc{related by Prim2Cons}
+~~
+&
+Q_\hd(u)
+&=
+\begin{pvector}
+\rho \\
+\rho v_j \\
+\rho/2 v^2 + \epsilon
+\end{pvector}\footnotemark\,.
+\label{eq.hd.Qu}
+\\
+\intertext{
+Classical hydrodynamics can be expressed in flux-conservative form 
+\eqref{intro:conservation-law},
+}
+	\label{eq.hd.fluxes}
+	&\text{with fluxes}
+	& F^i_\hydro(u) &=
+	\begin{pmatrix}
+		\text{fluxes for } D \\
+		\text{fluxes for } S_j \\
+		\text{fluxes for } E
+	\end{pmatrix}
+	=
+	\begin{pvector}
+		\rho v^i \\
+		W^i_j \\
+		v^i (E + p)
+	\end{pvector}
+	\,.
+\end{alignat}
+\footnotetext{Note how easily the primitives $u(Q)=(\rho, S_j/\rho, 
+E-\rho/(2v^2))$
+	can be analytically recovered from the conserved variables (in contrast to
+	relativistic hydrodynamics, presented in the next section). Therefore,
+	the fluxes in equation \eqref{eq.grhd.fluxes} are also an algebraic 
+	function of
+	the conserved state vector only.
+}%
+The other PDE terms in \eqref{intro:conservation-law} are vanishing.
+%
+Here, we used the hydrodynamic energy-momentum-tensor (EM tensor), given by
+\footnote{
+	The EM tensor is also refered to as $W^{ij}=S^{ij}$ in the literature
+	(and in Section~\ref{sec.3p1-emtensor}).}%
+\begin{equation}\label{eq.hd.emtensor}
+W^{ij} = S^i v^j + p \, \delta^{ij}  \, . \,\,
+\end{equation}%
+%
+Classical hydrodynamics is a nonlinear theory. Within the \code{ExaHyPE} code,
+it is widely used for performance measurements. Deriving the strong 
+hyperbolicity of classical hydrodynamics is part of many books
+\cite{Toro09,Rezzolla_book:2013}. The eigenvalues $\lambda_i$ in $k$-direction
+in $d$ dimensions are then found to be
+\begin{equation}\label{eq.hd.evs}
+\lambda_1 = v_k - c,
+\quad \lambda_{2,\dots,d+1} = v_k,
+\quad \lambda_{d+2} = v_k + c \,,
+\end{equation}
+where $c=\sqrt{\left(\partial_\rho p\right)_s}$ is the \emph{sound speed} of 
+the fluid. The three different wave speeds stand out as different waves in the
+Riemann problem (Section~\ref{sec:riemann-problem}).
+
+\subsection{Special relativistic hydrodynamics (SRHD)}
+Special relativistic hydrodynamics is the extension of classical
+hydrodynamics valid for high velocities ($v\to c$), but remaining on flat
+background spacetime.
+
+The 3-velocity $v^i$ of the fluid is extended in favour of the
+Lagrangian 4-velocity $u^\mu = (W,W v^\mu)$, with Lorentz factor $W=(1- 
+v^2)^{-1/2}$
+\footnote{
+	In the literature, alternative popular namings are $W=\Gamma$, $E=U$.
+	In any case, do not confuse $W$ with the conformal factor used in
+	some conformal formulations of Einstein Equations (see Section~\ref{sec:conformal-factor}).
+}.
+The 4-momentum/rest-mass current is then given by $S^\mu = \rho u^\mu$.
+The content of the primitive \eqref{eq.hd.prim} and conserved vector
+\eqref{eq.hd.cons} does not change. However, the relationship \eqref{eq.hd.Qu}
+is replaced by
+\begin{equation}
+	Q_\srhd(u)
+	=
+	\begin{pvector}
+	\rho W \\
+	\rho h W^2 v_j \\
+	\rho h W^2 - p - \rho W
+	\end{pvector}
+	\label{eq.srhd.Qu}
+\end{equation}
+with specific enthalpy $h=1+\epsilon+p/\rho$
+\footnote{Some groups prefer to evolve $Q_\srhd=(D,S_j,\tau)$ instead
+	of $Q_\srhd=(D,S_j,E)$ with $\tau=E-D$ the rescaled energy density.
+	In fact we will also stick to this convention.
+}.
+The conservative formulation of SRHD is then given by is then given by the 
+fluxes
+\begin{align}
+	\label{eq.srhd.fluxes}
+	F^i_\hydro(u) &=
+	\begin{pmatrix}
+		\text{fluxes for } D \\
+		\text{fluxes for } S_j \\
+		\text{fluxes for } \tau
+	\end{pmatrix}
+	=
+	\begin{pvector}
+		D v^i \\
+		W^i_j \\
+		S^i - v^i D
+	\end{pvector}
+	\,.
+\end{align}
+The SRHD equations are hyperbolic for causal EOS \cite{Anile_book,Font08}. The
+wave speeds decompose similarly as in \eqref{eq.hd.evs}, where however the
+relationship to the speed of sound $c$ is nonlinear \cite{Font08},
+\begin{equation}
+\lambda_\pm
+=
+\frac{v^k (1-c^2) \pm c \sqrt{(1-v^2)(1-v^2c^2 - v_k^2 (1-c^2))}}{1-v^2 c^2}
+\end{equation}
+and $\lambda_- := \lambda_1, \lambda_+ := \lambda_{d+2}$ in the notation of
+\eqref{eq.hd.evs}.
+
+% Note that if you add terms
+%to the energy-momentum tensor (such as the magnetic terms), also $S_j$
+%will change (c.f. \eqref{eq.grhd.Qu} to XXX).
+
+\subsection{The primitive recovery in relativistic hydrodynamics}\label{sec:c2p}
+Due to the nonlinear Lorentz factor $W=W(v^2)$, the recovery of the primitive
+variables \eqref{eq.hd.prim} from the conserved ones \eqref{eq.hd.cons} is no 
+more possible analytically in SRHD. Instead, the inverse of \eqref{eq.srhd.Qu}
+can be approximated by numerical root finding. The standard approach is to
+solve a single or multiple nonlinear equations. For instance, the authors of
+\cite{DelZanna2007,Noble2006} propose to solve a simple nonlinear $2 \times 2$
+system which reads for SRHD as
+\begin{equation}
+\begin{rcases}
+  y^2 x - S^2 &= 0 \\
+  y - p - E   &= 0 
+\end{rcases}\,,
+\end{equation}
+with $x=v^2, y=\rho h W^2$. Once
+$x$ and $y$ are determined numerically, all primitives can be recovered by
+computing $W=(1-x)^{-1/2}$, $\rho=D/W$, $v_j=S_j/y$,
+$h=S_j/(v_j\rho W^2)$ and for instance with the ideal gas (from above), 
+$\epsilon=h/(1+W)$\footnote{Obviously any non-analytic EOS raises new issues at
+	this point which are again subject to numerical treatment.}.
+
+
+\section{General relativistic hydrodynamics (GRHD)}\label{sec:grhd}
+General relativistic hydrodynamics is the theory which described fluids moving
+within an (external) gravitational potential. The (special) relativistic fluid
+follows the definitions from the previous section. The coupling of the
+background spacetime is mediated by a source term in the law of motion.
+
+A fully general relativistic description implies also matter backreaction on
+the spacetime (the fluid bends spacetime itself), according to Einstein's field
+equations (EFE, Chapter~\ref{chapter:gr}). In this case, the EFE determine the
+dynamics of the geravitational field under the presence of a source term
+(the energy momentum tensor of the fluid). Section \ref{sec:Cowling-approx}
+discusses the simplifications which can be made to the GRMHD equations
+when the backreaction is neglected.
+
+\subsection{3+1 split of special relativistic hydrodynamics}
+The ``Valencia formulation'' of GRHD presented in this thesis dates back to the
+pioneering work of Mart\'i et al. \cite{Marti91, Banyuls97, Ibanez01} in 1991.
+They where the first to make a characteristic approach to relativistic
+hydrodynamics in a 3+1 split of spacetime \footnote{
+see Section~\vref{sec:adm-foliation} for the definitions of normal vector 
+$n^\mu$, lapse $\alpha$, shift $\beta^i$ and 3-metric $\gamma_{ij}$.}.
+
+In the 3+1 split,
+the Lagrangian velocity $u^\mu$ can be casted as $u^\mu = W(n^\mu + v^\mu)$ and
+the 3-velocity as $v^i  =  u^i/W + \beta^i/\alpha$. The 3+1 language also offers
+beatiful interpretations, for instance is the projection of the fluid 4-velocity
+on the purely spatial hypersurfaces just the Lorentz-decorated 3-velocity,
+$\gamma^\mu_\nu u^\nu = W v^\mu$. Formally, the 3-energy-momentum-tensor can be
+interpreted as extension from the flat case,
+\begin{equation}\label{eq.wij.grhd}
+W_{\hydro}^{ij} = W^{ij}_\srhd = S^i v^j + p \delta^{ij}
+~\leftrightarrow~
+W^{ij}_\grhd = S^i v^j + p \gamma^{ij}
+\,.
+\end{equation}
+The SRHD fluxes are refined as
+\begin{align}
+\label{eq.grhd.fluxes}
+F^i_\hydro(u) &=
+\begin{pmatrix}
+\text{fluxes for } D \\
+\text{fluxes for } S_j \\
+\text{fluxes for } \tau
+\end{pmatrix}
+=
+\begin{pvector}
+D w^i \\
+\alpha W^i_j - \beta^i S_j \\
+\alpha (S^i - v^i D) - \beta^i \tau
+\end{pvector}
+\quad
+\text{(general $W^{ij}$)}
+\\
+&=
+\begin{pvector}
+D w^i \\
+S_j w^i + p \delta^i_j \\
+\tau w^i + p v^i
+\end{pvector}
+\hspace{2.7cm} % todo: push right
+\text{(only $W^{ij}=S^i v^j + p\gamma^{ij}$)}
+\label{eq.grhd.flux2}
+\end{align}
+It is convenient to write the fluxes with the vector
+$w^i=\alpha v^i - \beta^i$ which is refered to as the advection
+velocity relative to the coordinates, or just \emph{transport
+	velocity}\footnote{Note that $w^i$ does not transform like a 3-vector. However,
+	we introduce it only for abbreviation on the
+    paper and for saving contractions in the computer.}. With the replacment
+of $v^i \to w^i$, the GRHD fluxes \eqref{eq.grhd.flux2} have (almost) a similar
+shape as the SRHD fluxes \eqref{eq.srhd.fluxes}.
+
+In order to fully describe the state of a GRHD system, the local curvature must
+be encoded in the state vector
+\footnote{The ADM state is constant for the GRHD PDE, as the modification of the
+	background spacetime is prescribed by Einstein field equations, which are 
+	however
+	a PDE on their own (Chapter~\ref{chapter:gr}). In \code{ExaHyPE} language, 
+	an
+	entry in the state vector which is not evolved by the PDE, \ie which 
+	fulfills
+	$\partial_t Q^k=0$, is called a ``material parameter''. This term comes from
+	seismology where non-evolved parameters describe the immutable soil 
+	properties
+	(in GR lingua, the ``background'' spacetime) which are unchanged by the 
+	waves
+	described by the PDE.
+}. Therefore, the ADM state vector is defined as
+\begin{equation}\label{eq.grhd.adm}
+Q_\adm = (\alpha, \beta^i, \gamma_{ij}, K_{ij}) \,.
+\end{equation}
+%
+The GRHD system is hyperbolic \cite{Font00}, and the eigenvalues in $k$ direction
+are given by
+\begin{align}
+ \lambda_0 &= \alpha v^k - \beta^k \,, \\
+ \lambda_\pm &=
+  \frac{\alpha}{1 - v^2 c_s^2}
+  \big(  v^k (1-c_s^2) \nonumber\\
+  &\phantom= \pm c_s
+  \sqrt{(1-v^2)\left( \gamma^{kk}(1-v^2 c_s^2) - v^k v^k (1-c_s^2) \right)}
+  \big) - \beta^k \,, 
+\end{align}
+with the local sound speed $c_s=\sqrt{\partial_\rho p + p/\rho^2 \partial_\epsilon p}/h$.
+
+\subsection{Conformal factor}
+In the Valencia formulation, the PDE system is written in terms
+of tensor densities. The determinant of the metric
+$\gamma=\text{det}(\gamma_{ij})$ relates the tensor densities with
+an ordinary tensor. The 3-determinant is related to the determinant of
+the four-metric by $\sqrt{-g}=\alpha\sqrt{\gamma}$. The system is
+then formulated as\footnote{Here the full system \eqref{intro:ncp}
+  is given, even if some terms are zero for certain systems
+  (such as the algebraic and differential source for HD and SRHD).
+}
+\begin{equation}\label{eq:conformal-pde-grmhd}
+\partial_t (\sqrt{\gamma} Q)
++ \partial_i (\sqrt{\gamma} F^i)
++ \sqrt{\gamma} B^i \partial_i (\sqrt{\gamma} Q)
+= \sqrt{\gamma} S.
+\end{equation}
+The PDE as given in \eqref{eq:conformal-pde-grmhd} defines the
+state $Q$, the fluxes $F^i$, the non-conserva\-tive part $B^i$ and the
+algebraic source $S$ \emph{without} the factor $\sqrt{\gamma}$.
+This convention will be retained for the following sections. Note that,
+however, the vector $\sqrt \gamma Q$ is evolved in time.
+
+\subsection{Sources for curved spacetimes}
+In presence of a curved background, the spacetime coupling introduces
+a source. The governing equations of GRHD are therefore a balance law
+\eqref{intro:balance-law} instead of a conservation law
+\eqref{intro:conservation-law}. The source term induced by the
+spacetimes, written \emph{with Christoffel symbols}, read
+\footnote{Note the use of 4-dimensional tensors except the lapse $\alpha$.
+  See also Appendix~\ref{apx:symbols} for the standard definitions of
+  the Christoffel symbols of first kind $\Gamma^k_{ij}$ and 4-metric
+  $g_{\mu\nu}$.
+}
+\begin{equation}
+S_\hydro(u) =
+\begin{pvector}
+\text{source for } D \\
+\text{sources for } S_j \\
+\text{source for } \tau
+\end{pvector}
+=
+\begin{pvector}
+0
+\\
+T^{\mu\nu} \partial_\mu g_{\nu j} - \Gamma^\delta_{\nu\rho} g_{\rho j} T^{\mu\nu}
+\\
+\alpha T^{\mu 0} \partial_\mu \ln \alpha - \alpha T^{\mu\nu} \Gamma^0_{\mu\nu}
+\end{pvector}.
+\end{equation}
+In order to determine the 4-energy-momentum-tensor
+\begin{equation}\label{eq.grhd.tmunu}
+T^{\mu\nu} =
+\rho h W^2 (n^\mu + v^\mu) (n^\nu + v^\nu)
+   + p(\gamma^{\mu\nu} - n^\mu n^\nu)
+\,,
+\end{equation}
+the 4-velocity $u^\mu$ or the normal vector $n^\mu$ have to be recovered.
+This can be circumvented by using spatial tensors only: The equivalent
+``Christoffel symbol free'' source terms, as used in \cite{Radice2013c},
+read
+\begin{equation}\label{eq:grmhd.source}
+S_\hydro(u) =
+\begin{pvector}
+0
+\\
+\frac \alpha2 S^{lm} \partial_j \gamma_{lm} + S_k \partial_j \beta^k - E \partial_j \alpha
+\\
+\textcolor{red}{ \alpha S^{ij} K_{ij} } - S^i \partial_i \alpha
+\end{pvector}
+\,.
+\end{equation}
+The sources can also be written without computing the 
+3-energy-momentum-tensor $S^{ij}$, exploiting
+$\left(\partial_i \sqrt\gamma\right) / \sqrt\gamma = \frac 12 \gamma^{lm} 
+\partial_i \gamma_{lm}$,
+\footnote{
+  However, \eqref{eq:grmhd.source2} requires to compute
+  $\partial_i \sqrt \gamma$, which must then be (formally) part of the
+  state vector if the non-conservative product approach is chosen.
+}
+\begin{equation}\label{eq:grmhd.source2}
+S_\hydro(u) =
+\begin{pvector}
+0
+\\
+\frac \alpha2 S^l v^m \partial_j \gamma_{lm} + \alpha p \frac 1{\sqrt{\gamma}} 
+\partial_j \sqrt{\gamma} + S_k \partial_j \beta^k - E \partial_j \alpha
+\\
+\textcolor{red}{
+	\alpha S^l v^m K_{lm} - \alpha p \gamma^{lm} K_{lm}
+} - S^i \partial_i \alpha
+\end{pvector}
+\end{equation}
+All terms in the source except the red one(s) contain derivatives of the ADM
+state vector \eqref{eq.grhd.adm}. This motivates to extend the definition of
+the curvature state vector as
+\begin{equation}\label{eq.grhd.admTilde}
+\tilde Q_\adm = (
+   \alpha, \beta^i, \gamma_{ij}, K_{ij},
+   \partial_i \alpha, \partial_i \beta^j, \partial_i \gamma_{jk}
+   ) \,.
+\end{equation}
+If \eqref{eq.grhd.admTilde} is chosen in favour of \eqref{eq.grhd.adm}, then
+the GRHD source term is a purely algebraic one. In preparation of a coupled
+evolution of GRHD with spacetime, either $Q_\adm$ or $\tilde Q_\adm$ must be
+evolved in time. In fact, all quantities \eqref{eq.grhd.admTilde} are part of
+the FO-CCZ4 state vector \eqref{eq:foccz4-state-vector}, proposed in
+Section~\ref{sec:fo-ccz4}. Therefore, the GRHD part in a coupled evolution of
+the presented GRHD system with the FO-CCZ4 formulation is of the form
+\begin{equation}
+\partial_t Q_\hd + \partial_i F^i_\hd(Q_\hd, \tilde Q_\adm)
+ = S_\hd(Q_\hd, \tilde Q_\adm) \,.
+\end{equation}
+In contrast, an ordinary second order formulation of EFE would instead evolve
+only $Q_\adm$ in time, \ie without the derivatives. In such a case, the 
+differential
+and algebraic split of the source term (Section~\ref{sec:ncp}) is applicable.
+Part of the work carried out in \cite{Fambri2018} is to cast the PDE as
+\eqref{intro:ncp}, \ie to cast all non-red summands as 
+$B^{ij}_k(Q_\adm, Q_\grhd) \partial_i (Q_\adm)_j$.
+
+In order to cast these PDEs into the algebraic-differential source
+split \eqref{intro:ncp}, all black terms obtain an extra minus when they
+are moved from the RHS to the LHS. The final GRHD system reads
+then (colors now omitted):
+\begin{align}
+\left( B_\grhd \right)^{ij}_{k} \partial_i Q_j =%&=
+\begin{pvector}
+0
+\\
+- \frac \alpha2 S^{lm} \partial_j \gamma_{lm} - S_k \partial_j \beta^k + E \partial_j \alpha
+\\
+S^i \partial_i \alpha
+\end{pvector} \,,
+%\\
+\quad
+S_\grhd =%&=
+\begin{pvector}
+0
+\\
+0
+\\
+\alpha S^{ij} K_{ij}
+\end{pvector} \,.
+\end{align}
+
+\subsection{Cowling approximation}\label{sec:Cowling-approx}
+In case of a stationary spacetime (Cowling approximation
+\cite{Cowling41}, characterized by $\partial_t g_{ij} = 0$),
+one can simplify the source terms and
+get rid of the contraction \citep{MTW1973, York79, Gourgoulhon2012}
+\begin{equation}\label{eq:path-to-cowling}
+S^{ij} K_{ij} = \frac{1}{2\alpha} S^{ik} \beta^j \partial_j
+\gamma_{ik} + \frac 1\alpha S^j_i \partial_j\beta^i
+\,.
+\end{equation}
+In this particular case, \eqref{eq:grmhd.source} simplifies to
+\begin{equation}
+S_{\hydro\text{,Cowling}}(u) =
+\begin{pvector}
+0
+\\
+\frac \alpha2 S^{lm} \partial_j \gamma_{lm} + S_k \partial_j \beta^k - E \partial_j \alpha
+\\
+\frac 12 S^{ik} \beta^j \partial_j \gamma_{ik} + S^j_i \partial_j \beta^i - S^i \partial_j \alpha
+\end{pvector}
+\,.
+\label{eq.grmhd.cowling.source}
+\end{equation}
+In this special case, it is possible to write the GRHD equations without any
+algebraic source term. All terms in \eqref{eq.grmhd.cowling.source} can
+then be casted in the form $B\partial_i Q$. This allows to split the PDE as
+\footnote{
+  In the form \eqref{eq.grhd.as-cowling}, the flow on a background spacetime is 
+  drescribed
+  similiarly as in the shallow-water equations,
+  where the bottom-slope term (which accounts for gravitational forces)
+  can also be cast as a non-conservative product
+  \cite{Pares2006,Castro2006,Castro2010}.  
+}
+\begin{equation}\label{eq.grhd.as-cowling}
+\partial_t Q^k + \underbrace{\partial_i F^i(Q)}_\text{Hydro. contribution}
++ \underbrace{B^i_{jk} \partial_i Q_j}_\text{Background contribution}
+= 0
+\,.
+\end{equation}
+In the numerical schemes proposed in Section~\ref{sec:dg}, the absence of
+an algebraic source is desirable, as it supports the well-balanced property
+of these schemes.
+
+\section{General relativistic magnetohydrodynamics (GRMHD)}\label{sec:grmhd}
+
+The general relativistic magnetohydrodynamics (GRMHD) equations are
+the consequence of the coupling of Euler equations 
+(Hydrodynamics, GRHD) to Maxwell equations (Magnetodynamics, MD). In the
+popular ideal MHD approximation, the electric field $\vec E = \vec B \times \vec v$
+is fully determined by the moving fluid.
+In this approximation, the Faraday tensor $F^{\mu\nu}$ (with 6 degrees of freedom,
+$\vec E$  and $\vec B$) reduces to the magnetic field $\vec B$ only, therefore the
+vector of conserved variables in Magnetodynamics is just $Q_\magneto = (B^i)$.
+\footnote{We add further evolution equations in case of the divergence
+   cleaning technique. However, note that there is no distinction between
+   primitive and conserved variables in Magnetodynamics.}
+This approximation is appropriate to describe a wide variety of astrophysical
+phenomena where the electrical conductivity of the plasma (description
+of matter) is very high. In the ideal MHD approximation, the electrical
+conductivity $\sigma\to\infty$ is assumed to be divergent. The electrical field is
+completely determined by the fluid velocity and the magnetic field.
+The magnetic flux $\phi_B = B_i S^i$
+over any surface $\boldsymbol S$ is conserved,
+\begin{align}
+\oint_{\partial \boldsymbol{S}} \left( \boldsymbol{E} +\boldsymbol{v}
+\times \boldsymbol{B}\right) \cdot d\boldsymbol{\ell} = - \frac{d
+	\phi_B}{d t} = 0\,,
+\end{align}
+and is advected with the fluid movement. The magnetic contribution to the
+hydrodynamics equations, \ie the MHD equations, is then just a
+conservation equation for the magnetic field.
+
+\subsection{Magnetodynamics}
+The photon field (Maxwell in vacuum, \ie without charge carriers) has the momentum
+density $\boldsymbol S = \boldsymbol E \times \boldsymbol B$
+(Poynting vector), total energy density $U = \frac{1}{2}\left(E^2 + B^2\right)$
+and energy-momentum tensor $W^{jk}=U \gamma^{jk} - E^j E^k - B^j B^k$.
+
+The electric field $\boldsymbol{E}$ in the Eulerian frame 
+is determined by the simplified Ohm's law \ie $E_i = -
+\tilde{\epsilon}_{ijk} v^j B^k$ in the ideal MHD limit
+(\ie for diverging electrical conductivities).
+The cross product is given by the spatial three-Levi-Civita tensor
+density $\tilde{\epsilon}$ (see Appendix~\ref{apx:symbols} for the definition).
+Therefore, the momentum density and energy momentum tensor can be expressed,
+using only $\boldsymbol v$ and $\boldsymbol B$, as
+\begin{align}
+S^\magneto_i %= \left(\boldsymbol{E}\times\boldsymbol{B}\right)_i
+&= \tilde{\epsilon}_{ijk} E^j B^k = -\tilde{\epsilon}_{ijk} \tilde{\epsilon}^{jmn} v_m B_n B^k
+= v_i \left(B_k B^k \right) - B_i \left( v_k B^k\right)
+\,,
+\nonumber
+\\
+  W^{jk}_\magneto
+   &=  U \gamma^{jk} - B^j B^k / W^2 - (B^k v_k) v^j B^k \,.
+% = \boldsymbol{v} B^2 - \boldsymbol{B} \left(\boldsymbol{v}\cdot \boldsymbol{B}\right) .
+\label{eq.md.contributions}
+\end{align}
+
+\subsection{The GRMHD coupling}
+The Maxwell theory (Magnetodynamics) influence the hydrodynamic flow with the (energy)
+momentum contributions \eqref{eq.md.contributions}, while the Euler theory
+determines the electrical field in the presented ideal magnetodynamic approximation.
+Furthermore, the pressure $p$ get's a magnetic contribution and is replaced in
+\eqref{eq.wij.grhd} and \eqref{eq.grhd.tmunu} as
+\begin{equation}
+p \to p_\text{tot} = p_\hydro + p_\magneto
+\quad\text{with}\quad
+p_\magneto = \frac 12 \left( B_j B^j / W^2 + (B^j v_j)^2 \right)
+\end{equation}
+being the pressure contribution from ideal magnetodynamics.
+The total energy-momentum tensor is the sum of all involved theories,
+thus the GRM\-HD energy momentum tensor is given, for completeness, here as
+\begin{equation}
+\begin{aligned}
+	W^{ij}_\grmhd &= W^{ij}_\hydro + W^{ij}_\magneto = W^{ij}_\hydro(p_\hydro + p_\magneto) + W^{ij}_\magneto
+	\\
+	&= 
+	S^i v^j + p_\text{tot} \gamma^{ij} - \frac{B^i B^j}{W^2} - (B^k v_k)v^i B^j
+	\,.
+\end{aligned}
+\end{equation}
+Consequently, also the conserved quantities are given by
+\begin{alignat}{3}
+%	\desc{GRMHD P2C}
+	&
+	Q_\grmhd(u, Q_\magneto)
+	&&=
+	\begin{pvector}
+		D \\
+		S_j \\
+		\tau
+	\end{pvector}
+	=
+	\begin{pvector}
+		\rho W \\
+		D h W v_j + B^2 v_j - (B^i v_i) B_j \\
+		D (h W -1) - p + \frac 12 \left( B^2 (1 + v^2) - (B^j v_j)^2 \right)
+	\end{pvector}
+	\label{eq.grhd.Qu}
+\end{alignat}
+
+\subsection{Fluxes and sources}
+The evolution variables in GRMHD are
+\todo[color=green]{MHD: Adress the issue that we
+	evolve the \emph{covariant} momentum $S_j$ and the
+	\emph{contravariant} magnetic field $B^j$. Why?}
+\begin{equation}
+Q_\mhd = (Q_\hydro, Q_\magneto) = (D, S_j, \tau, B^j)
+\,.
+\end{equation}
+It should be emphasized that the vector of primitive variables \eqref{eq.hd.prim}
+does not change (increase in size), the primitive recovery takes
+only place for the hydrodynamic part of the GRMHD equations.
+%
+The MD conserved vector is just $Q_\magneto=(B^j)$ and its evolution is given
+by the induction equation
+\begin{equation}\label{eq.grmhd.pdeb.simple}
+\partial_t B^j + \partial_i (w^i B^j - B^i w^j) = 0 \,,
+\end{equation}
+\ie the new PDE has fluxes and sources
+\begin{equation}
+F^i(Q) = w^i B^j - B^i w^j,
+\quad S(Q) = 0 \,.
+\end{equation}
+
+The GRMHD equations are hyperpolic. For the characteristic wave speeds
+in GRMHD, a popular choice is the magnetosonic approximation \cite{Gammie03}.
+%
+The evolution equation \eqref{eq.grmhd.pdeb.simple} does not handle the magnetic
+field divergence, which is covered in the next section.
+
+%
+%\subsection{The pure GRMHD equations}
+%In consequence, the simple tensor-free fluxes of GRHD as given in
+%\eqref{eq.grhd.fluxes} are no more correct. Therefore, one typically
+%employs the fluxes with the energy-momentum-tensor. We repeat the first
+%three entries for the GRHD and give provide the new flux for the magnetic
+%field in the pure GRMHD (\emph{without} divergence cleaning) as the 
+%fourth entry:
+%\begin{equation}
+%F^i(u) =
+%\begin{pmatrix}
+%\text{fluxes for }D \\
+%\text{fluxes for }S_j \\
+%\text{fluxes for }D \\
+%\text{fluxes for }B^j
+%\end{pmatrix}
+%=
+%\begin{pmatrix}
+%w^i D
+%\\
+%\alpha W^i_j - \beta^i S_j
+%\\
+%\alpha (S^i - v^i D) - \beta \tau
+%\\
+%\end{pmatrix}.
+%\end{equation}
+%The source terms for the magnetic fields $B^j$ are zero, similar to the
+%source terms for the density $D$.
+%
+%This formulation is useful if one uses a technique to control the 
+%Maxwell constraint $\partial_j B^j = 0$ which does not change the
+%PDE system, for instance contraint transport.
+
+\subsection[Divergence cleaning]{The divergence cleaning (constraint damping) 
+formulation}\label{sec:divergence-cleaning}
+The Maxwell magnetic monopole constraint $\partial_i B^i=0$ can be
+casted as hyperbolic conservation law with a Generalized Lagrangian
+Multiplier approach (GLM) also refered to as \emph{divergence cleaning},
+initially proposed by \cite{Dedner:2002}. In this approach, the MHD
+system is augmented with an additional auxiliary equation for an
+artificial scalar field $\psi$ in order to propagate away numerical
+violations of the divergence-free constraint\footnote{
+  There are in fact other techniques to ensure in the divergence
+  freedom of the magnetic field on a numerical level, such as
+  constrained transport.
+}.
+\todo[color=green]{MHD: Tell more about constrained transport methods.}
+Hence, the PDE \eqref{eq.grmhd.pdeb.simple} is replaced by two
+different PDEs.
+The MD conserved vector is now $Q_\magneto = (B^j, \phi)$. The
+modified fluxes and sources read
+\cite{Porth2017,Palenzuela:2008sf, Dionysopoulou:2012pp}
+\begin{align}
+	%\desc{fluxes}
+	F^i(Q) &= \begin{pmatrix}
+		\text{fluxes for }B^j \\
+		\text{fluxes for }\phi
+	\end{pmatrix}
+	=
+	\begin{pvector}
+		w^i B^j - v^j B^i - B^i \beta^j \\
+		\alpha B^i - \phi \beta^i
+	\end{pvector}
+	\\
+	%\desc{and sources}
+	S(Q) &=
+	\begin{pmatrix}
+		\text{sources for } B^j \\
+		\text{sources for } \phi
+	\end{pmatrix}
+	=
+	\begin{pvector}
+		-B^i \partial_i \beta^j - \alpha \gamma^{ij} \partial_i \phi \\
+		\textcolor{red}{- \alpha \kappa \phi} - \phi \partial_i \beta^i
+		- \frac 12 \phi \gamma^{ij} \beta^k \partial_k \gamma_{ij}
+		+ B^i \partial_i \alpha
+	\end{pvector}
+\end{align}
+%
+Here, $\kappa$ is the damping term which controls the amount of damping applied on the 
+field $\phi$. In the sake of a sane balance law with purely differential 
+source terms, $\kappa=0$ is a choice also carried out in \cite{Fambri2017}. This
+choice reflects pure transport and no damping.
+
+Notably, the divergence cleaning formulation introduces additional sourc\-es
+which are mostly non-conservative (as in the case of GRHD) except of the
+damping term (displayed in red). Thus, from all presented equations, only
+a Cowling-GRMHD formulation with divergence cleaning and $\kappa=0$ has
+zero algebraic sources.
+

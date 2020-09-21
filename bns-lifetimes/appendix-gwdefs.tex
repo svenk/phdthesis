@@ -1,0 +1,59 @@
+% Currently an intermediate text reservoir
+
+\section{Extracting gravitational waves}
+\label{sec:extracting-gws}
+
+This appendix section is a tiny review of standard definitions in gravitational
+wave definitions (continuum) and their extraction in numerical simulations.
+For reviews, see \eg \cite{Centrella:2010,Bishop2016,Baumgarte2010b}.
+
+\subsection*{Definitions}
+
+Gravitational waves are defined within linearized gravity, \ie where the metric
+$\gamma_{\mu\nu} = \eta_{\mu\nu} + h_{\mu\nu}$ is the sum of the (Minkowski)
+vacuum $\eta_{\mu\nu}$ and a perturbation $h_{\mu\nu}$ which is small
+($|h|\ll 1$). The wave equations for the perturbation are found after defining
+the trace reversed perturbation $\bar h = h - \frac 12 \eta 
+h_\alpha^\alpha$ and imposing the Coulomb gauge $\nabla_\mu \bar h^{\mu\nu}=0$;
+they are given by the EFE $\nabla_\alpha \nabla^\alpha \bar h_{\mu\nu}
+= \Box \bar h_{\mu\nu} = 0$, with the covariant d'Alambert operator $\Box$.
+The remaining gauge freedom allows to fix transverse metric perturbations
+(yielding in a transverse traceless formulation), so that $\bar h = h$. In
+Cartesian coordinates, a gravitational wave (GW) propagating in $z$ direction can
+then be written as
+	$$
+	h_{\mu\nu} = 
+	\begin{bmatrix}
+	0 & 0 & 0 & 0 \\
+	0 & h_{+} & h_{\times} & 0 \\
+	0 & h_{\times} & - h_{+} & 0 \\
+	0 & 0 & 0 & 0
+	\end{bmatrix} \,.
+	$$
+Here, the scalars $h_{+}$ and $h_\times$ are identified as the two polarization
+states of the wave. Typically, they are collected in a complex field
+$y := h_{+} + ih_{-}$. The GW \emph{strain} is then defined as
+$\xi_i = \frac 12 \partial_t^2 h_{ij} \xi^j$. The experimentally accessible
+relative displacement $\delta \xi / \xi \sim h$ is proportional to $h$.
+
+\subsection*{Implementation}
+
+The gravitational wave strains $h_+$ and $h_-$ can be computed online in a time
+evolution code. At large distance from a central massive object (formally at
+infinity in Schwarzschild coordinates), typically at radius $R = \mathcal O(500) M$,
+where $M$ is the mass of the spacetime, a curvature invariant (Weyl scalar $\Psi_4$,
+in \code{EinsteinToolkit} following \cite{Newman62a,Baker:2002qf}) is derived from the
+spacetime (\ie from the Riemann or Weyl tensor which is derived from the
+4-metric or the ADM quantities, see also \cite{Nerozzi:2004wv,Burko:2005fa} for definitions).
+A spherical harmonic mode decomposition is
+then performed, where the GW DOF are encoded in the $l=2, m=2$ mode of $\Psi_4^{lm}$.
+
+In a postprocessing step, the \code{PyCactusET} software is used for time integrating
+the strain $h_{+,\times}$ from $\Psi_4$, following \cite{Reisswig:2011}.
+Figure \vref{fig:analsyis-example} shows an example of a GW signal from a binary neutron
+star merger obtained with this method, with a cutoff angular frequency $w_0=0.02$ for
+fixed frequency iteration.
+
+
+
+

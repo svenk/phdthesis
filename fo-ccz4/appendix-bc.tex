@@ -1,0 +1,139 @@
+% This text was written at 2017-10-24 for ExaHyPE and lives in the
+% ExaHyPE-Astrophysics/doc directory as a standalone tex. The version
+% for the thesis was adopted.
+
+% Integrals with long limits above/below
+\newcommand{\Int}[2]{\int\limits_{\mathrlap{#1}}^{\mathrlap{#2}}}
+
+\section{Boundary conditions for Einstein Equations}
+\label{sec:apx-bc}
+This appendix briefly reviews a number of boundary condition choices
+adopt\-ed within the implementation of the Einstein solver within the codes
+discussed in Chapter~\ref{chapter:gr}.
+
+When evolving full spacetimes of compact objects (\ie extended or collapsed
+matter located within a small region around the origin of the coordinate
+system), boundary conditions must take care of the finite simulation domain
+(sometimes refered to as ``finite volume effect''), \ie the fact that the
+physical domain is by concept infinite while the numerical one is finite.
+Any kind of unphysical effects at this boundary, such as reflection of
+outgoing waves, shall be prevented.
+
+In a cartesian grid, the box-like geometry of the boundary renders this
+requirement to a complex task. The grid-level solution is to overcome the
+cartesian geometry and to adopt a spherical one in the outer wave zone/near
+the boundary. Then, wave-absorbing Riemann solvers can be applied which have
+good properties for orthogonally arriving waves.
+
+However, within the Einstein Toolkit, the application of radiative boundary
+conditions have turned out to be sufficiently successful for long-term 
+evolutions (such as binary mergers) without significant reflections at the
+boundary. Therefore, the focus within this section is on that candidate,
+next to exact Riemann solvers. Other boundary conditions which were
+successfully adopted are periodic boundary conditions (\ie evolving a
+\emph{lattice} of black holes) and exact boundary conditions (not successful
+in black hole spacetimes, but sufficient for simpler benchmarks).
+
+\subsection{Sommerfeld boundary conditions}
+This section shortly reviews a simple version of the Sommerfeld boundary
+conditions, also known as radiative boundary conditions. The key idea of the
+``radiative'' boundary conditions is to solve a different
+PDE at the boundary which models radial outgoing scalar waves, independently
+for every component of the state vector for a given system.  This PDE can be
+cast in a similiar fully non-conservative way as the CCZ4 PDE system itself, \ie
+\begin{equation}\label{eq:apx-bc-base-pde}
+\partial_t Q + B(Q) \nabla Q = S(Q)
+\,.
+\end{equation}
+
+A motivational `toy'' deviation introduces the scalar field $f=f(\vec r,t)$
+as a place holder for a gravitational wave field, a component of the metric
+tensor or any other field from the FO-CCZ4 state vector. For $f$, the
+\emph{outgoing radial wave assumption}
+\begin{equation}
+r f(r,t) = \operatorname{const}
+\end{equation}
+is claimed, with $r=|\vec r|$. The time derivative of this assumption gives 
+a partial differential equation:
+\begin{equation}
+0 = \frac{\mathrm d}{\mathrm d t} (r f)
+   = v f + r \left( \frac{\partial f}{\partial t} + \sum_i \frac{\partial f}{\partial r_i} \frac{\mathrm d r_i}{\mathrm d t} \right)
+\end{equation}
+with a radial velocity $v=\mathrm d r / \mathrm d t$. The \emph{radial wave 
+assumption}
+\begin{equation}
+\frac{\mathrm d r_i}{\mathrm d t} = v^i \approx v \, e^i := v \frac{r^i}{r}
+\end{equation}
+approximates the velocity $\vec v$ as a radial velocity $v=|\vec v|$.
+$v$ is now related to the propagation speed of the $f$ which is
+the speed of light, i.e. $v=c\equiv 1$ (however, for the sake of clarity
+the symbol $v$ is kept for the time being). One thus ends up with the
+nonconservative PDE
+\begin{equation}
+\partial_t f + v \frac{r^i}{r} \partial_i f = - v \frac{f}{r}
+\end{equation}
+
+The outgoing radial wave assumption implies $\lim{r\to\inf} f(r)=0$. For
+some ADM variables (like $\alpha$ or $\gamma_{ii}$), the limites are $f_0 \neq 0$. In such a case, we define $g=f-f_0$, insert $g$ at the place of $f$ into
+the PDE and obtain for the actual $f$ a different source term:
+\begin{equation}\label{eq:pde}
+\partial_t f + v \frac{r^i}{r} \partial_i f = - \frac{f-f_0}{r}
+\end{equation}
+This PDE can be seen as the generic case for an outgoing wave with value $f_0$ at the boundary.
+
+In the CCZ4 system, we solve such a PDE for every single field of the 59 fields.
+This gives us 59 non-coupled differential equations.
+
+To be explicit, \eqref{eq:pde} shall be applied as follows: As initial data,
+the system's solution at or near the boundary is taken. Depending on the
+numerical interpretation, one might also extrapolate the solution ``to'' or
+``beyond'' the boundary to serve as initial data. The boundary conditions 
+itself adopted while integrating \eqref{eq:pde} are negligable, copy/outflow
+BC are appropriate.
+
+\subsection*{Diffusive Boundaries}
+Solving a different PDE ``at the boundary'' is a blurry formulation. In a
+FD/FV code, where ghostzones are maintained for holding the information just
+outside the simulation domain, \eqref{eq:pde} can be solved directly in the
+ghostzone, if the scheme is at least second order (so the ghostzones are
+three-dimensional). In a DG code, where no ghostzones exist, \eqref{eq:pde}
+could be solved evolving the whole last DG patch with the boundary PDE. This
+either shifts the boundary into the simulation domain or is implemented in a way
+that the cell is evolved with the actual PDE (say FO-CCZ4) but the results of
+the boundary PDE are read off the lower-dimensional boundary.
+
+This gives rise to decouple the two meanings of the term ``boundary'': The
+mathematical simulation boundary does not neccessarily need to correspond to
+the physical boundary. The generic formalization of the DG approach reads as
+follows: The prototypic PDE \eqref{eq:apx-bc-base-pde} functions
+could be composed as a ``meta'' PDE where any PDE term $X\in \{B, S\}$ is
+substituted by
+\begin{equation}
+X = \alpha X_\text{FO-CCZ4} + (1-\alpha) X_\text{Boundary}
+\end{equation}
+Here, the scalar field $\alpha$ encodes the simulation domain, where
+$\alpha=1$ means ``within'' the domain, $\alpha=0$ means ``outside'' the
+domain and any $\alpha \in (0,1)$ corresponds to the diffusive interface
+between inside and outside. An example for $\alpha(\vec x)$ would be the
+radially symmetric Logistic function
+\begin{equation}
+\alpha(\vec r) = \frac{1}{1 + \exp \left\{ -k(r - r_0)  \right\}}
+\end{equation}
+with $r_0$ encoding the de-facto extend of the physical domain (\ie a typical
+value in a BNS merger would be $r_0 \sim 2000M$) and $k$ encodes the width of
+the diffusive interface (a typical value would be $k=1$). This idea was
+rigorously implemented for linear elasticity equations in \cite{Tavelli2018},
+but without solving a PDE outside the physical domain.
+
+\subsection[
+  Exact wave-absorbing Riemann Solver
+]{Exact Riemann Solver for wave-absorbing Boundary Conditions}
+For the FO-CCZ4 system the full eigenstructure is known, all eigenvalues and
+eigenvectors for typical gauge choices are provided at \cite{Dumbser2017}.
+The pure computational costs of evaluating the full eigenvector system of
+FO-CCZ4 makes it way too expensive to adopt an exact Riemann solver in a
+numerical scheme. However, this cost might be worth being spent in the
+boundary: Ideally, thanks to AMR, there are only a small number of boundary
+cells. This was implemented in the robustness tests for FO-CCZ4, however
+\emph{greasing waves} accumulate in the corners of the rectangular domains.
+% I also think it failed for the single BH but don't remember exactly any more. 

@@ -1,0 +1,948 @@
+%
+% This is the text of the PhdThesis-version of the BNSLT paper, i.e. a single
+% chapter within the thesis of Sven. It ~is~_was_ maintained at the same time as the
+% bnslt paper itself ~is~_was_ written, but as seperate document. Like all texts in
+% the thesis, it is written with tufte-book in mind.
+% 
+% In this directory, there are two standalone compilation targets available
+% to render the content of this tex file without the whole thesis:
+%
+% 1. standalone-bnslt-thesis-version.tex => Looks like tufte/the thesis
+%    (good for quickly checking the style)
+% 2. standalone-bnslt-plain-version.tex => Looks discreet like a working report
+%    (good for communication with coauthors)
+%
+
+\providecommand{\cf}{cf.,~}
+\providecommand{\ie}{i.e.,~}
+\providecommand{\eg}{e.g.,~}
+\providecommand{\dd}{\mathrm{d}}
+\providecommand{\mev}{\,{\rm MeV}}
+\providecommand{\s}{\rm s}
+\providecommand{\ms}{\rm ms}
+\providecommand{\km}{\,{\mathrm{km}}}
+\providecommand{\gcm}{\,{\mathrm{g}/\mathrm{cm}^{3}}}
+\providecommand{\Msun}{M_{\odot}}
+\providecommand{\Msol}{M_{\odot}}
+\providecommand{\tov}{\textsc{tov}} % small caps TOV, as an alternative to {_{\rm TOV}} or \mathrm{TOV}
+\providecommand{\Mtov}{M_\tov}
+\providecommand{\tautov}{\tau_{\tov}}
+\providecommand{\Rtov}{R_\tov}
+\providecommand{\Mth}{M_\textrm{th}}
+\providecommand{\sys}{{\mathrm{sys}}}
+\providecommand{\Ctov}{\mathcal{C}_{\rm{TOV}}}
+
+% Translate the revtex table rules to booktab table rules
+\providecommand{\colrule}{\midrule}
+\providecommand{\botrule}{\bottomrule}
+
+% table column widths https://tex.stackexchange.com/a/12712/49958
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+In this chapter, the lifetimes of the remnant produced by the merger of two neutron
+stars is studied. By determining a maximum mass at which a
+binary neutron star system collapses immediately to a black hole,
+constraints on neutron star masses as well as a lower limit on their radii can be given.
+This chapter relies partially on the coauthored publication \cite{Koeppel2019}.
+An introduction into the problem and a review of previous work given in
+Section~\vref{sec:bnslt-intro}. As a motivation, the physical content of the
+tested nuclear equations of state are revisited.
+
+\section{Motivation: Nuclear equation of state}\label{sec:bnslt-motivation}
+%\todo{Do not talk about critical phenomenae, 
+%\cite{Baumgarte:2016xjw,Gundlach-2003-critical-review,Choptuik93}, interesting for
+%example \url{http://crunch.ikp.physik.tu-darmstadt.de/erice/2018/sec/talks/sunday/bauswein.pdf}}
+
+In order to describe neutron stars with the coupled Einstein-Euler equations
+(Chapters~\ref{chapter:gr} and \ref{chapter:hydro}), a suitable 
+(realistic) equation of state must be chosen which encodes all
+microscopic phenomenology (Section~\ref{sec:hd-nuclear-matter}).
+The equation of state depends on thermodynamic/hydrodynamic quantities
+such as (rest mass) matter (baryon) density $\rho$, internal energy $\epsilon$
+and temperature $T$. One of the common approximations made (in high energy
+physics in general) is to ignore thermal effects, assuming a ``cold'' EOS in the
+limit of $T=0$. In fact, these EOSs can be used in the inspiral phase of binary
+neutron stars (where the two stars are approximatively still ``cold''),
+but after merger, when the temperatures of the merged objects reaches values
+of several tens of MeV, the approximation breaks down. To
+counter this, it is not uncommon \cite{Bauswein2011,Takami2014} to model
+the post-merger dynamics by modifying zero-temperature EOS and modelling thermal
+effects in terms of a ``thermal contribution'' via an ideal-fluid EOS
+\cite{Rezzolla_book:2013} that accounts for the shock heating
+\cite{Janka93}. This approach is not self-consistent but robust and the
+use of thereby defined ``hybrid EOSs'' has been employed
+extensively in the literature \cite{Baiotti2016}.
+
+In contrast, ``hot'' equations of state to try model nuclear matter
+with taking temperature into account. A couple of examples shall be given which
+are relevant in this chapter.
+%which a subset is employed in  (Section~\ref{sec:id}).
+
+The Lattimer-Swesty (LS) EOS \citep{Lalazissis1996} is a popular EOS in both
+core-collapse supernovae and binary merger simulations which models 
+the nucleous as a finite-temperature
+compressible liquid droplet with Skyrme nuclear pseudo-potential
+\citep{Lattimer91,Lattimer85}. For heavy nuclei, the single nucleus 
+approximation (SNA)
+is adopted. The number 220 in LS220 refers to the chosen nuclear
+incompressibility $K_0=220$MeV.
+
+TM1 is the name of a popular EOS which name refers to a particular
+parametrization used in the employed relavistic mean field (RMF) theory,
+formulated in \cite{Sugahara1993} who added a nonlinear $\sigma$ model
+to describe nuclear matter with relativistic Hartree approximation.
+TM1 was first used in \cite{Lattimer91,Typel2010} with a Thomas-Fermi
+distribution for temperature effects. Hempel and Schaffner-Bielich
+adopted a nuclear statistical equilibrium (NSE) model and a different
+RMF parametrization for the TM1 EOS, leading to the modified
+HS-TM1 EOS \cite{Hempel2010,Hempel2012} which is used in place of the 
+original one in this text.
+
+DD \cite{Typel2005} presents another RMF model with adopts density dependent (DD)
+meson-nucleon coupling. DD2 has an improved experimental nucleon mass,
+introduced by \cite{Typel2010}. As with TM1, there is the HS-DD2 variant
+\cite{Hempel2012} which is adopted in this text.
+\begin{margintable}
+	\centering
+	\begin{tabular}{lr}
+		\toprule
+		EoS
+		& $\rho_0 / \rho_\text{nuc}$
+		\\
+		\colrule
+		BHB-LP  &  8.0 \\
+		DD2     &  7.2 \\
+		LS220   &  9.4 \\
+		SFHo    &  9.8 \\
+		TM1     &  6.7 \\
+		Togashi &  7.4 \\
+		\botrule
+	\end{tabular}
+	\caption[
+	  Nuclear EOS, small table: Central energy density and pressure
+	]{Central energy density $\rho_0$ of the maximum nonrotating mass star,
+		in units of the nuclear
+		saturation density $\rho_\text{nuc} = 2.7\times 10^{11}$kg/m$^3$ for
+		the EOS discussed in section~\ref{sec:bnslt-motivation}. See table
+		\protect\ref{table:eos-properties} for further properies.
+	    % Rho_nuc = 2461 in Msol units
+	}\label{table:EOS-nuclear-properties}
+\end{margintable}
+
+The Steiner-Fischer-Hempel (SFH) EOS \cite{Steiner2013} employs a non-linear
+Wal\-ecka model (nucleon mean-field interaction via $\sigma$, $\omega$ and $\rho$
+mesons) with some covariant interactions added to the Lagrangian. The SFHo
+model is fitted to observations from \cite{Steiner2010}.
+
+The Banik-Hempel-Bandyopadhyay (BHB) EOS \cite{Banik2014} uses the DD2 RMF
+parameter set for nucleons, the HS NSE model for light and heavy nuclei and
+includes strangeness (only the $\Lambda^0=uds$ hyperon and the
+$\phi\approx s\bar s$ meson for hyperon-hyperon interaction, hence the name
+BHB-$\Lambda\Phi$) and a first-order phase transition between the baryonic phase
+and the quark phase, \ie the quark-gluon plasma.
+
+The Togashi EOS \cite{Togashi2016,Togashi2017} includes $\Lambda$ and $\Sigma$
+hyperons and is obtained with cluster variational methods.
+
+In fact, SFHo, TM1, DD2 and BHB-$\Lambda\Phi$ are ruled out by
+observations~\cite{Radice2017b}, while LS220 was ruled out already earlier by
+unitary-gas considerations/\-con\-straints of chiral perturbation theory
+\cite{Kolomeitsev2016}, leaving Togashi alone as 
+not-yet-ruled-out in the battery of presented EOS.
+%Nevertheless, due to the universal
+%predictions on nuclear equations of state we claim to provide, it makes sense
+%to cover a broad range of different equations of state. Furthermore, all
+%mentioned equations of state are still popular in the community.
+
+\section{Methods}
+% Figure positioning issue ... therefore it goes here for the time being.
+\begin{marginfigure}
+	\hspace*{-.6cm}
+	\includegraphics[width=1.15\textwidth]{bnslt-figures/bnstracker-plot.pdf}
+	\caption[
+	2D Cartoon, showing the inspiral of two NS with trajectories, 
+	\exclusive
+	]{
+		Cartoon of the distance measure for merger time determination:
+		Orbits of a BHB$\Lambda\Phi$ $M=1.55\Msol$ binary in the equitorial
+		plane. The shaded circles in the background indicate the TOV radii
+		$R=8.78$km. The distance $d=2R$ is displayed in black.
+		Interestingly, the orbits also exhibit large 
+		eccentricity since they overlap.
+	}
+	\label{fig:bnstracker}
+\end{marginfigure}
+We have numerically solved Einsteins equations in the BSSNOK
+formulation (Section~\ref{sec:bssn}), fully coupled to 
+the relativistic Euler equations (Section~\ref{sec:grhd}).
+We used the \code{Ein\-stein\- Toolkit} \cite{loeffler_2011_et, ET2013, 
+EinsteinToolkit:web} to solve these coupled partial differential equations at 
+the same time with Method of Lines and a strong stability preserving RK3 method
+(Section~\ref{sec:time-and-mol}).
+The same techniques were employed in a number of other works
+\cite{Hanauske2017,Bovard2017}.
+
+We evolved spacetime with the \code{McLachlan} code \cite{Baumgarte99,Baumgarte2010, 
+Shibata95, Brown09, Reisswig:2011a}, which employs
+4th order finite differencing with artificial dissipation added. The lapse was 
+evolved with $1+\log$ slicing and the shift with the Gamma
+driver.
+
+In contrast, we evolved matter with the \code{WhiskyTHC} code 
+\cite{Radice2012a, Radice2013b, Radice2013c}. Here, we employed a 4th order 
+finite volume scheme with LLF flux splitting, HLLE Riemann solver 
+\cite{Harten83}, MP5 reconstruction operator \cite{suresh_1997_amp} and 
+positivity-preserving limiter \cite{Hu2013}.
+
+The three dimensional Cartesian grid was managed by the
+\code{Carpet} code \cite{Schnetter-etal-03b, Schnetter:2006pg, 
+Goodale02a} 
+which provided mesh refinement to evolve both the merger as well as the wave 
+zone. We adopted six fixed mesh refinement levels and cubic 
+cells $h=\Delta x=\Delta y=\Delta z$. The finest resolution within a given 
+simulation is $h=0.15\Msol \sim 0.215 \km$ if not denoted otherwise. The outer 
+boundary of the domain extends to at least $500 \Msun \sim 700 \km$.
+For the outer boundary conditions, radiative boundary conditions
+(Appendix~\ref{sec:apx-bc}) were used.
+
+
+
+\section{Definition of merger and collapse time}
+\begin{marginfigure}
+	\hspace*{-.6cm}
+	\includegraphics[width=1.15\linewidth]{bnslt-figures/bnslt_analysis_for_paper.pdf}
+	\caption[
+	    Cartoon for the different time definitions for BNS, \exclusive
+	]{
+		Cartoon for demonstrating the definition and extraction of the 
+		\emph{survival time} of a merger remnant.
+		The red line compares the merger time determination in three different
+		ways, from top to bottom: Seperation $d$, Gravitational wave strain
+		(polarization $h_+$ dashed, envelope $h$ solid), global lapse $\alpha$
+		minimum.
+		The green line shows the merger time, indicated by the lapse.
+		\\ This example shows an equal mass binary
+		$M=1.55 M_\tov$ for the BHB-$\Lambda\Phi$ equation of state.
+		% From top
+		%to bottom: Rest mass density $\rho$ maximum, Weyl scalar $|\psi_4|^2$
+		%($\ell=2$, $m=2$ mode read off at a spherical surface at $R=300\Msol$),
+		%integrated gravitational wave strain $h_+$, and lapse $\alpha$ minimum.
+	}\label{fig:analsyis-example}
+\end{marginfigure}
+
+In order to do a quantitative study, a number of time measures and their
+determination shall be introduced.
+We define the survival time $T=t_c - t_m$ of a merger product as the
+timespan between the merger event $t_m$ and the collapse to a black hole $t_c$.
+The individual times $t_c, t_m$ are measured in coordinate (simulation) time,
+\ie their clocks start when the initial data are evolved. Clearly, there is
+no unique definition of the collapse and merger, which determine $t_c$ and $t_m$.
+In the following, a couple of different definitions are reviewed.
+
+\subsection{Definition of merger time}
+For the definition of the binary merger (time $t_m$), we examined either the
+gravitational wave (GW) signal, the proper separation of the binary
+neutron stars or a decreasing treshold
+value of the global minimum of the lapse function (indicating a characteristic
+maximum strength of the gravitational potential). We do not find the peak
+of the global maximum (L$_\textrm{inf}$ integral) of the rest mass
+density a good measure for the merger time.
+ 
+In our simulation, we derive the complex Weyl scalar $\Psi_4$ from the Riemann
+tensor (see Appendix~\ref{sec:extracting-gws} for grativational wave extraction)
+on a spherical surface at a large 
+seperation (typically 300$\Msol$ or 500$\Msol$). The magnitude $|\Psi_4|^2$ can 
+serve as a
+protoypic gravitational wave signal. However, one can also proceed to integrate
+the strain $h_{+}$ and $h_{-}$ and define the merger time $t_c$ by the
+maximum of the actual gravitational wave strain 
+$h=(h_{+}^2 + h_{-}^2)^{1/2}$ \cite{Takami2014}. While we found subtle 
+differences between the peak of the gravitational wave strain and the magnitude
+of the Weyl scalar $\Psi_4$, for many EOSs it is $\Delta t_c \ll \Msol$.
+
+The neutron star positions can be determined by tracking the two (Newtonian)
+center of masses $\vec r_i$ during the evolution (Figure~\ref{fig:bnstracker}). 
+The seperation $d=|\vec r_1-\vec r_2|$ can be measured in the local coordinate
+frame. The merger time
+can be defined as the first time when $d<2R$ with $R$ the radius of the individual TOV 
+stars. \footnote{It can be useful to introduce a dimensionless scale factor $a$ to adopt for
+the tidal deformation in the late inspiral, thus defining merger time when
+$d=2aR$. The value of $a$ could be derived emperically, a typical value is $a=0.8$.
+}
+
+\subsection{The lapse as indicator}
+For the definition of the back hole formation (time $t_c$), we decided to use 
+the global minimum of the dimensionless lapse $\alpha$. Thanks to the
+singularity
+avoiding Bona-Masso slicing conditions \cite{Campanelli06,Baker05a}, the
+minimum of the lapse can serve as an indicator for the curvature of the
+spacetime. Furthermore, this quantity has been shown to be a very good proxy for the
+tracking and appearance of an apparent horizon \cite{Alcubierre:2008}.
+\footnote{
+  We also evaluated numerical apparent horizon finders
+  \cite{Libson94b,Schnetter03a}. However, they seriously slow down the time 
+  efficiency of the code. In \code{Cactus}, it is affordable to determine field 
+  reductions every $\Delta T_r\sim 20 M \lesssim 0.1$ms, whereas the 
+  horizon finder is only computed every $\Delta T_h \sim 150 
+  M \sim 0.75$ms.
+  Therefore there is a need for the high time resolution \emph{proxy} of the 
+  appearance an apparent horizon.
+}
+
+The simplest criterion which can be derived from $\operatorname{min}(\alpha)$
+is a treshold value $\alpha_\textrm{merged}$ in order to define 
+$t_m$ as soon as $\operatorname{min}(\alpha) < \alpha_\textrm{merged}$ for the
+first time.  
+%
+%Another criterion for the collapse is the emergence of
+%an apparent horizon. However, the dynamical detection of apparent horizons is
+%expensive and was done only at poor resolution in our simulations.
+%
+In addition, one can adopt the lapse function $\alpha$ for not only defining the
+collapse time $t_c$ but also the merger time $t_m$. Following the same argument 
+as above, the merger time $t_m$ can be defined as soon as
+$\operatorname{min}(\alpha) < \alpha_\textrm{collapsed}$ for the first time. 
+
+The evolution of the minimum of the lapse has particular \emph{features}
+which are recognisable in Figure~\ref{fig:analsyis-example}: There is a
+sudden dropoff at merger time and a change in the slope around collapse time.
+Figure~\ref{fig:alp_reasoning} illustrates this by showing also the first and 
+second time derivative of min$(\alpha)$ for a reference run. In all our
+simulations we observe that slightly before merger, the second derivative
+drops and has a minimum at GW peak. Similarly, at collapse the first derivative
+has a minimum. These features are not robust, but serve as a motivation for
+the treshold values
+\begin{equation}\label{eq:arbitrary-alpha-values}
+\alpha_\textrm{collapsed} = 0.35
+\quad\text{and}\quad
+\alpha_\textrm{merged} = 0.2
+\,.
+\end{equation} 
+
+Considering the definiton of the merger time $t_m$, we conclude that all
+presented methods (GW strain, coordinate distance, falling below a minimal
+lapse) are equally suited for defining the start of the merger and provide
+similar times within a small error in time. Within this chapter, we concentrate
+on using exclusively the lapse because it turned out to be most robust.
+
+\begin{marginfigure}
+	\hspace*{-.6cm}
+	\includegraphics[width=1.15\textwidth]{bnslt-figures/alp_reasoning.pdf}
+	\caption[
+	Three panels of the evolution of the lapse, with first and second 
+	derivative, \exclusive
+	]{
+		Time evolution in a reference binary system around merger time. The three panels
+		show the lapse minimum $\min(\alpha)$, its first and second time
+		derivative. The time is measured since merger (defined by GW peak),
+		\ie $t_m=0$ in this units.
+		The green line indicates merger by $\partial_t^3 \min\alpha=0$.
+        The red line indicates collapse by $\partial_t^2 \min\alpha=0$ at 
+        $t\sim 3.5$ms.
+        % Data is from LS220 $M=1.44\Msol$ binary, but slightly modified,
+        % thus this is more a cartoon/illustration
+    }
+	\label{fig:alp_reasoning}
+\end{marginfigure}
+
+\subsection{The free fall timescale}
+Quite generically, one expects that the lifetime $T$ of an hypermassive neutron
+star (HMNS) will decrease as the mass of the system is increased. In order to
+allow comparable times $T$ for different EOSs, the collapse time $T$ is 
+considered as a dimensionless quantity by expressing it in terms of the
+matter free-fall time
+$\tau_{\rm ff}$, \ie \cite{Rezzolla_book:2013}
+\begin{equation}
+\tau_{\rm ff} = \frac \pi 2 \sqrt{\frac{R^3}{2M} } \,,
+\end{equation}
+for an object of mass $M$ and radius $R$. As only equal mass binaries are
+considered, $M$ is the mass of a single star and $R$ its radius. The smallest
+free-fall time will be archieved for the maximum-mass model (since
+$R\sim 1/M$). Therefore, the shortest free-fall timescale is set to be with
+$\tau_\tov := \tau_{\rm ff} (M_\tov, R_\tov)$.
+Hence, we define the threshold mass $M_{\rm th}$
+as the one for which the merger remnant will collapse over such a
+timescale, \ie $M/M_\tov \to M_{\rm th}/M_\tov$ for
+$T/\tau_\tov \to 1$.
+Any survival time $T < \tau_\tov$ is classified as a \emph{prompt} collapse to
+a black hole.
+
+\subsection{Angular momentum}
+Our approach is to evolve a series of BNS initial data for different system
+masses for a given equation of state (Figure~\ref{fig:eos-properties} shows
+an open circle for each simulation run). We found that nearby masses might not
+be comparable because the individual BNS systems do a different number
+of orbits, resulting in a substaintially different amount of
+angular momentum present at the merger time. In order to investigate the effect 
+of the angular momentum, we also performed headon collisions with no angular
+momentum (only linear momentum, i.e. a boost of $v=0.1c$). In such a case,
+we observed all systems to collapse promptly at any given mass. We conclude
+that angular momentum is (1). crucial to yield a finite survival time $T>0$
+and thus initial data in quasi-circular orbits are required and (2.) the final
+angular momentum has to be comparable between different binary masses in order
+to have a well-defined collapse time.
+
+\section{Initial data and EOS} \label{sec:id}
+%
+\begin{figure*}[t]
+	\makebox[\textwidth][c]{ % overwidth figure
+		\includegraphics[width=1.1\linewidth]{bnslt-figures/eos_properties.pdf}
+	}% end of makebox
+	\caption[
+	  TOV curves, showing different properties (Mass, tidal love number, tidal 
+	  deformability, free-fall timescale), \exclusive, only first panel was
+	  used in our publication \cite{Koeppel2019}.
+	]{Properties of TOV sequences:
+		Radius $R$, dimensionless tidal love number $k_2$,
+		tidal deformability $\Lambda$ and free fall timescale $\tau$
+		as functions of the star mass $M$. The maximum masses $\Mtov$
+		and their relevant quantities $R_\tov$, $\kappa_\tov$, $\Lambda_\tov$
+		and $\tau_\tov$ are displayed with fulled circles. Open circles refer to
+		models used as initial data.
+		First panel published in \cite{Koeppel2019}.
+	}\label{fig:eos-properties}
+\end{figure*}%
+%
+\begin{table*}[b]
+	%\begin{minipage}{\textwidth} % avoid caption to be half text width
+	\caption[
+	  TOV maximum mass properties (mass, radius, compactness, baryon mass, 
+	  tidal Love number, deformability, lifetime, literature reference)
+	]{Various TOV properties of the equations of states taken into 
+		account.
+		These are the maximum mass of a nonrotating star $\Mtov$, its radius 
+		$\Rtov$, its compactness $C_\tov = M_\tov / R_\tov$, its tidal Love
+		number $\kappa_{2,\tov}$, its derived tidal deformability 
+		$\Lambda_\tov$, and its free-fall timescale $\tau_\tov$. Furthermore,
+		the literature which introduces the particular EOS is given for
+		completeness in the last column. See also Table 
+		\protect\ref{table:EOS-nuclear-properties} for the central density 
+		$\rho_c$
+		of the maximum nonrotating mass configuration.
+	}\vspace*{.2cm}\label{table:eos-properties}%
+	\begin{tabularx}{\textwidth}{Xrrrrrrrrrr}
+		\toprule
+		EoS               & $\Mtov [\Msol]$ & $\Rtov [\km]$ & $C_\tov$ & 
+		$M_{b,\tov} [\Msol]$
+		& $\kappa_{2,\tov}$ & $\Lambda_\tov$ & 
+		$\tau_\tov [\mu \s]$  & Literature  \\
+		\colrule
+		BHB-$\Lambda\Phi$ &           2.10 &        11.64 &  0.26 & 2.74 & 
+		0.020 
+		&  13.50 & 83.31 
+		& \cite{Banik2014} \\
+		DD2               &           2.42 &        11.94 &  0.30 & 3.28 & 
+		0.020 &   
+		5.52 & 80.60 
+		& \cite{Bildsten92,Hempel2010} \\
+		LS220             &           2.04 &        10.68 &  0.29 & 2.79 & 
+		0.014 
+		&   7.65 & 74.22
+		& \cite{Lalazissis1996} \\
+		SFHo              &           2.06 &        10.34 &  0.29 & 2.79 & 
+		0.019 &   5.81 & 70.44
+		& \cite{shen98} \\
+		TM1               &           2.22 &        12.60 &  0.26 & 2.86 & 
+		0.029 &  
+		16.60 & 91.70
+		& \cite{Lattimer91,Typel2010} \\
+		Togashi           &           2.23 &        10.17 &  0.32 & 3.13 & 
+		0.014 &  2.65 & 66.12 
+		& \cite{Togashi2016,Togashi2017} \\
+		\botrule
+	\end{tabularx}
+	%\end{minipage}
+\end{table*}%
+%
+We model the neutron stars with realistic tabulated hot equations of states 
+which are
+freely available at \href{http://stellarCollapse.org}{stellarCollapse.org}.
+We compute equilibrium solutions of the Tolman-Oppenheimer-Volkoff equations 
+(TOV) with the \texttt{PizzaTOV} code \cite{Kastaun2007} and its successor 
+\texttt{MargheritaTOV} \cite{Most2018b}.
+% is repeated below:
+%See Figure~\ref{fig:eos-properties} and
+%Table~\ref{table:eos-properties} for some TOV properties.
+%
+If not mentioned otherwise, initial data for the time evolution
+(ie. binary neutron star initial data) are computed under the assumption
+of irrotational quasi-circular equilibrium  with \code{Lorene}
+\cite{Bonazzola98b, Gourgoulhon01,Damour:2002qh}. The initial
+separation is 45km, so that the binaries perform around five orbits before the
+merger. We note that since
+the threshold mass for equal-mass binaries is always larger than for
+unequal-mass binaries, \ie $\Mth(q=1) > \Mth(q<1)$, the use
+of equal-mass binaries is not a restriction but optimises the search for
+$\Mth$~\cite{Bauswein2017b}.
+%Some TOV properties are displayed in figure \ref{fig:eos-properties}. Notably, 
+%some maximum mass properties are listed in table~\ref{table:eos-properties}.
+
+\subsection{Nuclear equations of state taken into account}
+Since the overall goal is that of determining as accurately as
+possible the threshold mass to prompt gravitational collapse, it is
+essential that the description of the thermal effects in the matter is as
+realistic and self-consistent as possible. In turn, this forces us to
+consider EOSs that have a physically consistent dependence on
+temperature (Section~\ref{sec:bnslt-motivation}).
+Unfortunately, the number of EOSs that can be employed for
+this scope and that do not violate some basic nuclear-physics requirement
+(as it is the case for the widely employed LS220
+EOS \cite{Lattimer91,Kolomeitsev2016}), is much more restricted.
+
+Notwithstanding this limitation, we have employed here all of the (five)
+``hot'' EOSs that have been proposed recently and whose properties are
+reported in Table~\ref{table:eos-properties} when expressed in terms of
+the masses and radii of the maximum-mass of the nonrotating configuration
+(hereafter indicated as TOV). Similarly, Fig.~\ref{fig:eos-properties},
+provides a graphical representation of the masses and radii of the
+corresponding TOV equilibrium solutions, both stable (solid lines) and
+unstable (dashed lines). The solid circles mark the
+maximum-mass solutions, while the open circles refer to models used as
+initial data (see below).
+
+%We chose to take into account six equations of states (EOS) which are listed in
+%Table~\ref{table:eos-properties} together with certain properties of the
+%(nonrotating) maximum mass configurations of their TOV sequences.
+%Figure~\ref{fig:eos-properties} displays the mass--radius diagram of these
+%equations of state and highlights which regime was actually probed by
+%the binary systems taken into account. All equations of states are realistic,
+%and ``hot'' equations of states.
+
+% Finde ich nicht mehr sinnvoll zu schreiben:
+%
+%All EOS are assumed in nuclear statistical
+%equilibrium (NSE) for $T \leq 0.5$MeV, \ie below nuclear staturation. The 
+%tables are computed in neutron-less $\beta$-equilibrium.
+
+We recognize the maxima of each TOV properties to serve as characteristic 
+values for the particular equation of state. These values can be used to 
+normalize all properties of any matter distribution described with the equation 
+of state \footnote{
+  The TOV approximation can be further motivated by the fact that the
+  irrotational stars within the binary share universal properties with
+  their TOV counterparts. That is, the authors of \cite{Breu2016} have
+  shown that the maximum mass of a rotating neutron 
+  star can brought into a simple relationship to the non-rotating solution,
+  $M_\text{max,rot} \approx 1.203 M_\tov$,
+  and therefore it is sufficient to discuss non-rotating stars only in this 
+  section.
+}
+Especially for the free-fall timescale $\tau$, which serves for
+normalization in the next sections, there is a large discrepancy between
+$\tau_\tov$ and the numbers in the relevant regime, which is up to a factor
+two. However, we performed the 
+whole analysis with both a dynamical $\tau(M)$ as well as a fixed 
+$\tau(M_\tov)$ and find only a minimal difference $\Delta T \ll \Msol$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results on the treshold mass} \label{sec:results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
+	\includegraphics[width=\linewidth]{bnslt-figures/tau_lin_scale.pdf}
+	% Allow to adress the three panels with references
+	\caption[
+	   BNS lifetime extrapolation to free fall timescale, 
+	   \publishedIn{Koeppel2019}
+	]{The scatter plot of measured survival (collapse) times $T$,
+	  here denoted as $t_{\rm{coll}} \equiv T$ for the different EOS
+	  (circles). The solid line represents a Gaussian fit.
+	  Stars represent the extrapolated treshold mass $\Mth$,
+	  predicted by the fit. All survival times $t_{\rm{coll}}<\tau_\tov$
+	  are considered as prompt collapse. Figure published in
+	  \cite{Koeppel2019}.
+     }%
+    \label{fig:lin_noscale}
+\end{figure}
+
+%\subsection{Calculating the threshold mass}\label{sec:calc_thresh}
+
+In order to calculate the threshold mass of a given EOS, over 200
+simulations were run for system masses with a short, but finite, collapse time.
+From these runs, only 15 suitable runs were selected for the analysis
+which had survival times $T<1.0$ms.
+
+Figure~\ref{fig:lin_noscale} reports the survival times $T$
+normalised to the free-fall time\-scale of the maximum mass models
+$\tau_\tov$ for the individual EOS. These times then are shown as a
+function of the initial mass $M$ of the binary system normalized to the
+EOS maximum mass. The adoption of such set of dimensionless
+quantities has the goal of revealing a universal behaviour in the
+treshold mass, if one is present \cite{Yagi2013a, Breu2016,Weih2017}.
+
+The coordinates of filled circles of different colors in 
+Fig.~\ref{fig:lin_noscale} are given by the system masses (initial data)
+and their read-off lifetime (after evolution).
+%Note that as $T$ decreases, even small differences in the initial
+%masses can lead to rather large differences in the survival time.
+For the Tagoshi$+$ EOS we only report two values and that these differ by
+only $3.7\%$ in mass (\ie $M=1.440\,M_{\odot}$ and $M=1.435\,M_{\odot}$);
+any other binary with a slightly smaller mass (\eg $M=1.430\,M_{\odot}$)
+leads to a hypermassive neutron star that is effectively stable over the
+timescales investigated here (\ie up to 1-10$\tau_\tov$).
+Finally, since $t_{\rm{coll}}$ should diverge for
+vanishingly small values of $M$, we fit the numerical data with a simple
+exponentially decaying function of the type
+\begin{margintable}
+	\centering
+	\begin{tabular}{lR{1cm}R{1.4cm}}
+		\toprule
+		EoS
+		& $M_\text{th}$
+		& $\Delta M_\text{th}$
+		\\
+		\colrule
+		BHB-LP  &  1.503 & 0.005 \\
+		DD2     &  1.364 & 0.020 \\
+		%LS220   &  1.487 & 0.00012 \\
+		SFHo    &  1.391 & 0.016 \\
+		TM1     &  1.520 & 0.015 \\
+		Togashi &  1.298 & 0.000 \\
+		\botrule
+	\end{tabular}
+	\caption[
+	  Numerical results of BNS prompt collapse treshold mass
+	]{Results for the threshold mass, including uncertainties.	
+		The masses are given in units of $M_\tov$. Errors are
+		discussed in Section~\ref{sec:bnslt-errors}.
+	}\label{table:Mtresh}
+\end{margintable}
+\begin{equation}\label{eq:bnslt-gauss}
+M/M_\tov =
+\tilde{a}\exp[-\tilde{b} ( t_{\rm coll}/\tau_\tov )^{2}]
+\,.
+\end{equation}
+\begin{figure}[b]
+	\caption[
+	Lifetimes, exponential vs. linear extrapolation,
+	taken from private referee communication about \cite{Koeppel2019}.
+	]{Same as Fig. \protect\ref{fig:lin_noscale}, but also showing the linear extrapolation
+		to the critical mass as a dashed line, as done in \cite{Bauswein2013}. In all
+		cases, the extrapolation values for the critical mass (shown as open squares)
+		are systematically larger then in the exponential model (see main text).
+	}\label{fig:lin_exp_comp_lifetimes}
+	\includegraphics[width=\columnwidth]{bnslt-figures/referee_reply__lin_vs_nonlin_fit.pdf}
+\end{figure}
+The behaviour reported in Fig.~\ref{fig:lin_noscale} reveals
+that a a universal behaviour is present only very approximately and that the
+threshold mass, averaged over all EOSs, is roughly given by
+%
+\begin{equation}
+\frac{M_{\rm th}}{M_\tov} \approx 1.415\,,
+\end{equation}
+%
+with a statistical error of $\Delta M_{\rm th}=0.05 M_{\odot}$, \ie with
+a variance of about $4\%$ (see Table~\ref{table:Mtresh} for the individual
+values).
+When comparing with a linear approximation, as it was done in \cite{Bauswein2013},
+\begin{equation}\label{eq:bnslt-linear}
+M/M_\tov = \tilde a + \tilde b ( t_{\rm coll}/\tau_\tov ) \,,
+\end{equation}
+we find it yields a systematic overestimate of the treshold mass 
+(Figure \ref{fig:lin_exp_comp_lifetimes}). When considering which of the functional
+behaviours, \eqref{eq:bnslt-gauss} vs. \eqref{eq:bnslt-linear}, fits the
+data best, the statistics do not provide a distinction criterion due to
+the small number of points. \footnote{The reduced $\chi^2$ are 0.0055 for the linear
+fit and slightly better, 0.0089, for the nonlinear fit.} More importantly,
+we believe it is not reasonable to expect that near the free-fall limit the
+behaviour should be a linear one. Such a limit, in fact, should be thought
+as a regime where only infinitesimal changes in the mass should lead to a
+prompt collapse, exactly because the merged object is very close to a stability
+limit. Such a behaviour, which is seen frequently in critical-collapse
+calculations (see \eg \cite{Gundlach-2003-critical-review} for a review),
+necessarily requires that the function $M/M_\tov$ should have
+vanishing derivative in the limit $t_\text{coll}/\tau_\tov \to 1$.
+Clearly, the nonlinear fitting \eqref{eq:bnslt-gauss} reflects this behaviour while
+a linear one \eqref{eq:bnslt-linear} does not.
+
+\subsection*{Predicting the treshold mass from the TOV compactness}
+The existence of a relation between the threshold mass and the corresponding
+maximum mass has been suggested initially by~\cite{Bauswein2013}, who, by
+employing a smooth-particle approximation for the hydrodynamics and a conformally
+flat approximation to general relativity, conclude the linear relationship
+\begin{equation}\label{eq:linear-c-tov-bauswein}
+{M_{\rm th}}/{M_\tov}=\hat{a}\,\mathcal{C}_\tov+\hat{b}
+\end{equation}
+with $\mathcal{C}_\tov := M_\tov/R_\tov$ the 
+maximum compactness. The universal ansatz proposed by \cite{Bauswein2013}
+is that ${M_{\rm th}}/{M_\tov}$ is independent of the EOS, with
+\begin{equation}
+\hat{a}=3.38,\,\hat{b}=2.43 \,.
+\end{equation}
+
+\begin{figure}[t]
+	%\makebox[\textwidth][c]{ % cheat; tinyurl.com/y8oxsaqr
+	\includegraphics[width=\columnwidth]{bnslt-figures/uni_rel.pdf}
+	%}% end of makebox
+	\caption[
+      Universal relations plot, \publishedIn{Koeppel2019}
+	]{Universal relations for the treshold mass with the stars matching
+	  the ones in figure~\protect\ref{fig:lin_noscale}. The solid blue line is
+	  the non-linear fit~\protect\ref{eq:fit} while the red dashed line
+	  is the linear fit~\protect\ref{eq:linear-c-tov-bauswein} from
+	  \cite{Bauswein2013}. The green shaded area displays the compactness
+	  expected for neutron stars (see main text).
+	  The inset shows a bird's eye view on the possible whole range of
+	  compactness, \ie $\mathcal{C}_\tov\in[0, \nicefrac 12]$.
+	  Figure published in \cite{Koeppel2019}.
+	}
+	\label{fig:uni_rel}
+\end{figure}
+
+Such a linear ansatz does represent a reasonable first approximation to
+the data.  However, it clearly overestimates the threshold mass in the
+limit $\mathcal{C}_\tov\to0$, as we would assume
+\begin{equation}\label{eq:mth-mtov-2-limit}
+\Mth / \Mtov \to 2 \quad\text{for}\quad \Ctov \to 0 \,.
+\end{equation}
+This limit physically represents an infinitely extended self-gravitating
+object. \footnote{
+  Loosely speaking, the limit $\mathcal C_\tov \to 0$ is also a
+  classical one, as one moves from relativistic self-gravitating
+  configurations over to Newtonian ones.
+}
+We do \emph{not} impose this limit on the fitting function. However, it
+is interesting (and revealing) that the data and the
+fitting function naturally provides this limit \eqref{eq:mth-mtov-2-limit}:
+For $\mathcal C_\tov \to 0$ the merged system would need to be nonorotating
+and hence with a threshold mass that is exactly twice the TOV mass.
+
+Furthermore, and more importantly, the linear relationship \eqref{eq:linear-c-tov-bauswein}
+does not provide the expected black hole limit, which predicts that
+\begin{equation}\label{eq:black-hole-constraint-limit}
+{M_{\rm th}}/{M_\tov}\to0 \quad\text{for}\quad
+\mathcal{C}_\tov\to1/2
+\,.
+\end{equation}
+This constraint requires some clarification. For neutron stars, the treshold mass
+${M_{\rm th}}$ must be larger then the TOV mass ${M_\tov}$, as the latter is the
+limit for stability to collapse. However, neutron stars make only a part of
+Figure~\ref{fig:uni_rel}, shaded in light green, \ie the most likely range
+of possible values of  $\mathcal{C}_\tov$ for stable neutron
+stars, with the lower limit $\mathcal{C}_\tov\gtrsim0.2$ being
+deduced from a large statistical sample of possible EOSs
+\cite{Most2018}, while the upper limit $\mathcal{C}_\tov\lesssim0.35$
+is set by the limit on causality~\cite{Koranda1997, Lattimer2016}.
+It is useful to consider the Buchdahl theorem \cite{Rezzolla_book:2013},
+which states that any self-gravitating object whose compactness is
+larger than $\mathcal C_B=4/9$ cannot be in equilibrium and must collapse to a black
+hole. The theorem, which is valid for any EOS, does not specify what is
+the mass of the object nor what is the corresponding TOV mass. All that
+is required to produce a collapse for such ultra-compact configurations
+is to reach such a compactness. Hence, it is possible to construct a
+self-gravitating object with finite mass whose compactness is only
+infinitesimally smaller than $\mathcal C_B$ and then add the (infinitesimal)
+amount of mass that would lead the compactness to exceed $\mathcal C_B$. This
+object would collapse promptly even if its mass is not large at
+all. Taking this line of argument to the limit, the threshold mass will
+have to go to zero when a black hole is already formed, \ie for
+$\mathcal C \to 1/2$. The (extended) regime of extremely compact objects
+(ECOs) is shaded in dark green in Figure~\ref{fig:uni_rel}.
+
+Hence, we correct the linear approximation via a \emph{nonlinear} fit of the type
+\begin{equation}
+	\label{eq:fit}
+	\frac{M_{\rm th}}{M_\tov} = a - \frac{b}{1 -
+		c\,\mathcal{C}_\tov}\,,
+\end{equation} 
+where $a,b,c$ are to be determined from the data. However, imposing the
+fulfilment of the black hole constraint limit 
+\eqref{eq:black-hole-constraint-limit}
+removes one free parameter and sets $a=2b/(2-c)$.
+
+Figure~\ref{fig:uni_rel} reports in blue the fit of Eq.~\eqref{eq:fit}
+with
+\begin{equation}
+b = 1.01, \quad c = 1.34 \,,
+\end{equation}
+against the numerical-relativity data shown with stars of the same
+colors as in Fig.~\ref{fig:lin_noscale}. \footnote{
+	See Table~\ref{table:Mtresh} for errors in the fit.
+	We also made a linear fit \eqref{eq:linear-c-tov-bauswein}
+	to our data (not shown). Considering the quality of the fit with the $\chi{2}$ test,
+	\eg for DD2 we find for the linear fit a $\chi^2 = 1.4\times 10^{-5}$
+	while the nonlinear fit has $\chi^2 = 1.1\times 10^{-5}$. Given the small
+	number of data points (as in Section \ref{sec:results}), the $\chi^2$ for
+	the nonlinear fit is slightly better, but the statistics do not provide a
+	sufficient distinction criterion (in contrast to the proposed 
+	physical arguments).
+	Naturally, the linear model of Bauswein can be understood as the first term in
+	a series expansion the nonlinear model~\eqref{eq:fit}.
+	It is also qualitatively obvious from Figure~\ref{fig:uni_rel} that
+	the linear result of \cite{Bauswein2017b} is a tangent to our curve.
+} Also shown with a red-dashed
+line is the linear approximation of~\cite{Bauswein2017b}, which clearly
+suggests larger treshold masses.
+We believe this result is a consequence of our fully
+general-relativistic approach, which properly accounts for the
+strong-curvature highly dynamical behaviour that characterizes the
+threshold to black hole collapse and that are probably underestimated in
+the conformally flat approximation of~\cite{Bauswein2013}. At the same
+time, the difference with the linear approximation of
+\cite{Bauswein2017b} is small ($8\%$ at most for the EOS considered here).
+
+\section{Constraining Neutron Star radii}
+%
+The nonlinear expression \eqref{eq:fit} can be used to provide more stringent
+(larger) lower limits on the radii of possible stellar models in the light of
+the recent detection of the event GW170817 \cite{Abbott2017}. In particular,
+following \cite{Bauswein2017b}, our treshold mass model
+\eqref{eq:fit} can be used to constrain neutron star radii. To do so, we write
+\eqref{eq:fit} formally as
+\begin{equation}\label{eq:rewrite}
+\Mth(M,R) = \left(a - b \left[1 - c \left( \frac{M}{R} 
+\right)~\right]^{-1} \right) M
+\end{equation}
+and then plot $\Mth(M)$ for different $R$ in
+Figure~\ref{fig:radius-constraint} (black lines). 
+Also reported in
+Fig.~\ref{fig:radius-constraint} with a gray-shaded area is the limit set
+by causality and that requires $M_\tov/R_\tov \lesssim0.354$~\cite{Koranda1997, Lattimer2016}. 
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{bnslt-figures/radius_constraint.pdf}
+	\caption[
+	BNS Lifetimes: Radius constraints, \publishedIn{Koeppel2019}
+	]{The lower bound on $R_\tov$ (red) using the universal relation
+		Eq.~\protect\eqref{eq:fit}. The horizontal dashed blue line
+		represents the observed mass of GW170817. The red shared area shows the
+		values excluded by the detection. The grey shaded area represents
+		values excluded by the causality constraint. Figure published in
+		\cite{Koeppel2019}.
+	}
+	\label{fig:radius-constraint}
+\end{figure}
+
+As noted by~\cite{Bauswein2017b}, given a measurement
+of a binary neutron-star merger with a given total mass $M_{\rm tot}$,
+and assuming that the merger product has collapsed to a black hole, it is
+possible to set a lower limit on $M_{\rm th}$ and, in turn, a lower limit
+(although not very stringent) on $R_\tov$. This is shown
+graphically in the left panel Fig.~\ref{fig:radius-constraint}, where we
+report with a horizontal blue-dashed line and the total gravitational
+mass estimated for GW170817~\cite{Abbott2017},
+\begin{equation}\label{eq:radius-constraint-outcome}
+M_\text{tot} = 2.74 ^{+0.04}_{-0.01} \Msol
+\,.
+\end{equation}
+The corresponding uncertainty band (blue-shaded area) gives a lower
+constraint on $M_{\rm th}$, since GW170817 did not lead to a prompt
+collapse.
+
+The blue band thus cuts (``constrains'') the red shaded area from below.
+Especially it gives us an estimate of a neutron star \emph{minimal} radius,
+$R_\tov \ge 9.74^{+0.14}_{-0.04}\,$km (red solid line);
+this is to be contrasted with the value deduced by~\cite{Bauswein2017b},
+\ie $R_\tov \ge 9.26^{+0.17}_{-0.03}\,$km, on the basis of
+their linear approximation. Interestingly, in order to obtain a similar
+stringent constraint derived here, the authors
+of \cite{Bauswein2017b} require a
+hypothetical detection of a binary with a comparatively larger mass
+$M_{\rm tot} \simeq 2.9\,M_{\odot}$.
+
+\begin{figure}[b]
+	\caption[
+	Universal relations for different neutron star sizes,
+	\publishedIn{Koeppel2019}
+	]{Universal relation (black) for the lower limit on $R_x$
+		for a given mass $M$ (blue crossed); the red arrow is the constraint
+		from \cite{Bauswein2017b} for a 1.6$\Msol$ star.
+		Figure published in \cite{Koeppel2019}.
+	}
+	\label{fig:radius-Rx}
+	\includegraphics[width=\linewidth]{bnslt-figures/rad_fit.pdf}
+\end{figure}
+All of the procedure followed so far to derive the nonlinear fit
+\eqref{eq:fit} for $\mathcal{C}_\tov$ can be repeated for an the
+compactness of a fixed mass $M_x$, \ie $\mathcal{C}_{x}:=M_x/R_x$, thus
+allowing us to set constraints not only on $R_\tov$, but on any
+radius $R_x$ within a reasonable range. The result of this series of fits
+is shown in Fig.~\ref{fig:radius-Rx}, where
+the values of $M_x$ and $R_x$ are indicated with a blue crosses. Also
+reported in black is the quadratic fit
+%
+\begin{equation}
+\label{eq:fit_generic}
+R_x = -0.88\,M^{2} + 2.66\,M + 8.91\,.
+\end{equation}
+
+The importance of \eqref{eq:fit_generic} is that it now offers a very
+simple and handy expression for the lower limit of stellar models as
+deduced from GW170817. A similar procedure has been followed also by
+\cite{Bauswein2017b}, but only for a fixed mass of $1.6\,M_{\odot}$,
+and it was deduced that $R_{1.6}\ge 10.30\,{\rm km}$; this result should
+be contrasted with the the value derived from \eqref{eq:fit_generic},
+which is instead $R_{1.6}\ge10.90\,{\rm km}$.  Similarly, for a reference
+star of $1.4\,M_{\odot}$ we obtain $R_{1.4}\ge10.92\,{\rm km}$, which is
+close to the estimate by~\cite{Bauswein2017b} for
+$1.6\,M_{\odot}$\footnote{In \cite{Bauswein2017b}, an estimate is only
+	provided for $R_{1.6}$.}. Our $R_{1.4}$ estimate is in good
+agreement with those made by \cite{Most2018}, who have expoited a
+statistical exploration of possible EOSs and building a set of one
+billion stellar models, \ie $12.00<R_{1.4}/{\rm km}<13.45$.
+
+\section{Convergence and error budget}\label{sec:bnslt-errors}
+For a typical equation of state (SFHo), we made a convergence study with
+different resolutions of $\Delta x$=215, 287 and 573m
+($\Delta x/\Msol = 0.15, 0.20, 0.40$). Figure~\ref{fig:convergence}
+shows the variation of the collapse time and treshold mass
+as a function of resolution.
+The linear continuum extrapolation clearly
+shows the first order convergence of the results.
+
+Concerning the error budget, 
+systematic errors are introduced by the time resolution
+of the repeated output of field integrals and derived quantities. For
+instance, for efficiency we determine field reductions only every 128
+timesteps ($\Delta T\sim 20 M \lesssim 0.1$ms). This read-off error goes
+into the threshold mass determination. However, since a two-parametric
+function is fitted to two to three data points
+(Fig.~\ref{fig:lin_noscale}), there is virtually no statistical
+read-off error of the threshold mass (as demonstrated by Table~\ref{table:Mtresh}).
+These negligible errors are at the order
+of $\Delta M_{\rm th} \sim 0.05 M_{\odot}$, \ie at the order of 1\%. These
+errors go
+into the universal relations plot (Fig.~\ref{fig:uni_rel}) where again a
+two-parametric function is fitted to five data points, resulting again in
+an inconclusive error budget of $\sim$1\%. The 5\% deviation from
+\citep{Bauswein2017b} is obviously a systematic consequence of the
+overall technique and not part of statistical errors. Therefore, the
+radius constraining plot (Fig.~\ref{fig:radius-constraint}) has no
+significant errors coming from the model~\eqref{eq:fit} and the error
+given on the radius constraint is dominated by the observational error from
+GW170817.
+
+\begin{figure*}[t] % width=0.5\linewidth
+	\includegraphics[height=4.5cm]{bnslt-figures/referee_reply__convergence_tcoll.pdf}
+	\includegraphics[height=4.5cm]{bnslt-figures/referee_reply__convergence_Mth.pdf}
+	\caption[
+	  BNS Lifetimes, convergence study plot for collision time and critical
+	  mass determination, \exclusive; part of private
+	  conversation with our referee within \cite{Koeppel2019}.
+	]{Convergence plots on the collapse
+	  times and the determined critical masses for an exemplaric system
+	  and equation of state. The colors of the dots represent the different resolutions.
+	}
+	\label{fig:convergence}
+\end{figure*}
+
+\section{Summary}
+In Chapter~\ref{chapter:bnslt}, a large number of general relativistic
+simulations of binary neutron star mergers has been carried out in order to
+investigate the open question about the mass leading to a prompt collapse;
+which again is informative on the material neutron stars could be made
+of (\ie the nuclear equation of state). Using a fully general-relativistic
+approach and a novel method for the determination of the threshold mass, we have
+carried out simulations making use of all of the realistic EOSs
+available to describe this process. In this way, we have found a
+nonlinear universal relation for the threshold mass as a function of the
+maximum compactness and which is potentially valid for all compactnesses.
+At least for the temperature-dependent EOSs considered here, this universal
+relation improves the linear relation found recently with methods that
+are less accurate, but that also yield quantitatively similar results.
+Furthermore, exploiting the detection of GW170817,
+we have used the universal relation to set lower limits on the
+stellar radii for any any mass.
+
+

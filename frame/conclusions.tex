@@ -1,0 +1,133 @@
+% Overall Conclusions for phdthesis
+
+\vspace{.5cm} % seperation to chapter mark artwork
+\begin{fullwidth}
+
+In this thesis, the applicability of sophisticated family of high order and 
+communication avoiding dicontinous Galerkin (DG) schemes wer eexamined for
+solving partial differential equations in relativistic astrophysics.
+These schemes where supplemented with an ADER time integration and a finite
+volume limiter in order to deal withspacetime singularities and hydrodynamical 
+discontinuities (\ie shocks).
+Different to what has been done in literature before, an
+explicit split of differential contributions in source terms combined with
+a path-conservative treatment, first proposed by Castro and Par\'es in the 
+finite-volume context \cite{Castro2006,Pares2006} and later extended also
+to ADER-DG schemes in \cite{Dumbser2009a,Dumbser2010}, was carried out. The
+schemes were implemented in different state of the art
+adaptive mesh refinement (AMR) codes.
+
+In order to employ the Einstein equations for the proposed schemes, a novel 
+first order formulation with conformal and constraint correcting features had to
+be found: Tthe conformal and covariant Z4 formulation. This formulation was
+proven to be strongly hyperbolic for popular gauge choices. The evolution
+laws for the ADM quantities $\alpha,\beta^i,\tilde{\gamma}_{ij}$ as well as the
+conformal factor $\phi$ 
+could be reduced to a pure system of ODEs, thanks to the auxilliary variables
+which render derivatives as purely algebraic source terms. These ODEs have
+zero eigenvalues and unit eigenvectors, leaving a PDE system with 47 variables
+open for hyperbolization. For the remaining system of 47 variables, first
+approximate symmetrization by use of ordering constraints is a key ingredient,
+and second the dependency of the ADM (composing) variables $\alpha,
+\beta^i, \tilde{\gamma}_{ij}$ and $\phi$ only results in a fully
+linearly degenerate PDE system. Furthermore, the adoption of the genuinely
+non-conservative from (in contrast to a flux-conservative form such as in
+\cite{Bona97a,Alic:2009}) was also essential for applying the previously
+mentioned simplifications, as the Jacobian $\partial F^i_k / \partial Q^j$
+of the flux $F^i_k(Q)$ in direction $k$ also depends on the dynamical
+variables. The
+quasi-linear form of the flux-conservative system therefore contains
+differential terms in the ADM variables. The proof
+of strong hyperbolicity was given for two standard gauge choices, \ie 
+harmonic lapse and zero shift as well as 1+log slicing with Gamma driver. In
+both cases, the full eigenstructure was computed. This is the first time
+that hyperbolicity of a first-order reduction of the CCZ4 system is
+analyzed, in particular including the Gamma-driver shift condition.
+However, the system is \emph{not} symmetric hyperbolic in the sense of
+Friedrichs \cite{Friedrichs1954}. Further work
+in this direction will be necessary to try and achieve a symmetric
+hyperbolic form of FO-CCZ4 with a convex extension.
+
+Subsequently, the equations of relativistic hydrodynamics were brought into a
+similar form, with a clear seperation between conserved hydrodynamic flux and
+non-conserved differential gravitational source, induced by the curved 
+spacetime. This much simpler rewrite did not change the hyperbolic nature of
+the PDE system. At this  stage, the development of exactly well-balanced
+numerical methods for the GRMHD equations is still out of scope, but further
+developments in this direction would definitely deserve attention.
+
+In a variety of tests, the applicability of the ADER-DG scheme was demonstrated
+on the Einstein-Euler system. Here, the spacetime evolution was tested still
+separately from the hydrodynamic matter evolution, which itself was evolved
+on a fixed background spacetime. Nevertheless, these were the first simulations
+of black hole spacetimes and (fixed) general relativistic
+magnetohydrodynamic flows performed in three spatial dimensions with a
+high-order DG code.
+All previous simulations of black-hole spacetimes with high-order DG
+schemes, in fact, were limited to the one-dimensional case only.
+
+Future research will consider the implemention of the algorithms within
+a code which scales well on thousands of codes/computers. Furthermore,
+the coupled FO-CCZ4 and GRMHD system, solved with a single numerical scheme,
+will be evolved using such a code. This will allow to simulate binary neutron
+star merger binaries with the Limiting ADER-DG scheme.
+
+We have also considered a general-relativistic estimate on the treshold mass
+which seperates prompt collapse from a delayed collapse scenario in the case of
+binary neutron star mergers. As part of a systematic parameter study,
+a large number of binary neutron star merger simulations was carried out,
+adopting a series of realistic nuclear equations of state. A number of
+universal laws were found, which either relate the treshold mass of a
+particular equation of state to its maximum stable static equilibrium (TOV)
+solution or its compactness. We also could constraint the maximum radius and 
+mass of neutron stars in general which go hand in hand with observational 
+constraints from gravitational wave observations.
+
+These results can be improved in at least two ways.  First, as new hot
+equations of state becomes available for numerical simulations, it will be
+possible to extend the analysis carried here, reducing  its uncertainty.
+Second, as new detections from binary neutron-star mergers will be revealed,
+the masses of these systems and their electromagnetic counterparts will be
+used to set ever more precise lower bounds on the radii of neutron stars.
+
+As a final project, we have studied higher-dimensinal black hole solutions and
+their thermodynamics from GUP-inspired approachs. These include the
+Kempf-Mann-Mangano (KMM) momentum measure, a new modified momentum measure,
+and also the Scardigli-Casadio-Carr-Lake (SCCL) approach. The fact that the
+standard Hawking temperature diverges for small mass black holes is one
+of the indicators that a theory of quantum gravity is needed. The GUP is
+such a candidate and has been shown to modify this behaviour in the
+standard $(3+1)$-dimensional case (SCRAM phase).  Since the GUP can
+for example be motivated by string theory which needs extra dimensions
+this strongly suggests that the cure of the temperature divergence
+should also work in higher dimensions.
+
+In the former case, we have shown that for $n=4$ spatial dimensions, the
+metric function admits an extremal solution whose temperature exhibits
+the SCRAM phase of the regular $(3+1)$-D KMM black hole.  Additionally,
+the solution reveals a conical singularity at the origin, which can be
+interpreted as a Barriola-Vileking like monopole.  For $n > 4$, howver,
+the GUP has no effect and the temperatures diverge as with the
+standard Schwarzschild solution.
+
+We have also investigated a revised GUP approach that produces an alternate
+momentum measure that uniformly suppresses the GUP in the limit of large
+$\vec{p}$.  In this case, the solution reveals a much richer thermodynamic
+behaviour that is characterized by a ``lighthouse effect''.  That is, for 
+increasing $n > 4$, both the mass distribution and temperature oscilate
+as the black hole evaporates. This is possibly due to negative energy
+density contributions close to the origin, or alternatively due to the
+presence of tachyon states. 
+
+The metric function also admits multiple horion structures depending
+on the black hole mass, relative to a critical value $M_0$.  This
+particular characteristic has the effect of dividing the solutions
+into two classes, {\it i.e.} small and large black holes.
+
+A variety of future investigations are possible, in particular those
+which involve different interpretations of the GUP (\eg a higher
+dimensional version of the metric derived in \cite{CMN15}).  Alternatively,
+GUP-inspired Reissner-Nordstr\"om and Kerr metrics might introduce
+additional new physics similar to the lighthouse effect discussed herein.
+
+\end{fullwidth}

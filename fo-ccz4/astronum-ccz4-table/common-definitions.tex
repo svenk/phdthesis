@@ -1,0 +1,105 @@
+%% Common definitions require by both the CCZ4 system table as well
+%% as the Riemann helpers table
+
+%
+%% Determine how to fix this...
+%\setlength{\mathindent}{0pt}% amsmath, also require fleqn locally somehow
+%
+% left aligned vector
+\newenvironment{pvector}{\begin{pmatrix*}[l]}{\end{pmatrix*}}%
+%
+% Wrap aligns inside the big CCZ4 table so the table can be
+% put wiht background colors
+\makeatletter%
+\newcommand{\embedEQ}[1]{ {\CT@everycr{\the\everycr} #1 }}%
+\makeatother%
+%
+% the parbox is important for getting a width
+%\newcommand{\embedNCP}[1]{ \parbox{5cm}{\embedEQ{#1}} }
+\newcommand{\longNCP}[1]{ \parbox{4.0cm}{\embedEQ{#1}} }%
+\newcommand{\longSource}[1]{ \parbox{4.0cm}{\embedEQ{#1}} }%
+%
+\newcommand{\NCP}[1]{{\left[#1\right]_\text{NCP}}}%
+\newcommand{\SRC}[1]{{\left[#1\right]_\text{SRC}}}%
+%
+% colorized CCZ4 parameters
+\newcommand{\param}[1]{\textcolor{red}{#1}}%
+% colorized CCZ4 matter sources
+\newcommand{\matter}[1]{\textcolor{blue}{#1}}%
+%
+% define colors for CCZ4 variables
+\definecolor{alpha}{HTML}{D1F2A5}%
+\definecolor{beta}{HTML}{FFE3EB}%
+\definecolor{gamma}{HTML}{FF9F80}%
+\definecolor{phi}{HTML}{FFDFAB}%
+%
+\definecolor{Atilde}{HTML}{93DFB8} %FFC48C}
+\definecolor{K}{HTML}{FFC8BA} %EFFAB4}
+\definecolor{Theta}{HTML}{E3AAD6} %FFB397} % too dark: F56991
+\definecolor{Gamma}{HTML}{B5D8EB} %EFFAB4}
+\definecolor{b}{HTML}{FFBDD8} %CAE2D0}
+%
+\colorlet{A}{alpha}%
+\colorlet{B}{beta}%
+\colorlet{D}{gamma}%
+\colorlet{P}{phi}%
+%
+% leftovers:
+%\definecolor{D}{HTML}{FFB397}
+\definecolor{varPP}{HTML}{DCEBFA}%
+\definecolor{varK0}{HTML}{FCF3CD}%
+%\definecolor{K}{HTML}{84C1FF}
+%
+\newcommand{\einefarbe}[1]{#1}%
+%
+% background colors
+% yields errors:
+\newcommand{\colorSymbol}[1]{ \cellcolor{#1} }%
+\newcommand{\colorNCP}[1]{ \cellcolor{#1!50!white} }%
+\newcommand{\colorSource}[1]{ \cellcolor{#1!60!white} }%
+%
+% Rotate text in multirow table (source: https://tex.stackexchange.com/a/89116)
+\newcommand{\verticalrow}[2]{\parbox[t]{2mm}{\multirow{#1}{*}{\rotatebox[origin=c]{90}{#2}}}}%
+%
+% Integrals with long limits above/below
+\newcommand{\Int}[2]{\int\limits_{\mathrlap{#1}}^{\mathrlap{#2}}}%
+%
+% This fully works, but of course makes one equation per
+% 
+\providecommand{\eqnNum}[2]{%
+%%\addtocounter{equation}{1}% works, but instead use refstepcounter for label
+%%
+%% Works, but disabled for the time being for display
+%\makeatletter%
+%\def\@currentlabel{#2}%
+%\renewcommand{\theequation}{\arabic{equation}.#2}%
+%\makeatother%
+%%
+%%
+\refstepcounter{equation}%%%\label{#1} % This line works, keep it!!!
+\latexlabel{#1}% Using \latexlabel instead of label for tufte.
+(\theequation)% mimic the display of an equation
+}%
+%
+% the same but with subequtions...
+\providecommand{\subEqnNum}[2]{%
+	%\addtocounter{equation}{1}% works, but instead use refstepcounter for label
+	%
+	% test currentlabel thing
+%	\makeatletter%
+%	\def\@currentlabel{#2}%
+%	\renewcommand{\thesubequation}{\themainequation.#2}%
+%	\makeatother%
+	% redefine \theequation
+	%
+	\refstepcounter{subequation}\label{#1} % This line works, keep it!!!
+	(\theequation)% mimic the display of an equation
+}%
+%
+%
+\newcommand{\setAstronumTableSizes}{
+\setlength{\abovedisplayskip}{3pt}%
+\setlength{\belowdisplayskip}{3pt}%
+\setlength{\abovedisplayshortskip}{3pt}%
+\setlength{\belowdisplayshortskip}{3pt}%
+}%

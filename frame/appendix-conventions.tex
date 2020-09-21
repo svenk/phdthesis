@@ -1,0 +1,232 @@
+\section{Notation and conventions}
+The notation chosen in this work mostly follows
+the standard notations in general relativity:
+Indices of four-dimensional tensors
+\footnote{or symbols, in general like the Christoffel symbols}
+are denoted with lower-case greek letters,
+as in $X_{\alpha\beta\gamma\dots}^{\mu\nu\eta\dots}$.
+These indices run over $[0,1,2,3]$ (or $[1,2,3,4]$, if prefered).
+Three-dimensional tensors are denoted with lower-case latin letters,
+as in $X_{abc\dots}^{ijk\dots}$. These indices run over $[1,2,3]$.
+Explicitely higher dimensional spatial tensors are denoted
+with upper case latin letters, as in $X_{ABC\dots}^{IJK\dots}$.
+The indices run over $[1,2,3,\dots,n]$ in $n$ spatial
+dimensions.
+
+Einstein sum convention is applied all over the text. For symbols
+which do not follow the concept of covariance (\ie not described
+with differential geometry), the index ordering (upper or lower)
+is arbitrarily chosen in order to meet Einstein sum convention.
+With such symbols, lower latin indices are also used for various
+kind of indices.
+For instance, state vector indices are typically given with lower
+case indices, but they do not count over $[0\dots 3]$ but over
+$[1,\dots,N]$, where $N$ is the number of state vector variables.
+Another example are Gaussian basis functions which run over a
+specific set $[1,\dots,N]$ where $N$ is the
+typically the order of the method/number of basis points.
+
+An higher-dimensional object \emph{may} be written without indices.
+In general relativity, this concept is known as
+\emph{abstract index notation} and allows to write simple contractions
+as scalar products, revealing a descriptive meaning of some terms.
+For covariant symbols, this notation is avoided within this text.
+However, it is widely adopted for other types, such as three-vectors
+or state vectors. Generally, the arrow in $\vec x$ indicates that
+$\vec x = (x_1,x_2,x_3)$ \footnote{
+  Intentionally, I do not formally distinguish between a definition
+  $\vec x = (x_1,x_2,x_3)$ or $\vec x=(x_1,x_2,x_3)^T$, \ie
+  column and row vector, because the nature of the object typically
+  depends on the surrounding: A numerical or CAS implementation or
+  as part of a linear algebra calculation where it's shape matters.
+} is a three-vector. In contrast, a symbol in bold typeface such as
+$\mathbf x$ or $\boldsymbol x$ only indicates that the symbol is
+an abstract object with one or more indices. For instance, fluxes
+$\boldsymbol F^{ij}$ are written in bold, meaning that the fundamental
+object is $F^{ij}_k$ (which however does not transform like a tensor).
+The shortened notation where only a few indices are written out
+emphasizes the implementation where only the $n \times n$ matrix is
+of interest. Therefore, the index-free notation is adopted \emph{only}
+in situations when the clarity shall be preserved, for instance because
+objects are decorated with discreteness indicators. Another example is
+$Q_k$, this may indicate the $k$th component of the state vector
+$Q$, but $\boldmath Q_n^s$ is the whole state vector at spatial position
+$x_n$ and time index $t^s$.
+
+Furthermore, since this thesis deals with field theory, almost all
+objects are fields, \ie $X=X(t,\vec x)$. Again, this information
+can only be provided by context.
+
+\subsection{Units}
+This work uses geometric units with gravitational coupling $G=1$, speed of light $c=1$.
+In astrophysical simulations, we set the solar mass (mass of the sun) $\Msol=1$ 
+and measure subsequently all quantities
+in these units. In context of quantum mechanics, natural units are adopted,
+where furthermore the reduced Planck constant $\hbar=1$ and the Boltzmann
+constant $k_B=1$.
+
+%In this work it is usually tried to avoid to give quantities
+%without dimensionful units.
+
+\subsection{Symbols}\label{apx:symbols}
+\begin{itemize}
+    \item States (state vectors) in PDEs are usually denoted as $Q$ or $u$.
+      $V$ is typically the symbol for a primitive vector.
+    \item Landau symbol $\mathcal O$ for the physical ``at the 
+      order of'' or the computer science complexity.
+	\item Levi-Civita-Symbol (total antisymmetric tensor);
+	  in two dimensions:
+	  \begin{equation}
+	  \epsilon^{ik} = \begin{pmatrix} 0 & 1 \\  -1 & 0 
+	  \end{pmatrix}
+	  \end{equation}
+	\item Levi-Civita-Symbol in three dimensions: Spatial 3-Levi-Civita tensor
+  	 density $\tilde{\epsilon}$ given by
+	 \begin{equation}
+	 \tilde{\epsilon}^{ijk} = \gamma^{-\frac{1}{2}} [ijk]\,, \hspace{0.5cm}
+	 \tilde{\epsilon}_{ijk} = \gamma^{\frac{1}{2}} [ijk]\,. \\
+	 \end{equation}
+	 where 
+	 $[ijk]$ is the regular total antisymmetric symbol, commonly known as
+	 epsilon tensor/Levi-Civita tensor in flat space,
+	 \begin{equation}
+	 [ijk] = \begin{cases}
+      \phantom{-}1 & \text{for even	permutations of $(1,2,3)$}, 
+      \\
+	 %
+	 -1 & \text{for odd permutations}, 
+	 \\
+	 \phantom{-}0 &  \text{otherwise.}
+	 \end{cases}.
+	 \end{equation}
+	
+	
+	\item $\Theta=\Theta(x)$ is in general the symbol for
+	   the Heaviside step function
+	   \begin{equation}
+	  \Theta(x)=\begin{cases}
+	  1 & x > 0 \\ 0 & x < 0
+	  \end{cases} \,,
+	  \end{equation}
+	  but sometimes also used for other cases\footnote{
+	    An example is $Z_\mu = (\Theta, Z_i)$ in the
+	    FO-CCZ4 PDE (Chapter~\ref{chapter:gr}).
+      }
+	\item $\delta$ is either the Dirac delta function
+	  $\delta=\delta(x)$, also refered to as unit impulse
+	  or Dirac distribution, defined via its property
+	  \begin{equation}
+	  f(a) = \int f(x) \delta(a) \d x \,.
+	  \end{equation}
+	  In $n$ spatial dimensions, the symbol
+	  is refered to as $\delta^{(n)}(\vec x)$.
+	  $\delta$ can also be the discrete version, \ie
+	  the Kronecker Delta
+	  \begin{equation}
+	  \delta_{ij} =
+	  \begin{cases}
+	  1 & \text{if } i = j \\
+	  0 & \text{else (if } i \neq j \text{)}
+	  \end{cases}
+	  \end{equation}
+	
+	\item Lower incomplete Gamma function
+	\begin{equation}
+	\gamma(s;x) = \int_0^x \d t ~ t^{s-1} e^{-t}
+	\end{equation}
+	
+	\item the $p$ norm, or $L^p$ norm, is defined as
+	\begin{equation}\label{apx.def.lpnorm}
+	  \left| \vec x \right|_p = \left( \sum_{i=1}^k |x_i|^p \right)^{1/p}
+	\end{equation}
+	with a vector $\vec x \in \mathbb R^k$ and $|r|$ with the absolute of
+	a real number $r\in \mathbb R$. The norms define
+    $L^p$ function spaces.
+    
+    \item Symmetric and antisymmetric part of tensors, exemplary for a $(0,2)$ tensor:
+       Symmetric part $T_{(ab)} = \nicefrac{1}{2} \left( T_{ab} + T_{ba} \right)$,
+       antisymmetric part $T_{[ab]} = \nicefrac 12 \left( T_{ab} - T_{ba} \right)$.
+    
+    \item Covariant derivative $\nabla_\mu$, exemplary for a scalar field $\phi$,
+      a covector field $t^\mu$, a $(2,0)$ tensor $A^{\mu\nu}$:
+      \begin{align}
+      	\nabla_\mu \phi &= \partial_\mu \phi \\
+      	\nabla_\alpha t^\nu &= \partial_\alpha t^\nu + \Gamma^\nu_{\alpha\gamma} t^\gamma \\
+      	\nabla_\lambda A^{\mu\nu} &= \sum_{\delta}
+      	\partial_\lambda A^{\mu\nu} + \Gamma^\mu_{\delta\lambda} A^{\delta\mu} + \Gamma^{\nu}_{\delta\lambda} A^{\mu\delta}
+     \end{align}
+   
+    \item Lie derivative $\Lie_{\boldsymbol \xi}$, for a vector field $\xi_\mu$ and the same fields from above:
+    \begin{align}
+    	 \Lie_\xi \phi &= \xi^\alpha \partial_\alpha \phi \\
+    	 \Lie_\xi t^\nu &= \xi^\alpha \partial_\alpha t^\nu - t^\alpha \partial_\alpha \xi\nu \\
+    	 \Lie_\xi A^{\mu\nu} &= \xi^\alpha \partial_\alpha A^{\mu\nu}
+    	   - \xi^\mu \partial_\alpha A^{\alpha\nu}
+    	   - \xi^\nu \partial_\alpha A^{\mu\alpha}
+   	\end{align}
+    Sometimes, $\Lie_{\boldsymbol \xi}$ is written as $\Lie_{\xi}$ for brevety.
+    	
+\end{itemize}
+
+\subsection{Symbols with canonical physical meaning}
+
+\begin{itemize}
+	\item  Christoffel symbols of first kind
+	\begin{equation}
+     \Gamma^k_{ij} = \frac{1}{2} g^{kl} \left(\partial_i g_{jl} 
+     + \partial_j g_{il} - \partial_l g_{ij}\right)
+	\end{equation}
+
+	\item 4-metric, expressed by ADM quantities:
+    \begin{equation}
+	g_{\mu\nu} = 
+	\begin{pmatrix}
+	-\alpha^2 + \beta_i \beta^i  & \beta_i \\
+	\beta_i                      & \gamma_{ij}
+	\end{pmatrix}
+    \end{equation}
+    
+    \item See Table \ref{table:overview-gup-symbols} for an overview
+      of symbols used within the context of quantum black holes.
+	
+\end{itemize}
+
+\begin{table}[t]
+	\begin{tabularx}{\linewidth}{llX}
+	\firsthline
+	symbol && semantics \\
+	\hline
+	$M$ & & Generic total mass of a black hole \\
+	$L$ && Any length scale \\
+	$T$  & & Hawking temperature \\
+	$d$ & & Number of total space-time dimensions \\
+	$n$ && Number of total spatial dimensions \\
+	$G_\mathrm N$  & & Newton's constant in 3+1 dimensions. \\
+	$M_\mathrm{Pl}$ & & Planck mass in 3+1 dimensions. \\
+	$L_\mathrm{Pl}$   & & Planck length in 3+1 dimensions. \\
+	$\mathbb G(\dots)$ && Newton's constant as differential operator \\
+	$M_*$ && Fundamental mass scale in any dimension \\
+	$L_*$ && Fundamental length scale in any dimension \\
+	$\sqrt{\beta}$ && Length scale in the GUP \\
+	$\mathcal M(r)$ & & Cumulative mass distribution \\
+	$M_0$ & & Mass of critical black hole configuration \\
+	$r_0$ && Radius of critical black hole configuration \\
+	$T_\textrm{max}$ && Temperatur of critical black hole (maximum temperature) 
+	\\
+	$\mathbb T^\mu_\nu$ & & Nonlocal energy-momentum tensor \\
+	$\rho(\vec x)$ && Density distribution  \\
+	$f_n(r)$ && Metric function in $n$ spatial dimensions \\
+%%%		
+	$r_\pm$ & & The inner and outer horizons radii. \\
+	$r_0$ && The size of the extremal black hole configuration. \\
+	$r_C$ && The critical radius, at this radius the temperatures are maximal. 
+	\\
+	\hline
+	\end{tabularx}
+	\caption[List of symbols used in the GUP chapter]{
+		This is an overview of symbols as they are introduced and used in
+		Chapter~\protect\ref{chapter:qgr}, exclusively.
+    }\label{table:overview-gup-symbols}
+\end{table}
+
+

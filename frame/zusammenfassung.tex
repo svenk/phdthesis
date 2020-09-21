@@ -1,0 +1,306 @@
+% This is the german speaking 5-10 page summary.
+% This is an UTF-8 text, using deutsche Umlaute üöäß.
+
+\begin{otherlanguage}{german}
+\begin{fullwidth}
+
+% The german summary is displayed differently then the english
+% introduction mainly in order to archieve the 5-10 page limit.
+\begin{center}
+\begin{adjustwidth}{1cm}{1cm}
+
+\chapter*{Zusammenfassung}\label{chapter:zusammenfassung}
+\addcontentsline{toc}{section}{German summary (Zusammenfassung)}
+
+Schwarze Löcher und Gravitationswellen gehören zu den faszinierenden Vorhersagen
+der allgemeinen Relativitäts\-theorie. Schwarze Löcher gibt es auf fast jeder
+Längenskala und seit einigen Jahren gibt es mehr und mehr Möglich\-keiten, sie
+zu messen. Die größten schwarzen Löcher werden supermassereich genannt, 
+Millionen
+von Sonnenmassen schwer werden sie im Zentrum von jeder Galaxie vermutet.
+Das Event Horizon Telescope hat zum Ziel, die Photonensphäre des Objekts
+Sagittarius A* zu messen, welches als supermassereiches schwarzes Loch im Zentrum
+der Milchstraße vermutet wird. Das
+Laser-Interferometer-Gravitationswellen-Observatorium (LIGO) wiederum
+konnte bereits 2016 zum ersten mal Gravitationswellen direkt beobachten, die
+durch den Kollaps zweier stellarer schwarzer Löcher (jeweils ca 20-30 Sonnenmassen
+schwer) entstanden. Dafür erhielten drei LIGO-Physiker 2017 den Nobelpreis.
+
+Ebenfalls wurden von LIGO und dem europäischen Pendant Virgo die Gravitationswellen
+von der Verschmelzung zweier Neutronensterne gemessen. Neutronensterne gehören zu
+den kompaktesten astrophysikalischen Objekten, mit einer Ausdehnung von wenigen Kilometern und
+einer mit der Sonne vergleichbaren Masse. Die zentrale Massendichte in
+Neutronensternen erreicht ein Vielfaches der nuklearen Sättigungsdichte. Damit
+sind Neutronensterne ein Ort in der Natur, in dem sich außergewöhnliche
+Materiezustände vorfinden lassen, wie etwa das Quark-Gluon-Plasma.
+Mit der Beobachtung von Kollisionen solcher Sterne, insbesondere über mehrere
+Kanäle (Radiowellen verschiedener Spektren sowie Gravitationswellen) können erstmals
+präzise Aussagen über die Beschaffenheit dieser Sterne gemacht werden.
+
+Die Messung dieser Gravitationswellen ist nicht nur eine %fantastische
+experimentelle Meisterleistung, sondern unter anderem auch dem Fortschritt der
+computerbasierten Lösung von Einsteins nichtlinearen Feldgleichungen zu
+verdanken. Die numerische Relativitätstheorie hat in den letzten 15 Jahren
+gewaltige Fortschritte gemacht, die nicht bloß einer allgemein
+gestiegenen verfügbaren Rechenleistung zu verdanken sind, sondern vor allem
+dem besseren Verständnis der wesentlichen Freiheitsgrade der allgemeinen
+Relativitätstheorie, der trickreichen Reformulierung der Feldgleichungen als
+hyperbolische partielle Differentialgleichungen im Rahmen eines wohldefinierten
+klassischen Anfangs-Randwertproblems, dem Verständnis ihrer 
+Eigenstruktur sowie nicht zuletzt besser konvergierenden numerischen Methoden,
+welche allgemein unter dem engl. Stichwort ``high order methods'' zusammengefasst
+werden.
+Erst seit 2005 ist es nach jahrzehntelanger Forschung möglich, schwarze Löcher
+in Doppelsystemen in einer Computersimulation stabil in der Zeit zu entwickeln
+und dabei die Abstrahlung von Gravitationswellen zu beobachten. Auf ganzen
+Datenbanken solcher Wellenvorhersagen fußt die experimentelle Messung von
+Gravitationswellen, denn ohne diesen wäre dem verrauschten Signal nichts
+zu entnehmen.
+
+\subsection*{Methoden zur kommunikationsvermeidende Zeitentwicklung}
+Daher entsteht ein enormer Bedarf an einer weiteren Verbesserung der
+Vorhersagekraft von Computersimulationen. Informatiker stehen vor
+einem Problem: Es steht zwar immer mehr Rechenleistung für die Wissenschaft zur
+Verfügung --- die Rede ist von einem Exaskalencomputer, also einem Rechner, der
+$10^{18}$ Grundrechenarten pro Sekunde bewältigt --- allerdings werden
+bestehende Simulationsprogramme gnadenlos scheitern, diese neue
+Rechnergeneration, die rein rechnerisch in der Lage sein soll, ein menschliches
+Gehirn zu simulieren, dabei allerdings aus hunderten millionen Prozessorkernen
+bestehen, voll auszuschöpfen. Im Rahmen dieser Dissertation wurden
+daher neuartige Methoden zum Lösen der hyperbolischen Zeitentwicklung, die
+von Anfang an die Kommunikation innerhalb eines Supercomputers auf ein
+Minimum beschränkt, auf astrophysikalische Probleme angewandt.
+Diese sogenannten diskontinuierliche Galerkin-Verfahren versprechen darüber
+hinaus eine hohe Konvergenzordnung bei, verglichen mit herkömmlichen
+Methoden, niedrigem Stromverbrauch. Im Gegenteil zu herkömmlichen Finite
+Volumen-Verfahren wird die räumliche Simulationsdomäne dabei in eine Anzahl
+von unabhängig voneinander (daher ``diskontinuierlich'') zeitentwickelten
+Zellen unterteilt, welche ihrerseits Polynome beherbergen, die die
+physikalischen Felder beschreiben.
+
+Um das Gibbs'sche Phänomen bei physikalischen Unstetigkeitsstellen (etwa
+Singularitäten der Raumzeit oder hydrodynamischen Schocks) zu verhindern,
+fällt das Schema als Prädiktor-Korrektor-Verfah\-ren bei Unstetigkeit lokal
+auf ein klassisches robustes Finite Volumen-Verfah\-ren zurück. Es verbindet
+damit die Erprobtheit herkömmlicher Methoden mit den Vorteilen von
+diskontinuierlichen Galerkin-Verfahren.
+Im Rahmen dieser Dissertation wurden unter anderem diese numerischen Methoden
+in den neuartigen ``ExaHyPE''-Code (engl., für ``an Exascale Hyperbolic PDE
+Engine'') eingebaut, einem Computerprogramm zur Lösung beliebig vieler gekoppelter
+hyperbolischen Differentialgleichungen, welches den hohen Anforderungen der
+zukünftigen Exaskalencomputer gerecht werden soll. Mit Beispielanwendungen aus
+der Seismologie (Erdbebenvorhersagen) und der Astrophysik
+(Neutronensternverschmelzungen) soll ExaHyPE ab Ende 2019 der Öffentlichkeit
+zugänglich sein.
+
+\subsection*{Die konform kovariante Formulierung der Einsteingleichungen in 
+erster Ordnung}
+Im Rahmen dieser Arbeit wurde eine neue Formulierung der Einsteingleichungen
+hergeleitet, die aus 59 gekoppelten nichtlinearen Differentialgleichungen besteht.
+Das partielle Differentialgleichungssystem ist erste Ordnung in Zeit
+\emph{und} Raum. Die Motivation war dabei, eine streng hyperbolische
+Formulierung der Einsteingleichungen zu finden, die für eine numerische
+Zeitentwicklung mit den oben vorgestellten diskontinuierliche Galerkin-Verfahren
+geeignet ist.
+
+Diese neue Formulierung, die den Namen ``FO-CCZ4'' trägt, geht als Umschreibung
+der CCZ4-Gleichung\-en zurück, der konform kovarianter Z4-Formulierung (engl.
+``conformally covariant Z4'') der Einsteingleichungen. Diese erhält man, in
+dem die vier Eichfreiheitsgrade der Einsteingleichungen im Rahmen der
+Cauchy-Anfangswert-Formulierung (ADM-Split) separiert und fixiert werden.
+Die erstmals 2010 formulierte Z4-Variante stellt die Kovarianz dieser
+Eichtheorie sicher, in dem sie die Hamiltonschen Zwangsbedingungen zusätzlich
+als dynamische Zustandsgröße entwickelt. Auf diese Weise wird die Formulierung
+um ein selbstheilendes Element ergänzt, welches numerische Fehler korrigiert
+und den Zustandsvektor des Gleichungssystems zu einem physikalischen Zustand
+konvergieren lässt.
+
+Im Zuge weiterer Umschreibungen werden die konformen Freiheitsgerade 
+separiert und
+transvers-spurlose Tensordichten zeitentwickelt, welche zu einer weiteren
+Stabilisierung des Systems beitragen. Sie erlauben es, hyperbolische (also
+insbesondere zeitabhängige) singularitätsvermeidende Eichfixierungen 
+vorzunehmen,
+die die Variation des räumlichen Koordinatenvolumens minimal halten
+(diese bewährten Eichfixierungen heißen ``Bona-Massó Slicing'' und ``Gamma Driver'').
+Die auf diese Weise beschriebene konforme und kovariante Z4-Formulierung der
+Einsteingleichungen wurden anschließend in ein
+Differentialgleichungssystem erster Ordnung umgeschrieben. Dabei wurde eine
+approximative Symmetrisierung der dünnbesetzten Systemmatrix erreicht, in dem
+der Satz von Schwarz zur Symmetrisierung von Ableitungen (Ordering Constraints)
+rigoros angewendet wurde, ohne dabei das Entstehen von Jordan-Blöcken zu
+erlauben. Es konnte gezeigt werden, dass das konform-kovariante Z4-System in den
+üblichen Eichfixierungen nicht nur streng hyperbolisch ist, sondern sogar die
+Dynamik der vierdimensionalen Metrik (in der konformen ADM-Formulierung
+zusammengesetzt aus dem sogenannten Lapse-Skalar, Shift-Vektor, der
+räumlichen Metrik und dem konformen Faktor) als gewöhnliche Differentialgleichungen
+entkoppeln. Ferner sind alle Felder linear degeneriert, was zur Folge hat, dass das
+System keine ``gravitativen Schockwellen'' entwickeln kann. Bis auf Orte 
+unendlicher
+Krümmung (Singularitäten) sind die in dieser Formulierung zeitentwickelten Felder,
+welch die Raumzeit beschreiben, also immer kontinuierlich.
+
+Die konform kovarianten Z4-Formulierung in erster Ordnung (\emph{engl.}
+first order conformally covariant Z4, FO-CCZ4) ist mit ihren 59 gekoppelten
+nichtlinearen Differentialgleichungen erheblich komplexer als die
+Einsteingleichungen (üblicherweise geschrieben als 16 gekoppelte
+Differentialgleichungen, aber nur 10 Freiheitsgrade beschreibend).
+Trotzdem ist ihr Einsatz okonomisch, da die Formulierung in erster Ordnung 
+erlaubt,
+das Gleichungssystem räumlich diskret mit pfadkonservativen Methoden zu
+integrieren. Ähnlich wie in der Fluiddynamik
+werden dabei alle charakteristischen Wellen des Systems vom numerischen
+Schema ``erfasst''. Dies äußert sich bei der zeitentwicklung stationärer
+Raumzeiten etwa dadurch, dass die Lösung besser erhalten wird als mit herkömmlichen
+Methoden.
+
+Zur Demonstration der Korrektheit der Formulierung sowie ihrer Lösbarkeit mit den
+dargestellten numerischen Schemata wurden einige Standardtests der numerischen
+Relativitätstheorie erfolgreich demonstriert, darunter linearisierte
+Gravitationswellen-Tests, Stabilitätstests einer gestörten Minkowskimetrik,
+Zeitentwicklung nichtlinearer ``Eichwellen'', Konvergenztests zur Demonstration
+der Konvergenzordnung bei der Zeitentwicklung der statischen Schwarzschild-Raumzeit
+und der stationären Kerr-Raumzeit, sowie zuletzt die numerische Lösung des
+Zweikörper\-problems (Verschmelzung zweier schwarzer Löcher mithilfe der
+Punkturmethode).
+
+\subsection*{Relativistische Magnetohydrodynamik im nichtkonservativen Split}
+Die relativistische Hydrodynamik ist eine erfolgreiche Theorie, um die Materie
+(ausgedehnter) kompakter Objekte zu beschreiben.
+Zur Beschreibung von Effekten,
+in denen elektrodynamische Wechselwirkungen eine wichtige Rolle spielen, ist
+zudem die allgemein relativistische Magnetohydrodynamik (engl.
+GRMHD, für ``general relativistic magnetohydrodynamics'') eine anerkannte
+effektive Theorie. In ihrer idealen Näherung beschreibt diese Gleichung die
+relativistische Dynamik eines Fluides, welches durch seine Bewegung ein
+Magnetfeld induziert und mit diesem auch wechselwirkt. Auf diese Weise lassen
+sich eine Vielzahl astrophysikalischer Phänomene beschreiben, etwa Jets,
+Pulsare und Gammastrahlenblitze.
+
+Neben den Einsteingleichungen wurden auch die Gleichungen der allgemein
+relativistischen Magnetohydrodynamik in eine flusskonservative Form gebracht, in der
+Erhaltungsterme und nichtkonservative Flüsse getrennt werden. Auf diese Weise
+ist eine pfadkonservative Integration aller Flüsse möglich, was zu einer
+wesentlich exakteren Beschreibung des diskretisierten Problems führt
+als herkömmliche Methoden.
+
+In Standard-Benchmarks wurde die neue Formulierung der allgemein relativistischen
+Magnetohydrodynamik auf stationären gekrümmten Hintergrundräumen (Cowling-Näherung)
+mithilfe der oben eingeführten diskontinuierlichen Galerkin-Verfahren demonstriert.
+Dabei wurden als kontinuierliche Flüsse in der Schwarzschild-Raumzeit seperat
+die Dynamik im Inneren eines Torus, die Akkretion eines elektrisch neutralen
+sowie die Akkretion eines magnetohydrodynamisch wechselwirkenden Fluides demonstriert.
+Als nichtkontinuierliche speziell-relativistische Flüsse wurden
+einige akademische Beispiele präsentiert, etwa die Lösung eindimensionaler
+Riemannprobleme in gekrümmten Hintergrundräumen, die Zeitentwicklung einer
+zweidimensionalen magnetischen Schleife, einer magnetischen Druckwelle, sowie
+des Orszag-Tang-Vortexes. Als nichtkontinuierliche allgemein-relativistische
+Flüsse werden Raumzeiten einer Torus-Schwarzes Loch-Konfiguration simuliert
+und ferner vorläufige Ergebnisse auf die Zeitentwicklung eines Neutronensterns
+(TOV-Lösung, nach Tolmann-Oppenheimer-Volkhoff) präsentiert.
+
+\subsection*{Wie lange überlebt ein hypermassiver Neutronenstern?}
+Ein weiteres Projekt, welches in der vorliegenden Dissertation beschrieben wird,
+ist eine Anwendung obiger Methoden, also der numerischen Zeitintegration des
+gekoppelten Einstein-Euler-Systems. Dabei wurde das Szenario eines
+``verzögerten Kollapses'' bei der Vereinigung zweier Neutronensterne untersucht.
+Es wurden quantitative Kriterien entwickelt, um einen sofortigen Kollaps
+zu einem schwarzen Loch von der Entstehung eines metastabilen hypermassiven
+Neutronensternes zu unterscheiden.
+Als Unterscheidungskriterion für das Szenario des ``verzögerten Kollapses''
+kommt dabei die Masse der Raumzeit bzw. der Konstituenten zum Tragen. Oberhalb
+einer kritischen Masse kommt es zum prompten Kollaps zu einem schwarzen Loch
+und unterhalb zu einem verzögerten Kollaps.
+Dazu wurde eine Parameterstudie
+durchgeführt, bei der für eine Vielzahl an realistischen nuklearen
+Zustandsgleichungen eine Menge an Anfangswertprobleme gebildet wurden, die sich
+durch die Masse ihrer Konstituenten unterscheiden. Um Anfangswerte für die
+Einstein-Euler-Gleichungen zu erhalten, die die Raumzeit eines
+Doppelsternsystems im stark wechselwirkenden Endstadium beschreiben, müssen
+elliptische Gleichungen gelöst werden. Iterative Anfangswertcodes finden
+dazu zunächst die Lösung der TOV-Gleichungen und fügen diesen dann
+schrittweise Drehmoment hinzu, während der Abstand der Sterne verringert wird.
+Die erzeugten Anfangswerte werden dann mit den obengenannten hyperbolischen
+Methoden zeitentwickelt bis sich ein schwarzes Loch gebildet hat.
+
+Die Überlebenszeit des Kollisionsproduktes ist definiert als die
+Koordinatenzeit, die zwischen Verschmelzung und Kollaps zum schwarzen Loch
+verstrichen ist. Anhang der Simulationsdaten können eine Vielzahl an Kriterien
+herangezogen werden, um Verschmelzung und Kollaps zu definieren, so zum
+Beispiel über den Koordinatenabstand der Neutronensterne, den Peak des
+Gravitationswellensignals, einem kritischen Wert für das globale Maximum der
+Ruhemassendichte oder das globale Minimum des effektiven Potentials.
+Im Rahmen der Untersuchung stellte sich heraus, dass die
+dynamische Eichfixierung dank ihrer Eigenschaft, die Koordinaten aus dem
+Gravitationspotential (her)rauszutreiben, sowohl für die Definition des
+Zeitpunkts der Verschmelzung als auch des Kollapses am besten geeignet ist.
+
+Die Überlebenszeiten, die nun jedem einzelnen Computerexperiment (einem
+Doppelneutronensternsystem mit gewisser Masse und Zustandsgleichung) zugewiesen
+werden konnte, wurden für jede Zustandsgleichung die Systemmassen zu einer
+charakteristischen Zeit extrapoliert, die der Eigenzeit beim freien Kollaps
+eines TOV-Sternes bis zur Entstehung eines schwarzen Loches entspricht. Die auf
+diese Weise definierten kritischen Massen zeigen eine Korrelation zu den
+TOV-Massen der Zustandsgleichung. Vor allem lassen sich aber Zusammenhänge
+zwischen den kritischen Massen aller untersuchten Zustandsgleichungen
+herstellen, welche erlauben für eine neue Zustandsgleichung die kritische Masse
+anhand ihrer TOV-Eigenschaften vorherzusagen. Zuguterletzt lassen sich die
+Zahlen auch unter Zuhilfenahme von echten Gravitationswellenmessungen benutzen,
+um den minimalen Radius eines Neutronensterns einzuschränken. Mithilfe der
+Experimentellen Daten von GW170817 wurde der minimale Radius
+$R=9.74(\pm 0.1)$km ermittelt.
+
+\subsection*{Die Raumzeit eines quantenmechanischen schwarzen Loches}
+Als letztes Projekt ist dieser Monographie ein Projekt aus dem
+Bereich der Quantengravitation beigelegt, welches die Eingangs aufgelisteten
+Skalen von schwarzen Löchern komplettieren: Die Modellierung der Metriken von
+mikro-schwarzen Löchern. Es wird dabei eine stringtheoretisch
+motivierte impulsabhängige Modifikation der Heisenbergschen Unschärferelation
+eingeführt, welche als effektive Theorie die erste Ordnung einer
+quantenmechanischen Gravitationstheorie beschreiben kann. Die neuen
+Kommutatorrelationen erllauben exakte Impulsoperatoren, aber erzwingen
+eine minimale Länge im Ortsraum. Die Dirac-Deltaquelle der Schwarzschild-Metrik 
+lässt sich somit als Fouriertransformierte der ebenen Welle (im Impulsraum)
+nicht mehr exakt (im Ortsraum) darstellen und bewirkt damit
+eine Verschmierung / Delokalisierung des gravitativen Potentials.
+Berechnet man die Hawking-Temperatur
+dieses quantenmechanisch modifizierten schwarzen Loches, findet man einen kalten
+Evaporationsendpunkt, welcher sich im selbstvollständigen Paradigma mit der
+Planck-Skala in Verbindung setzen lässt. Dieses stabile ``kleinstmögliche''
+schwarze Loch ist dabei lediglich das Ergebnis der Tatsache, dass kleine
+schwarze Löcher signifikant viel Energie durch Hawkingstrahlung verlieren.
+Das stabile Überbleibsel eignet sich etwa als Kandidat zur Beschreibung von
+dunkler Materie.
+
+Im Rahmen der Dissertation wurden mögliche Erweiterungen der Theorie der
+modifizierten Heisenbergschen Unschärferelation auf große Extradimensionen
+untersucht. Ein solches ``Extradimensions''-Szenario
+könnte das schwache Hierarchieproblem des Standardmodells lösen und birgt
+die einzige Chance, dass schwarze Löcher im Teilchenbeschleuniger gemessen
+werden können.
+Gedankenexperimente suggerieren allerdings verschiedene Möglichkeiten,
+welche algebraische Form die Unschärfe\-re\-lation in höheren Dimensionen
+haben sollte. Zwei Formulierungen stechen dabei heraus: Zum einen eine,
+welche in einer Extradimension (also 4+1-dimensionaler Raumzeit) eine
+konische Singularität aufweist. Dies ist die erste exakte Lösung einer
+Raumzeit, welche auf kurzen Skalen wie ein gravitativer Monopol aussieht
+und auf großen Skalen wie ein schwarzes Loch.
+
+Eine weitere, modifizierte Unschärferelation wiederum reproduziert in
+jeder Dimension die gleiche Impulsraum-Regularisierung, verfügt darüber
+hinaus aber über einen neuen komplexeren thermodynamischen Zustandsraum.
+Dabei handelt es sich um das Phänomen, dass
+das schwarze Loch kurz vor seiner
+Verdampfung auf der Planck-Skala Temperaturoszillationen aufweist,
+welche mit wiederholten Phasenübergängen zwischen negativer und positiver
+Wärmekapazität einhergehen. Die damit verbundene stetig veränderte
+Luminosität verleitet zur Prägung des Begriffes ``Leuchtturm-Effekt''.
+Darüberhinaus gibt es mehrere stabile Evaporationsendpunkte, welche
+für kleine schwarze Löcher (enstanden aus dem quantenmechanischen
+Regime) unterschiedliche minimale Längen vorhersagen als für
+große schwarze Löcher (entstanden aus dem semiklassischen Regime).
+
+\end{adjustwidth}
+\end{center}
+\end{fullwidth}
+\end{otherlanguage}

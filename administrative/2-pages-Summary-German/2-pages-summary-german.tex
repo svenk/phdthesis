@@ -1,0 +1,125 @@
+% 1-2 pages summary of SvenK phd thesis in German language,
+% as standalone document (not part of the thesis). This is required
+% by the Pruefungsamt Naturwissenschaften
+%
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[a4paper]{geometry}
+\usepackage{hyperref,a4wide}
+
+\title{
+	High-order methods in fully general-relativistic hydrodynamics and magnetohydrodynamics
+	\\[0.5em]\large {\it Deutschsprachige zweiseitige Zusammenfassung}
+}
+\author{Sven Köppel}
+\date{} % blank
+
+\begin{document}
+
+\maketitle
+
+Schwarze Löcher und Gravitationswellen gehören zu den faszinierenden Vorhersagen
+der allgemeinen Relativitäts\-theorie. Schwarze Löcher gibt es auf fast jeder
+Längenskala und seit einigen Jahren gibt es mehr und mehr Möglich\-keiten, sie
+zu messen. Das Laser-Interferometer-Gravitationswellen-Observatorium (LIGO)
+konnte 2016 zum ersten Mal Gravitationswellen direkt beobachten, die durch den
+Kollaps zweier stellarer schwarzer Löcher entstanden sind. Kurze Zeit später 
+wurden
+die Gravitationswellen von der Verschmelzung zweier Neutronensterne gemessen.
+Das Signal bekam den Namen GW170817.
+Neutronensterne gehören zu den kompaktesten astrophysikalischen Objekten,
+mit einer Ausdehnung von wenigen Kilometern und einer mit der Sonne vergleichbaren
+Masse. Die zentrale Massendichte in Neutronensternen erreicht ein Vielfaches
+der nuklearen Sättigungsdichte. Damit sind Neutronensterne ein Ort, in dem sich
+extrem heiße und kompakte Materie findet. Dank der
+neuen Ära der Multimessenger-Astronomie können erstmals präzise Aussagen über 
+die Beschaffenheit dieser Sterne gemacht werden.
+
+Eine zentrale Rolle spielt dabei die computerbasierte Lösung von Einsteins
+allgemeiner Relativitätstheorie (ART). Die numerische Relativitätstheorie ist ein
+junges Feld. Erst vor 15 Jahren wurde mittels der Punktierungsmethode
+der Durchbruch beim Zweikörperpro\-blem der ART erlangt. Seitdem gab es 
+gewaltige
+Fortschritte, die unter anderem den stetig verbesserter 
+Anfangs-Randwertproblem-Formulierungen der ARt zuzuschreiben sind.
+Darüber\-hinaus profitiert die numerische Relativitäts\-theorie von zunehmend
+besser konvergierenden numerischen Methoden, welche allgemein
+unter dem englischen Stichwort ``high order methods'' zusammengefasst werden.
+
+Im Rahmen dieser Dissertation werden die neuartigen sogenannten 
+diskontinuierlichen Galerkin-Verfahren in einem ebenfalls neuartigen adaptiven
+Gitterverfeinerungscode auf astrophysikalische Probleme angwandt. Dabei handelt 
+es sich um generische Verfahren, um gekoppelte Systeme von hyperbolischen 
+partiellen Differentialgleichungen (PDG) zu lösen. Um nicht an
+Unstetigkeitsstellen, etwa
+in der Materie-Verteilung oder Singularitäten der Raumzeit, zu begegnen,
+fällt das Schema als Prädiktor-Korrektor-Verfahren auf ein klassisches
+robustes Finite Volumen-Verfahren zurück.
+
+Ein weiterer Gegenstand dieser Arbeit ist die Herleitung einer
+neuen Formulierung der Einsteingleichungen im $(3+1)$-Split der Raumzeit, die 
+nur Ableitungen erster Ordnung in Zeit \emph{und} Raum aufweist. Es kann
+gezeigt werden, dass das System aus 59 gekoppelten nichtlinearen PDGs streng
+hyperbolisch ist und damit für eine numerische Zeitentwicklung sehr
+gut geeignet. Zur Demonstration der Korrektheit der Formulierung sowie ihrer
+Lösbarkeit mit den dargestellten numerischen Schemata werden einige
+Standardtests der numerischen Relativitätstheorie erfolgreich demonstriert.
+
+Zur Beschreibung der Materie in astrophysikalischen Raumzeiten wurden in einem
+weiteren Projekt die Gleichungen der allgemein relativistischen 
+Magnetohydrodynamik (engl. GRMHD, für ``general relativistic
+magnetohydrodynamics'') an die benötigte
+Formulierung angepasst. Mit den Gleichungen der GRMHD lassen sich eine Vielzahl
+astrophysikalischer Phänomene beschreiben, etwa Jets, Pulsare und
+Gammastrahlenblitze. In Benchmarks wird die Formulierung auf stationären
+Raumzeiten (Cowling-Näherung) getestet.
+
+Ein viertes Projekt ist eine Anwendung der vorangegangenen
+Techniken, also der numerischen Zeitintegration des gekoppelten
+Einstein-Euler-Systems. Dabei wird das Szenario eines
+``verzögerten Kollapses'' bei der Vereinigung zweier Neutronensterne untersucht.
+Es werden quantitative Kriterien entwickelt, um einen sofortigen Kollaps
+zu einem schwarzen Loch von der Entstehung eines metastabilen hypermassiven
+Neutronensternes zu unterscheiden.
+Dazu wird eine Parameterstudie
+durchgeführt, bei der für eine Vielzahl an realistischen nuklearen
+Zustandsgleichungen eine Menge an Anfangswertprobleme gebildet werden, die sich
+durch die Masse ihrer Konstituenten unterscheiden.
+Bei der Untersuchung stellte sich heraus, dass die
+dynamische Eichfixierung dank ihrer Eigenschaft, die Koordinaten aus dem
+Gravitationspotential herauszutreiben, am besten dafür geeignet ist, den
+Zeitpunkt der Verschmelzung und des Kollapses zu definieren. Als Ergebnis
+kann ein nichtlinearer Zusammenhang zwischen Zustandsgleichungen und
+Überlebenszeit hergestellt werden. Mithilfe von Messwerten von GW170817
+kann ferner eine die minimal mögliche Ausdehnung eines Neutronensternes
+ermittelt werden, diese untere Radius-Schranke beträgt $R \geq 9.74(\pm 0.1)$km.
+
+Als letztes Projekt ist dieser Monographie ein Projekt aus dem
+Bereich der Quantengravitation beigelegt. Es handelt sich dabei um die
+Modellierung von schwarzen Mikro-Löchern mittels einer stringtheoretisch
+motivierten impulsabhängigen Modifikation der heisenbergschen
+Unschärferelation. Die neuen
+Kommutatorrelationen sorgen für exakte Impulsoperatoren auf Kosten einer
+minimalen Länge im Ortsraum.
+Im Rahmen der Dissertation wurden mögliche Erweiterungen der Theorie 
+auf große Extradimensionen untersucht. 
+Zwei Erweiterungen stechen dabei heraus: Eine, welche in
+$(4+1)$-dimensionaler Raumzeit eine konische Singularität aufweist, ist
+die erste exakte Lösung einer Raumzeit, welche auf kurzen Skalen wie ein
+gravitativer Monopol aussieht und auf großen Skalen wie ein schwarzes Loch.
+%
+Eine weitere modifizierte Unschärferelation wiederum reproduziert in
+jeder Dimension die gleiche Impulsraum-Regularisierung, verfügt darüber
+hinaus aber über einen neuen komplexeren thermodynamischen Zustandsraum.
+Dabei handelt es sich um das Phänomen, dass das schwarze Loch kurz vor seiner
+Verdampfung auf der Planck-Skala Temperaturoszillationen aufweist,
+welche mit wiederholten Phasenübergängen zwischen negativer und positiver
+Wärmekapazität einhergehen. Die damit verbundene stetig veränderte
+Luminosität prägt den Begriff ``Leuchtturm-Effekt''.
+
+
+
+	
+\end{document}

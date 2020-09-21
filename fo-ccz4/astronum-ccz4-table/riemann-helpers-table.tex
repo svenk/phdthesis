@@ -1,0 +1,203 @@
+% Based on the standalone ccz4 table.
+%
+% This is not a standalone document, it needs a to be included, either
+% in the thesis.tex or in a standalone version.
+% 
+% For proper usage, requires a couple of packages, see the standalone
+% versions.
+%
+\begingroup % group of no spacing around align environments
+\setAstronumTableSizes
+%% display all formulas compact
+%\let\OLDdisplaystyle\displaystyle
+%\let\displaystyle\textstyle
+%
+%\begin{subequations}
+\begin{tabular}{llllr}
+\toprule
+& $T$ & $T_\text{NCP}(Q, \nabla Q)$: Nonconservative part & $T_\text{SRC}(Q)$: 
+Algebraic part
+& Eqn.
+\\
+\midrule
+\verticalrow{6}{ODE-ADM}
+& \colorSymbol{A} $\tilde\Gamma^k_{ij}$
+& \colorNCP{A} $0$
+& \colorSource{A} \longSource{\begin{equation*}
+\tilde{\gamma}^{kl} \left( D_{ijl} + D_{jil} - D_{lij} \right)
+\end{equation*}}
+& \colorSymbol{A} \eqnNum{eq.foccz4.riemmann.gtilde}{$\tilde{\Gamma}$} \\
+%
+%
+& \colorSymbol{B} $\partial_k\tilde\Gamma^m_{ij}$
+& \colorNCP{B} \longNCP{\begin{flalign*}
+\tilde{\gamma}^{ml} \left( \partial_{(k} {D}_{i)jl} + \partial_{(k} {D}_{j)il} - \partial_{(k} {D}_{l)ij} \right)
+\end{flalign*}}
+& \colorSource{B} \longSource{\begin{equation*}
+-2 D_k^{ml} \left( D_{ijl} + D_{jil} - D_{lij} \right)
+\end{equation*}}
+& \colorSymbol{B} 
+\eqnNum{eq.foccz4.riemmann.dgtilde}{$\partial\tilde{\Gamma}$}  \\
+%
+%
+& \colorSymbol{A} $\Gamma^k_{ij}$
+& \colorNCP{A} \longNCP{$0$}
+& \colorSource{A} \longSource{\begin{flalign*}
+\SRC{\tilde\Gamma^k_{ij}}
+- \tilde{\gamma}^{kl} \left( \tilde{\gamma}_{jl} P_i + \tilde{\gamma}_{il} P_j - \tilde{\gamma}_{ij} P_l \right)
+\end{flalign*}}
+& \colorSymbol{A} \eqnNum{eq.foccz4.riemmann.gamma}{$\Gamma$}
+\\
+%  
+% 
+& \colorSymbol{B} $\partial_k \Gamma^m_{ij}$
+& \colorNCP{B} \longNCP{\begin{flalign*}
+  +\tilde{\gamma}^{ml} \left( \partial_{(k} {D}_{i)jl} + \partial_{(k} {D}_{j)il} - \partial_{(k} {D}_{l)ij} \right) 
+  \\
+   - \tilde{\gamma}^{ml} \left( \tilde{\gamma}_{jl} \partial_{(k} {P}_{i)} + \tilde{\gamma}_{il} \partial_{(k} {P}_{j)}
+  - \tilde{\gamma}_{ij} \partial_{(k} {P}_{l)} \right)
+\end{flalign*}}
+& \colorSource{B} \longSource{\begin{flalign*}
+% -2 D_k^{ml} \left( D_{ijl} + D_{jil} - D_{lij} \right)
+& \SRC{\partial_k \tilde\Gamma^m_{ij}}
++ 2 D_k^{ml} \left( \tilde{\gamma}_{jl} P_i + \tilde{\gamma}_{il} P_j- 
+\tilde{\gamma}_{ij} P_l \right)
+\\
+& - 2 \tilde{\gamma}^{ml} \left(  D_{kjl} P_i + D_{kil} P_j  - D_{kij} P_l \right)
+\end{flalign*}}
+& \colorSymbol{B} \eqnNum{eq.foccz4.riemmann.dgamma}{$\partial\Gamma$}  \\
+\midrule
+\verticalrow{11}{SO-CCZ4}
+& \colorSymbol{Atilde} $R^m_{ikj}$
+& \colorNCP{Atilde} \longNCP{\begin{flalign*}
+& \NCP{\partial_k \Gamma^m_{ij}} - \NCP{\partial_j \Gamma^m_{ik}}
+\\
+& + \NCP\Gamma^l_{ij} \NCP\Gamma^m_{lk} - \NCP\Gamma^l_{ik} \NCP\Gamma^m_{lj}
+\end{flalign*}}
+& \colorSource{Atilde} \longSource{\begin{flalign*}
+& \SRC{\partial_k \Gamma^m_{ij}} - \SRC{\partial_j \Gamma^m_{ik}}
+\\
+& + \SRC\Gamma^l_{ij} \SRC\Gamma^m_{lk} - \SRC\Gamma^l_{ik} \SRC\Gamma^m_{lj}
+\end{flalign*}}
+& \colorSymbol{Atilde} \eqnNum{eq.foccz4.riemmann}{$R^m_{ikj}$} \\
+%
+%
+& \colorSymbol{K} $R_{ij}$
+& \colorNCP{K} $\NCP R^m_{imj}$
+& \colorSource{K} \longNCP{\begin{flalign*}
+\SRC R^m_{imj}
+\end{flalign*}}
+& \colorSymbol{K} \eqnNum{eq.foccz4.ricci}{$R_{ij}$}  \\
+%
+%
+& \colorSymbol{Theta} $R$
+& \colorNCP{Theta} $\phi^2 \tilde\gamma^{ij} \NCP R^i_i$
+& \colorSource{Theta} \longNCP{\begin{flalign*}
+\phi^2 \tilde\gamma^{ij}  \SRC R^i_i
+\end{flalign*}}
+& \colorSymbol{Theta} \eqnNum{eq.foccz4.ricciscalar}{$R^i_i$} \\
+%
+%
+\midrule
+%
+%
+& \colorSymbol{Gamma} $\nabla_i\nabla_j \alpha$
+& \colorNCP{Gamma} \longNCP{\begin{flalign*}
+\alpha \partial_{(i} A_{j)}
+\end{flalign*}}
+& \colorSource{Gamma} \longSource{\begin{flalign*}
+\alpha A_i A_j - \alpha \SRC \Gamma^k_{ij} A_k
+\end{flalign*}}
+& \colorSymbol{Gamma} \eqnNum{eq.foccz4.nna}{$\nabla\nabla\alpha$} \\
+%
+%
+& \colorSymbol{b} $\nabla^i\nabla_i \alpha$
+& \colorNCP{b} $\phi^2 \tilde\gamma^{ij} \NCP{\nabla_i \nabla_j \alpha} $
+& \colorSource{b} \longNCP{\begin{flalign*}
+\phi^2 \tilde\gamma^{ij} \SRC{\nabla_i \nabla_j \alpha}
+\end{flalign*}}
+& \colorSymbol{b} \eqnNum{eq.foccz4.laplacealpha}{$\Delta\alpha$} \\
+%
+%
+\midrule
+%
+%
+\verticalrow{8}{FO-CCZ4}
+& \colorSymbol{A} $\tilde\Gamma^i$
+& \colorNCP{A} \longNCP{\begin{flalign*}
+0
+\end{flalign*}}
+& \colorSource{A} \longSource{\begin{flalign*}
+\tilde\gamma^{jl} \SRC{\tilde\Gamma^i_{jl}}
+\end{flalign*}}
+& \colorSymbol{A} \eqnNum{eq.foccz4.gtilde}{$\tilde{\Gamma}$} \\
+%
+%
+& \colorSymbol{B} $\partial_k \tilde\Gamma^i$
+& \colorNCP{B} \longNCP{\begin{flalign*}
+\tilde\gamma^{jl} \NCP{\partial_k \tilde\Gamma^i_{jl}}
+\end{flalign*}}
+& \colorSource{B} $ -2 D^{jl}_k \SRC{\tilde\Gamma^i_{jl}} + \tilde\gamma^{jl} 
+\SRC{\partial_k \tilde\Gamma^i_{jl}}$
+& \colorSymbol{B} \eqnNum{eq.foccz4.dgtilde}{$\partial\Delta\alpha$}\\
+%
+%
+& \colorSymbol{D} $Z^i$
+& \colorNCP{D} \longNCP{\begin{flalign*}
+0
+\end{flalign*}} 
+& \colorSource{D} \longSource{\begin{flalign*}
+\frac 12 \phi^2 \left( \hat\Gamma^i  -   \tilde\Gamma^i\right)
+\end{flalign*}}
+& \colorSymbol{D} \eqnNum{eq.foccz4.Z}{$Z$}  \\
+%
+%
+& \colorSymbol{P} $\nabla_i Z_j$
+& \colorNCP{P} \longNCP{\begin{flalign*}
+\frac 12 \tilde\gamma_{jl} \left( \partial_i \hat\Gamma^l 
+- \NCP{ \partial_i \tilde\Gamma^l} \right)
+\end{flalign*}}
+& \colorSource{P} \longSource{\begin{flalign*}
+\frac 12 \tilde\gamma_{jl} \left( 
+0
+- \SRC{ \partial_i \tilde\Gamma^l} \right)
++ D_{ijl} \left( \hat\Gamma^l - \tilde\Gamma^l \right)
+- \Gamma^l_{ij} Z_l
+\end{flalign*}}
+& \colorSymbol{P} \eqnNum{eq.foccz4.nZ}{$\nablaZ$}
+\\
+\bottomrule
+%\\
+%%
+%% Phantom line to preserve the widths.
+%%
+%% This line is needed to preserve the same table widths as in the
+%% CCZ4 table. Just copy the most lengthy expressions here.
+%%
+%% This however creates artificial height which probably needs truncation.
+%& 
+%&
+%\phantom{
+%\longNCP{\begin{flalign*}
+%&- {\beta^l \partial_l A_k} + \alpha \param g(\alpha) \left( \partial_k K - \partial_k K_0 - 2 \param c \partial_k \Theta \right) \\
+%&+ {\param s \, \alpha \, \param g(\alpha) \tilde{\gamma}^{nm} \partial_k 
+%\tilde{A}_{nm} }
+%\end{flalign*}}
+%}
+%& \phantom{\longSource{\begin{flalign*}
+%&{ \nicefrac{2}{3} \tilde{\Gamma}^i B_k^k - \tilde{\Gamma}^k B_k^i  } +
+%       2 \alpha ( \tilde{\Gamma}^i_{jk} \tilde{A}^{jk} - 3 \tilde{A}^{ij} P_j ) - 
+%       2 \alpha \tilde{\gamma}^{ki} \left( \Theta A_k + \nicefrac{2}{3} K Z_k \right)
+%       \matter{ - 16\pi \alpha \tilde{\gamma}^{ij} {S_j} }
+%\\&	-	 2 \alpha \tilde{A}^{ij} A_j 
+%	   - 4\param s \alpha \tilde{\gamma}^{ik} D_k^{nm} \tilde{A}_{nm}
+% + 2\param{\kappa_3} \left( \nicefrac{2}{3}~ \tilde{\gamma}^{ij} Z_j B_k^k - \tilde{\gamma}^{jk} Z_j B_k^i \right)
+%%\\& 
+%- 2 \alpha \param{\kappa_1} \tilde{\gamma}^{ij} Z_j 
+%\end{flalign*}}} \\
+\end{tabular}%
+%\end{subequations}
+%
+\endgroup % group of no spacing around align environments
+%\end{small}
+%
